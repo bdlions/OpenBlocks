@@ -273,7 +273,7 @@ public class BlockValidator {
 		{
 
 			/**
-			 * adding function bloks error and counting how many params are missed
+			 * adding function blocks error and counting how many params are missed
 			 * */
 
 			ArrayList<String> nameList = new ArrayList<String>();
@@ -281,12 +281,18 @@ public class BlockValidator {
 			nameList.add("or");
 			nameList.add("not");
 			nameList.add("abs");
-			nameList.add("sum");
+			nameList.add("integer_sum_integer");
+			nameList.add("integer_difference_integer");
+			nameList.add("integer_quotient_integer");
+			nameList.add("integer_product_integer");
 			nameList.add("double_sum_integer");
+			nameList.add("double_difference_integer");
+			nameList.add("double_quotient_integer");
+			nameList.add("double_product_integer");
 			nameList.add("double_sum_double");
-			nameList.add("difference");
-			nameList.add("product");
-			nameList.add("quotient");
+			nameList.add("double_difference_double");
+			nameList.add("double_quotient_double");
+			nameList.add("double_product_double");
 			nameList.add("integernot-equalsinteger");
 			nameList.add("integerequalsinteger");
 			nameList.add("integerlessthaninteger");
@@ -305,7 +311,7 @@ public class BlockValidator {
 			//checking the validation of location of expression. A && B, A < B etc should be inside a condition
 			if(nameList.contains(genusName) && block.getPlug() != null && block.getPlug().getBlockConnectors() != null && block.getPlug().getBlockConnectors().getConnectBlockId() == 0 )
 			{
-				customMessage = DisplayMessage.convertedTextInSelectedLanguage("Invalid block with");
+				customMessage = DisplayMessage.convertedTextInSelectedLanguage("Invalid block location with");
 				errors.add(customMessage+" '"+block.getLabel()+"'");
 			}
 			

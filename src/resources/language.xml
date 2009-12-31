@@ -242,8 +242,8 @@
 			<entry name="All Validation Errors">
 				<label>All Validation Errors</label>
 			</entry>
-			<entry name="Invalid block with">
-				<label>Invalid block with</label>
+			<entry name="Invalid block location with">
+				<label>Invalid block location with</label>
 			</entry>
 		</language>
 		<language name="Spanish">
@@ -487,8 +487,8 @@
 			<entry name="All Validation Errors">
 				<label>All Validation Errors*</label>
 			</entry>
-			<entry name="Invalid block with">
-				<label>Invalid block with*</label>
+			<entry name="Invalid block location with">
+				<label>Invalid block location with*</label>
 			</entry>
 		</language>
 		<language name="Francis">
@@ -732,8 +732,8 @@
 			<entry name="All Validation Errors">
 				<label>All Validation Errors**</label>
 			</entry>
-			<entry name="Invalid block with">
-				<label>Invalid block with**</label>
+			<entry name="Invalid block location with">
+				<label>Invalid block location with**</label>
 			</entry>
 		</language>
 	</languages>

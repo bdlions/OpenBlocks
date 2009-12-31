@@ -591,7 +591,6 @@ public class Page  implements WorkspaceWidget, SearchableContainer, ISupportMeme
 					block.getComment().getParent().remove(block.getComment());
 				}
 				
-				//System.out.println(block.getBlock().getGenusName());
 				String genusName = block.getBlock().getGenusName();
 				if(genusName.equals("var-execute") || genusName.equals("var-userexternal") || genusName.contains("_decl"))
 				{

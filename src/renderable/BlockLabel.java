@@ -208,8 +208,10 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 			oldBlock.changeGenusTo(genus);
 			
 			RenderableBlock rb = RenderableBlock.getRenderableBlock(blockID);
-			rb.setToolTipText(BlockGenus.getGenusWithName(genus).getBlockDescription().trim());
+			//updating block tool tip
+			rb.setBlockToolTip(BlockGenus.getGenusWithName(genus).getBlockDescription().trim());			
 			rb.repaintBlock();
+			
 			Workspace.getInstance().notifyListeners(new WorkspaceEvent(rb.getParentWidget(), blockID, WorkspaceEvent.BLOCK_GENUS_CHANGED));
 			
 			//updating code panel

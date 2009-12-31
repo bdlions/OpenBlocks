@@ -25,511 +25,6 @@
 		<BlockConnectorShape shape-type="cmd" shape-number="14"></BlockConnectorShape>
 	</BlockConnectorShapes>
 	<BlockGenuses>
-		<!-- COLORS -->
-		
-		<BlockGenus name="red" kind="data" initlabel="red" color="255 0 0">
-			<description>
-				<text>
-					Reports the red color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="color" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="15"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="gray" kind="data" initlabel="gray" color="128 128 128">
-			<description>
-				<text>
-					Reports the gray color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="5"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="orange" kind="data" initlabel="orange" color="255 165 0">
-			<description>
-				<text>
-					Reports the orange color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="25"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="brown" kind="data" initlabel="brown" color="165 42 42">
-			<description>
-				<text>
-					Reports the brown color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="35"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="yellow" kind="data" initlabel="yellow" color="255 255 0">
-			<description>
-				<text>
-					Reports the yellow color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="45"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="lime" kind="data" initlabel="lime" color="0 255 0">
-			<description>
-				<text>
-					Reports the lime color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="65"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="turquoise" kind="data" initlabel="turquoise" color="64 224 208">
-			<description>
-				<text>
-					Reports the turquoise color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="75"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="cyan" kind="data" initlabel="cyan" color="0 255 255">
-			<description>
-				<text>
-					Reports the cyan color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="85"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="purple" kind="data" initlabel="purple" color="128 0 128">
-			<description>
-				<text>
-					Reports the purple color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="115"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="magenta" kind="data" initlabel="magenta" color="255 0 255">
-			<description>
-				<text>
-					Reports the magenta color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="125"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="sky" kind="data" initlabel="sky" color="135 206 255">
-			<description>
-				<text>
-					Reports the sky color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="95"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="blue" kind="data" initlabel="blue" color="0 0 255">
-			<description>
-				<text>
-					Reports the blue color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="105"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="pink" kind="data" initlabel="pink" color="255 192 203">
-			<description>
-				<text>
-					Reports the pink color shown.
-				</text>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
-				<LangSpecProperty key="special-value" value="135"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<!-- LOGIC -->
-
-		<!-- MATH -->
-		<BlockGenus name="sum" kind="function" initlabel="+" color="15 20 220">
-			<description>
-				<text>
-					Reports the sum of two numbers (<arg n="1" />+<arg n="2" />).
-				</text>
-				<arg-description n="1" doc-name="left number">
-				</arg-description>
-				<arg-description n="2" doc-name="right number">
-				</arg-description>
-			</description>
-			<BlockConnectors>
-				<BlockConnector label="" connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="sum"></LangSpecProperty>
-				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-		<BlockGenus name="double_sum_integer" kind="function" initlabel="+" color="15 20 220">
-			<description>
-				<text>
-					Reports the sum of two numbers (<arg n="1" />+<arg n="2" />).
-				</text>
-				<arg-description n="1" doc-name="left number">
-				</arg-description>
-				<arg-description n="2" doc-name="right number">
-				</arg-description>
-			</description>
-			<BlockConnectors>
-				<BlockConnector label="" connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="sum"></LangSpecProperty>
-				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-		<BlockGenus name="double_sum_double" kind="function" initlabel="+" color="15 20 220">
-			<description>
-				<text>
-					Reports the sum of two numbers (<arg n="1" />+<arg n="2" />).
-				</text>
-				<arg-description n="1" doc-name="left number">
-				</arg-description>
-				<arg-description n="2" doc-name="right number">
-				</arg-description>
-			</description>
-			<BlockConnectors>
-				<BlockConnector label="" connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="sum"></LangSpecProperty>
-				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="difference" kind="function" initlabel="-" color="15 20 220">
-			<description>
-				<text>
-					Reports the difference of two numbers (<arg n="1" />-<arg n="2" />).
-				</text>
-				<arg-description n="1" doc-name="left number">
-				</arg-description>
-				<arg-description n="2" doc-name="right number">
-				</arg-description>
-			</description>
-			<BlockConnectors>
-				<BlockConnector label="" connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="difference"></LangSpecProperty>
-				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="product" kind="function" initlabel="x" color="15 20 220">
-			<description>
-				<text>
-					Reports the product of two numbers (<arg n="1" />x<arg n="2" />).
-				</text>
-				<arg-description n="1" doc-name="left value">
-				</arg-description>
-				<arg-description n="2" doc-name="right value">
-				</arg-description>
-			</description>
-			<BlockConnectors>
-				<BlockConnector label="" connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="product"></LangSpecProperty>
-				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="quotient" kind="function" initlabel="/" color="15 20 220">
-			<description>
-				<text>
-					Reports the quotient of two numbers (<arg n="1" />÷<arg n="2" />).
-				</text>
-				<arg-description n="1" doc-name="left value">
-				</arg-description>
-				<arg-description n="2" doc-name="right value">
-				</arg-description>
-			</description>
-			<BlockConnectors>
-				<BlockConnector label="" connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
-				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="quotient"></LangSpecProperty>
-				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="abs" kind="function" initlabel="abs" color="15 20 220">
-			<description>
-				<text>
-					Reports the absolute value of a number.
-				</text>
-				<arg-description n="1" doc-name="integer">
-					A number from which
-					to get the absolute value.
-				</arg-description>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer"></BlockConnector>
-				<BlockConnector connector-kind="socket" connector-type="integer"></BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="abs"></LangSpecProperty>
-				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<!-- Added block genus by Alamgir kabir -->
-		<BlockGenus name="setx" kind="command" initlabel="set x" color="27 180 225">
-			<description>
-				<text>
-					Sets the x-coordinate of the agent.
-				</text>
-				<arg-description n="1" name="coord" doc-name="coord">
-					The new
-					x-coordinate value for the agent.
-				</arg-description>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="integer">
-					<DefaultArg genus-name="integer" label="0" />
-				</BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="setx"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="sety" kind="command" initlabel="set y" color="27 180 225">
-			<description>
-				<text>
-					Sets the y-coordinate of the agent.
-				</text>
-				<arg-description n="1" name="coord" doc-name="coord">
-					The new
-					y-coordinate value for the agent.
-				</arg-description>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="integer">
-					<DefaultArg genus-name="integer" label="0" />
-				</BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="sety"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<BlockGenus name="setname" kind="command" initlabel="set name" color="27 180 225">
-			<description>
-				<text>
-					Sets a name.
-				</text>
-				<arg-description n="1" name="string" doc-name="name">
-					The new name
-				</arg-description>
-			</description>
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="string">
-					<DefaultArg genus-name="string" label="alamgir" />
-				</BlockConnector>
-			</BlockConnectors>
-			<LangSpecProperties>
-				<LangSpecProperty key="vm-cmd-name" value="setname"></LangSpecProperty>
-			</LangSpecProperties>
-		</BlockGenus>
-
-		<!-- country -->
-
-		<!-- VARIABLES -->
-		<BlockGenus name="agent-var-boolean" kind="variable" initlabel="boolean declaration" editable-label="yes" label-unique="yes" color="65 170 225">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="boolean">
-					<DefaultArg genus-name="true" label="true" />
-				</BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="agent-var-boolean-list" kind="variable" initlabel="agent boolean list" editable-label="yes" label-unique="yes" color="65 170 225">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="boolean-list"></BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="agent-var-number" kind="variable" initlabel="integer declaration" editable-label="yes" label-unique="yes" color="65 170 225">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="integer">
-					<DefaultArg genus-name="integer" label="0" />
-				</BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="agent-var-number-list" kind="variable" initlabel="agent number list" editable-label="yes" label-unique="yes" page-label-enabled="yes" color="65 170 225">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="number-list"></BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="agent-var-string" kind="variable" initlabel="string declaration" editable-label="yes" label-unique="yes" color="65 170 225">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="string">
-					<DefaultArg genus-name="string" label="some string" />
-				</BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="agent-var-double" kind="variable" initlabel="double declaration" editable-label="yes" label-unique="yes" color="65 170 225">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="double">
-					<DefaultArg genus-name="double" label="0.0" />
-				</BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-		
-		<BlockGenus name="agent-var-string-list" kind="variable" initlabel="agent text list" editable-label="yes" label-unique="yes" page-label-enabled="yes" color="65 170 225">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="string-list"></BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="global-var-boolean" kind="variable" initlabel="shared boolean" editable-label="yes" label-unique="yes" page-label-enabled="yes" color="230 0 255 ">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="boolean"></BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="global-var-boolean-list" kind="variable" initlabel="shared boolean list" editable-label="yes" label-unique="yes" page-label-enabled="yes" color="230 0 255 ">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="boolean-list"></BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="global-var-number" kind="variable" initlabel="shared number" editable-label="yes" label-unique="yes" page-label-enabled="yes" color="230 0 255 ">
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="number-inv"></BlockConnector>
-				<BlockConnector connector-kind="socket" connector-type="integer"></BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="global-var-number-list" kind="variable" initlabel="shared number list" editable-label="yes" label-unique="yes" page-label-enabled="yes" color="230 0 255 ">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="number-list"></BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="global-var-string" kind="variable" initlabel="shared text" editable-label="yes" label-unique="yes" page-label-enabled="yes" color="230 0 255 ">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="string"></BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-
-		<BlockGenus name="global-var-string-list" kind="variable" initlabel="shared text list" editable-label="yes" label-unique="yes" page-label-enabled="yes" color="230 0 255 ">
-			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="string-list"></BlockConnector>
-			</BlockConnectors>
-		</BlockGenus>
-		
-				
-		<!-- Block genus adding complete by AK -->
-		<BlockGenus editable-label="no" initlabel="num1"
-			is-label-value="yes" is-starter="no" is-terminator="no" kind="data"
-			label-unique="yes" name="num1" page-label-enabled="no" color="230 0 255 ">
-			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="integer"
-					is-expandable="no" label-editable="no" position-type="mirror" />
-			</BlockConnectors>
-		</BlockGenus>
-		
 		<!-- Block genus for Math -->
 		<BlockGenus name="integer" kind="data" initlabel="1" editable-label="yes" is-label-value="yes" color="255 0 255">
 			<description>
@@ -549,7 +44,7 @@
 		<BlockGenus name="double" kind="data" initlabel="1.0" editable-label="yes" is-label-value="yes" color="255 0 255">
 			<description>
 				<text>
-					Reports the number shown.
+					Reports the double number shown.
 				</text>
 			</description>
 			<BlockConnectors>
@@ -557,6 +52,217 @@
 			</BlockConnectors>
 			<LangSpecProperties>
 				<LangSpecProperty key="vm-cmd-name" value="eval-num"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		
+		<BlockGenus name="integer_sum_integer" kind="function" initlabel="+" color="15 20 220">
+			<description>
+				<text>
+					Reports the sum of two numbers (+)
+				</text>
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="sum"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		<BlockGenus name="integer_difference_integer" kind="function" initlabel="-" color="15 20 220">
+			<description>
+				<text>
+					Reports the difference of two numbers (-)
+				</text>
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="difference"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		<BlockGenus name="integer_product_integer" kind="function" initlabel="x" color="15 20 220">
+			<description>
+				<text>
+					Reports the product of two numbers (x)
+				</text>				
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="product"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		<BlockGenus name="integer_quotient_integer" kind="function" initlabel="/" color="15 20 220">
+			<description>
+				<text>
+					Reports the quotient of two numbers (/)
+				</text>
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="integer" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="quotient"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		
+		<BlockGenus name="double_sum_integer" kind="function" initlabel="+" color="15 20 220">
+			<description>
+				<text>
+					Reports the sum of two numbers (+)
+				</text>
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="sum"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		<BlockGenus name="double_difference_integer" kind="function" initlabel="-" color="15 20 220">
+			<description>
+				<text>
+					Reports the difference of two numbers (-)
+				</text>
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="difference"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		<BlockGenus name="double_product_integer" kind="function" initlabel="x" color="15 20 220">
+			<description>
+				<text>
+					Reports the product of two numbers (x)
+				</text>				
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="product"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		<BlockGenus name="double_quotient_integer" kind="function" initlabel="/" color="15 20 220">
+			<description>
+				<text>
+					Reports the quotient of two numbers (/)
+				</text>
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="integer" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="quotient"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		
+		<BlockGenus name="double_sum_double" kind="function" initlabel="+" color="15 20 220">
+			<description>
+				<text>
+					Reports the sum of two numbers (+)
+				</text>
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="sum"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		<BlockGenus name="double_difference_double" kind="function" initlabel="-" color="15 20 220">
+			<description>
+				<text>
+					Reports the difference of two numbers (-)
+				</text>
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="difference"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		<BlockGenus name="double_product_double" kind="function" initlabel="x" color="15 20 220">
+			<description>
+				<text>
+					Reports the product of two numbers (x)
+				</text>				
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="product"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		<BlockGenus name="double_quotient_double" kind="function" initlabel="/" color="15 20 220">
+			<description>
+				<text>
+					Reports the quotient of two numbers (/)
+				</text>
+			</description>
+			<BlockConnectors>
+				<BlockConnector label="" connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+				<BlockConnector label="" connector-kind="socket" connector-type="double" position-type="bottom"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="quotient"></LangSpecProperty>
+				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
+			</LangSpecProperties>
+		</BlockGenus>
+		
+		<BlockGenus name="abs" kind="function" initlabel="abs" color="15 20 220">
+			<description>
+				<text>
+					Reports the absolute value of a number.
+				</text>
+			</description>
+			<BlockConnectors>
+				<BlockConnector connector-kind="plug" connector-type="integer"></BlockConnector>
+				<BlockConnector connector-kind="socket" connector-type="integer"></BlockConnector>
+			</BlockConnectors>
+			<LangSpecProperties>
+				<LangSpecProperty key="vm-cmd-name" value="abs"></LangSpecProperty>
 				<LangSpecProperty key="is-monitorable" value="yes"></LangSpecProperty>
 			</LangSpecProperties>
 		</BlockGenus>
@@ -1341,12 +1047,24 @@
 		<BlockFamily>
 			<FamilyMember>and</FamilyMember>
 			<FamilyMember>or</FamilyMember>
+		</BlockFamily>		
+		<BlockFamily>
+			<FamilyMember>integer_sum_integer</FamilyMember>
+			<FamilyMember>integer_difference_integer</FamilyMember>
+			<FamilyMember>integer_quotient_integer</FamilyMember>
+			<FamilyMember>integer_product_integer</FamilyMember>
 		</BlockFamily>
 		<BlockFamily>
-			<FamilyMember>sum</FamilyMember>
-			<FamilyMember>difference</FamilyMember>
-			<FamilyMember>quotient</FamilyMember>
-			<FamilyMember>product</FamilyMember>
+			<FamilyMember>double_sum_integer</FamilyMember>
+			<FamilyMember>double_difference_integer</FamilyMember>
+			<FamilyMember>double_quotient_integer</FamilyMember>
+			<FamilyMember>double_product_integer</FamilyMember>
+		</BlockFamily>
+		<BlockFamily>
+			<FamilyMember>double_sum_double</FamilyMember>
+			<FamilyMember>double_difference_double</FamilyMember>
+			<FamilyMember>double_quotient_double</FamilyMember>
+			<FamilyMember>double_product_double</FamilyMember>
 		</BlockFamily>
 		<BlockFamily>
 			<FamilyMember>USA</FamilyMember>
@@ -1386,7 +1104,7 @@
 			<BlockDrawer name="Math" type="factory" button-color="102 129 255">
 				<BlockGenusMember>integer</BlockGenusMember>
 				<BlockGenusMember>double</BlockGenusMember>
-				<BlockGenusMember>sum</BlockGenusMember>
+				<BlockGenusMember>integer_sum_integer</BlockGenusMember>
 				<BlockGenusMember>double_sum_integer</BlockGenusMember>
 				<BlockGenusMember>double_sum_double</BlockGenusMember>
 				<BlockGenusMember>abs</BlockGenusMember>
