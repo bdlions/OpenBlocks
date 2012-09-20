@@ -1,18 +1,36 @@
 package controller;
 
+
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Rectangle;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import javax.jws.soap.SOAPBinding.Style;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.JTextComponent;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,15 +40,26 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import renderable.BlockUtilities;
+import renderable.RenderableBlock;
+
+import workspace.Page;
 import workspace.SearchBar;
 import workspace.SearchableContainer;
 import workspace.TrashCan;
 import workspace.Workspace;
+import codeblocks.Block;
 import codeblocks.BlockConnectorShape;
 import codeblocks.BlockGenus;
 import codeblocks.BlockLinkChecker;
 import codeblocks.CommandRule;
 import codeblocks.SocketRule;
+import codegenerator.Attribute;
+import codegenerator.TextAreaWriter;
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 /**
  * 
@@ -62,6 +91,7 @@ public class WorkspaceController {
     //flag to indicate if a workspace has been loaded/initialized 
     private boolean workspaceLoaded = false;
     
+    private static JTextComponent editor;
     /**
      * Constructs a WorkspaceController instance that manages the
      * interaction with the codeblocks.Workspace
@@ -416,8 +446,9 @@ public class WorkspaceController {
         ImageIcon tc = new ImageIcon("support/images/trash.png");
         ImageIcon openedtc = new ImageIcon("support/images/trash_open.png");
         TrashCan trash = new TrashCan(tc.getImage(), openedtc.getImage());
+
         workspace.addWidget(trash, true, true);
-        
+       
         
         workspacePanel = new JPanel();      
         workspacePanel.setLayout(new BorderLayout());
@@ -485,8 +516,68 @@ public class WorkspaceController {
         // create save button
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
+            public void actionPerformed(ActionEvent evt){
                 System.out.println(workspace.getSaveString());
+                
+                /* ------------------------------------------------------------------- */    
+                /* You should do this ONLY ONCE in the whole application life-cycle:   */    
+            
+                /* Create and adjust the configuration */
+                Configuration cfg = new Configuration();
+                try {
+					cfg.setDirectoryForTemplateLoading(
+					        new File("H:\\WorkspaceRAC\\OpenBlocks"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                cfg.setObjectWrapper(new DefaultObjectWrapper());
+
+                /* ------------------------------------------------------------------- */    
+                /* You usually do these for many times in the application life-cycle:  */    
+                        
+                /* Get or create a template */
+                Template temp = null;
+				try {
+					temp = cfg.getTemplate("java.ftl");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+                /* Create a data-model */
+                Map root = new HashMap();
+                
+                Map classMap = new HashMap();
+                classMap.put("name", "Person");
+                classMap.put("packageName", "person");
+                root.put("class", classMap);
+                
+                List<Attribute> aKeys = new ArrayList<Attribute>();
+                aKeys.add(new Attribute("String", "name"));
+                aKeys.add(new Attribute("int", "age"));
+                aKeys.add(new Attribute("int",  "passingYear"));
+                aKeys.add(new Attribute("float", "value"));
+                
+                root.put("aKeys", aKeys);
+                
+                
+                /* Merge data-model with template */
+                Writer out = new PrintWriter(new TextAreaWriter(editor));
+                try {
+                	//editor.list(new PrintWriter(out));
+					temp.process(root, out);
+					//editor.setText(out.toString());
+				} catch (TemplateException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                try {
+					out.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
         
@@ -496,6 +587,20 @@ public class WorkspaceController {
         topPane.add(saveButton);
         frame.add(topPane, BorderLayout.PAGE_START);
         frame.add(wc.getWorkspacePanel(), BorderLayout.CENTER);
+        
+        
+        Page editorPage = workspace.getPageNamed("Code");
+        editor = new JTextPane();
+        editor.setBackground(editorPage.getJComponent().getBackground());
+        editor.setForeground(Color.green);
+        editor.setFont(new Font("monospaced", Font.BOLD, 15));
+        
+        int width = (int)editorPage.getJComponent().getBounds().getWidth();
+        int height = (int)editorPage.getJComponent().getBounds().getHeight();
+        Rectangle updatedDimensionRect = new Rectangle(0,0,width,height);
+        
+        editor.setBounds(updatedDimensionRect);
+        editorPage.getRBParent().addToBlockLayer(editor);
         
         frame.setVisible(true);
         
@@ -516,6 +621,7 @@ public class WorkspaceController {
                 wc.setLangDefFilePath(LANG_DEF_FILEPATH);
                 wc.loadFreshWorkspace();
                 createAndShowGUI(wc);
+               
             }
         });
     }

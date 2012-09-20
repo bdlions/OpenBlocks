@@ -93,7 +93,7 @@ public class Page  implements WorkspaceWidget, SearchableContainer, ISupportMeme
 	/** The default abstract width */
 	private static final int DEFAULT_ABSTRACT_WIDTH = 700;
 	/** The default abstract height */
-	public static final int DEFAULT_ABSTRACT_HEIGHT = 1600;
+	public static final int DEFAULT_ABSTRACT_HEIGHT = 4600;
 	/** an equals sign followed by a double quote character*/
 	private static final String EQ_OPEN_QUOTE = "=\"";
 	/** a double quote character */

@@ -2,10 +2,12 @@ package workspace;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -44,13 +46,15 @@ public class TrashCan extends JComponent implements MouseListener, WorkspaceWidg
 		if(width >0 && height > 0){
 			setSize(width,height);
 			setPreferredSize(new Dimension(width,height));
+			//setBounds(new Rectangle(new Point(0, 0), getPreferredSize()));
+
 		}else{
 			setSize(150,200);
 			setPreferredSize(new Dimension(150,200));
 		}
-		this.setLayout(null);
+		this.setLayout(new FlowLayout());
 		//Set the widget's location.
-		this.setLocation(500, 400);
+		this.setLocation(0, 0);
 		
 		addMouseListener(this);
 		Workspace.getInstance().addComponentListener(this);

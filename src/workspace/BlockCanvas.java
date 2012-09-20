@@ -386,12 +386,16 @@ public class BlockCanvas implements PageChangeListener, ISupportMemento  {
 		int widthCounter = 0;
  		for (int i = 0; i<pages.size() ; i++) {
  			Page p = pages.get(i);
- 			if(p.getDefaultPageColor() == null){
- 	            if (i % 2 == 1) {
+ 			if(p.getDefaultPageColor() == null)
+ 			{
+ 				
+ 				p.setPageColor(new Color(30,30,30));
+ 				
+ 	            /*if (i % 2 == 1) {
  	                p.setPageColor(new Color(30,30,30));
  	            } else {
  	            	p.setPageColor(new Color(40,40,40));
- 	            }
+ 	            }*/
  			}else{
  				p.setPageColor(p.getDefaultPageColor());
  			}

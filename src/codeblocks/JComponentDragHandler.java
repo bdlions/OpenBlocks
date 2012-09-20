@@ -15,7 +15,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
+import workspace.Page;
 import workspace.Workspace;
+import workspace.WorkspaceWidget;
 import codeblockutil.GraphicsManager;
 
 /**
@@ -169,6 +171,7 @@ public class JComponentDragHandler implements MouseListener, MouseMotionListener
          */ 
         Workspace.getInstance().scrollToComponent(myComponent);
         Point p = SwingUtilities.convertPoint(myComponent, newX + mPressedX, newY + mPressedY, Workspace.getInstance());
+        
         if (Workspace.getInstance().getWidgetAt(p) == null && !Workspace.getInstance().contains(p)) {
         	// how is this not working?  if it's in the window, shouldn't it be dragging?
         	// I guess the drawer cards aren't widgets, so it's getting confused... 
@@ -192,9 +195,31 @@ public class JComponentDragHandler implements MouseListener, MouseMotionListener
         // save how much this drag amount is
         dragDX = newX - myComponent.getX();
         dragDY = newY - myComponent.getY();
-                
-        // move to the new location
-        myComponent.setLocation(newX, newY);        
+        
+        /**
+         * 
+         * Changed by Alamgir kabir on 15.09.2012
+         * */
+        /*Point currentPoint = new Point(newX , newY);
+        WorkspaceWidget workspaceWidget =  Workspace.getInstance().getWidgetAt(currentPoint);
+        
+        //if the widget is not null and instance is a block page
+        if(workspaceWidget != null && workspaceWidget instanceof Page)
+        {
+        	Point validPointToMove = new Point(newX + myComponent.getWidth() , newY);
+        	if(Workspace.getInstance().getWidgetAt(validPointToMove) instanceof Page)
+        	{
+        		Page page = (Page)Workspace.getInstance().getWidgetAt(validPointToMove);
+        		Page firstPage = Workspace.getInstance().getBlockCanvas().getPages().get(0);
+        	
+        		if(page.equals(firstPage))
+        		{
+        			// move to the new location
+        			myComponent.setLocation(newX, newY);
+        		}
+        	}
+        }*/
+        myComponent.setLocation(newX, newY);
     }
 
     /**
