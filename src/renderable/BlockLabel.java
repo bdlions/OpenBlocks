@@ -83,8 +83,10 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 				return textValid(text);
 			}
 		};
-		widget.setNumeric(Block.getBlock(this.blockID).getGenusName().equals("number"));
-
+		
+		widget.setInteger(Block.getBlock(this.blockID).getGenusName().equals("integer"));
+		widget.setDouble(Block.getBlock(this.blockID).getGenusName().equals("double"));
+		
 		// Only editable if the isEditable parameter was true, the label is either a Block's name or
 		// socket label, the block can edit labels, and the block is not in the factory. 
 		widget.setEditable(
@@ -246,7 +248,18 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 			RenderableBlock.getRenderableBlock(blockID).processKeyPressed(e);
 			return;
 		}
-		if(Block.getBlock(this.blockID).getGenusName().equals("number")){
+		if(Block.getBlock(this.blockID).getGenusName().equals("integer")){
+			if(e.getKeyChar() == '-' && widget.canProcessNegativeSign()){
+				return;
+			}
+			for(char c : validOperators){
+				if(e.getKeyChar() == c){
+					RenderableBlock.getRenderableBlock(blockID).processKeyPressed(e);
+					return;
+				}
+			}
+		}
+		if(Block.getBlock(this.blockID).getGenusName().equals("double")){
 			if(e.getKeyChar() == '-' && widget.canProcessNegativeSign()){
 				return;
 			}
