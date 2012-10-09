@@ -307,7 +307,10 @@ public class BlockUtilities {
 
 			//TODO genus name are based from TNG, need to figure out a workaround 
 			// selects the number block
-			if(renderable.getBlock().getGenusName().equalsIgnoreCase("number")){
+			if(renderable.getBlock().getGenusName().equalsIgnoreCase("integer")){
+				matchingBlocks.add(new TextualFactoryBlock((FactoryRenderableBlock)renderable, digits));
+			}
+			if(renderable.getBlock().getGenusName().equalsIgnoreCase("double")){
 				matchingBlocks.add(new TextualFactoryBlock((FactoryRenderableBlock)renderable, digits));
 			}
 			// selects any other block that contains the number (for variables that contains the number)

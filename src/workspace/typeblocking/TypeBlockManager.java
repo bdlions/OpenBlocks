@@ -594,7 +594,8 @@ public class TypeBlockManager {
 		Long parentBlockID = TypeBlockManager.manager.focusManager.getFocusBlockID();
 		if(isNullBlockInstance(parentBlockID)){
 			//focus on canvas
-			TypeBlockManager.automateBlockInsertion("number", "-");
+			TypeBlockManager.automateBlockInsertion("integer", "-");
+			TypeBlockManager.automateBlockInsertion("double", "-");
 
 		}else{
 			Block parentBlock = Block.getBlock(parentBlockID);
@@ -603,7 +604,8 @@ public class TypeBlockManager {
 				TypeBlockManager.automateBlockInsertion("difference", null);
 			}else{
 				//focus on a non-data block
-				TypeBlockManager.automateBlockInsertion("number", "-");
+				TypeBlockManager.automateBlockInsertion("integer", "-");
+				TypeBlockManager.automateBlockInsertion("double", "-");
 			}
 		}
 	}

@@ -70,9 +70,12 @@ public class BlockDropAnimator implements ActionListener{
 
 			//stop the timer
 			timer.stop();
-	        if(Block.getBlock(childBlock.getBlockID()).getGenusName().equals("number")){
+	        if(Block.getBlock(childBlock.getBlockID()).getGenusName().equals("integer")){
 	        	childBlock.switchToLabelEditingMode(false);			
-	    	}else{													
+	    	}else if(Block.getBlock(childBlock.getBlockID()).getGenusName().equals("double")){
+	        	childBlock.switchToLabelEditingMode(false);			
+	    	}
+	        else{													
 	    		childBlock.switchToLabelEditingMode(true);		
 	    	}
 	    	
