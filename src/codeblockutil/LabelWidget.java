@@ -54,8 +54,10 @@ public abstract class LabelWidget extends JComponent{
 	
 	/** The label text before user begins edit (applies only to editable labels)*/
     private String labelBeforeEdit = "";
-	/** If this is a number, then only allow nagatvie signs and periods at certain spots */
-	private boolean isNumber = false;
+	/** If this is an integer, then only allow nagatvie signs and periods at certain spots */
+	private boolean isInteger = false;
+	/** If this is a double, then only allow nagatvie signs and periods at certain spots */
+	private boolean isDouble = false;
     /** Is labelText editable by the user -- default true */
 	private boolean isEditable = false;
 	/** If focus is true, then show the combo pop up menu */
@@ -169,18 +171,25 @@ public abstract class LabelWidget extends JComponent{
 		return isEditable;
 	}
 	
-	public void setNumeric(boolean isNumber) {
-		this.isNumber = isNumber;
+	public void setInteger(boolean isInteger) {
+		this.isInteger = isInteger;
+	}
+	
+	public void setDouble(boolean isDouble) {
+		this.isDouble = isDouble;
 	}
 	
 	/**
 	 * isEditable returns if BlockLable is editable
 	 * @return isEditable
 	 */
-	public boolean isNumeric() {
-		return isNumber;
+	public boolean isInteger() {
+		return isInteger;
 	}
 
+	public boolean isDouble() {
+		return isDouble;
+	}
 	public void setSiblings(boolean hasSiblings, String[][] siblings){
 		this.hasSiblings = hasSiblings;
 		this.menu.setSiblings(siblings);
@@ -378,7 +387,7 @@ public abstract class LabelWidget extends JComponent{
 	private class BlockLabelTextField extends JTextField implements MouseListener, DocumentListener, FocusListener, ActionListener{
     	private static final long serialVersionUID = 873847239234L;
     	/** These Key inputs are processed by this text field */
-    	private final char[] validNumbers = {'1','2','3','4','5','6','7','8','9','0','.'};
+    	private final char[] validNumbers = {'1','2','3','4','5','6','7','8','9','0'};
     	/** These Key inputs are processed by this text field if NOT a number block*/
     	private final char[] validChar = {'1','2','3','4','5','6','7','8','9','0',
     			'q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j',
@@ -444,19 +453,36 @@ public abstract class LabelWidget extends JComponent{
 		 * that key or
 		 */
 	    protected boolean processKeyBinding(KeyStroke ks, KeyEvent e,int condition, boolean pressed){
-	    	if(isNumber){
+	    	if(isInteger){
 		    	if(e.getKeyChar() == '-' && canProcessNegativeSign()){
 	    			return super.processKeyBinding(ks, e, condition, pressed);
 		    	}
+	    		for(char c : validNumbers){
+	    			if(e.getKeyChar() == c){
+		    			return super.processKeyBinding(ks, e, condition, pressed);
+		    		}
+	    		}
+	    	}else if(isDouble){
+		    	if(e.getKeyChar() == '-' && canProcessNegativeSign()){
+	    			return super.processKeyBinding(ks, e, condition, pressed);
+		    	}
+		    	/**
+		    	 * if already a dot exist in the number then
+		    	 * then we cannot add another 
+		    	 */
 	    		if(this.getText().contains(".") && e.getKeyChar() == '.'){
 	    			return false;
+	    		}
+	    		if(e.getKeyChar() == '.'){
+	    			return super.processKeyBinding(ks, e, condition, pressed);
 	    		}
 	    		for(char c : validNumbers){
 	    			if(e.getKeyChar() == c){
 		    			return super.processKeyBinding(ks, e, condition, pressed);
 		    		}
 	    		}
-	    	}else{
+	    	}
+	    	else{
 		    	for(char c : validChar){
 		    		if(e.getKeyChar() == c){
 		    			return super.processKeyBinding(ks, e, condition, pressed);
