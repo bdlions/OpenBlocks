@@ -34,7 +34,7 @@ public class JavaCodeGeneration {
         /* You usually do these for many times in the application life-cycle:  */    
                 
         /* Get or create a template */
-        Template temp = cfg.getTemplate("java.ftl");
+        Template temp = cfg.getTemplate("java2.ftl");
 
         /* Create a data-model */
         Map root = new HashMap();
@@ -51,7 +51,13 @@ public class JavaCodeGeneration {
         aKeys.add(new Attribute("float", "value"));
         
         root.put("aKeys", aKeys);
-        
+        Map ifBlockMap = new HashMap();
+        ifBlockMap.put("left1", "age");
+        ifBlockMap.put("expression1", "<=");
+        ifBlockMap.put("right1", "30");
+        ifBlockMap.put("actionLeft", "age");
+        ifBlockMap.put("actionRight", "20");
+        root.put("ifBlock", ifBlockMap);
         
         /* Merge data-model with template */
         Writer out = new OutputStreamWriter(System.out);

@@ -55,6 +55,7 @@ import codeblocks.BlockLinkChecker;
 import codeblocks.CommandRule;
 import codeblocks.SocketRule;
 import codegenerator.Attribute;
+import codegenerator.CodeGen;
 import codegenerator.TextAreaWriter;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -519,65 +520,8 @@ public class WorkspaceController {
             public void actionPerformed(ActionEvent evt){
                 System.out.println(workspace.getSaveString());
                 
-                /* ------------------------------------------------------------------- */    
-                /* You should do this ONLY ONCE in the whole application life-cycle:   */    
-            
-                /* Create and adjust the configuration */
-                Configuration cfg = new Configuration();
-                try {
-					cfg.setDirectoryForTemplateLoading(
-					        new File("H:\\WorkspaceRAC\\OpenBlocks"));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                cfg.setObjectWrapper(new DefaultObjectWrapper());
-
-                /* ------------------------------------------------------------------- */    
-                /* You usually do these for many times in the application life-cycle:  */    
-                        
-                /* Get or create a template */
-                Template temp = null;
-				try {
-					temp = cfg.getTemplate("java.ftl");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-                /* Create a data-model */
-                Map root = new HashMap();
-                
-                Map classMap = new HashMap();
-                classMap.put("name", "Person");
-                classMap.put("packageName", "person");
-                root.put("class", classMap);
-                
-                List<Attribute> aKeys = new ArrayList<Attribute>();
-                aKeys.add(new Attribute("String", "name"));
-                aKeys.add(new Attribute("int", "age"));
-                aKeys.add(new Attribute("int",  "passingYear"));
-                aKeys.add(new Attribute("float", "value"));
-                
-                root.put("aKeys", aKeys);
-                
-                
-                /* Merge data-model with template */
-                Writer out = new PrintWriter(new TextAreaWriter(editor));
-                try {
-                	//editor.list(new PrintWriter(out));
-					temp.process(root, out);
-					//editor.setText(out.toString());
-				} catch (TemplateException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                try {
-					out.flush();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+                CodeGen codeGen = new CodeGen();
+                editor.setText(codeGen.getCode(workspace.getSaveString()));
             }
         });
         
@@ -597,7 +541,7 @@ public class WorkspaceController {
         
         int width = (int)editorPage.getJComponent().getBounds().getWidth();
         int height = (int)editorPage.getJComponent().getBounds().getHeight();
-        Rectangle updatedDimensionRect = new Rectangle(0,0,width,height);
+        Rectangle updatedDimensionRect = new Rectangle(20,0,width,height);
         
         editor.setBounds(updatedDimensionRect);
         editorPage.getRBParent().addToBlockLayer(editor);

@@ -1293,11 +1293,11 @@ public class Block implements ISupportMemento {
             appendAttribute("has-focus", "yes", saveString);
         saveString.append(">");
         
-        if(!this.label.equals(this.getInitialLabel())){
+        //if(!this.label.equals(this.getInitialLabel())){
             saveString.append("<Label>");
             saveString.append(escape(label));
             saveString.append("</Label>");
-        }
+        //}
         
         if(pageLabel != null && !pageLabel.equals("")){
             saveString.append("<PageLabel>");
