@@ -36,7 +36,7 @@ public class Block
 	public void setGenusName(String genusName) {
 		this.genusName = genusName;
 	}
-	
+
 	public int getAfterBlockId() {
 		return afterBlockId;
 	}

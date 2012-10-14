@@ -6,61 +6,36 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Rectangle;
-import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.StringReader;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.jws.soap.SOAPBinding.Style;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.text.JTextComponent;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import renderable.BlockUtilities;
-import renderable.RenderableBlock;
-
 import workspace.Page;
 import workspace.SearchBar;
 import workspace.SearchableContainer;
 import workspace.TrashCan;
 import workspace.Workspace;
-import codeblocks.Block;
 import codeblocks.BlockConnectorShape;
 import codeblocks.BlockGenus;
 import codeblocks.BlockLinkChecker;
 import codeblocks.CommandRule;
 import codeblocks.SocketRule;
-import codegenerator.Attribute;
 import codegenerator.CodeGen;
-import codegenerator.TextAreaWriter;
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 /**
  * 
@@ -520,8 +495,11 @@ public class WorkspaceController {
             public void actionPerformed(ActionEvent evt){
                 System.out.println(workspace.getSaveString());
                 
-                CodeGen codeGen = new CodeGen();
-                editor.setText(codeGen.getCode(workspace.getSaveString()));
+                //CodeGen codeGen = new CodeGen();
+                //editor.setText(codeGen.getCode(workspace.getSaveString()));
+                
+                CodeGen manageCode = new CodeGen();
+                editor.setText(manageCode.getGenerateCode(workspace.getSaveString()));
             }
         });
         

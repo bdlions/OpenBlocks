@@ -8,6 +8,8 @@ public class BlockConnector {
 	private int connectBlockId;
 	private String label;
 	private String type;
+	private String positionType;
+	
 	
 	public String getLabel() {
 		return label;
@@ -31,5 +33,13 @@ public class BlockConnector {
 	@XmlAttribute(name="init-type")
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public String getPositionType() {
+		return positionType;
+	}
+	@XmlAttribute(name="position-type")
+	public void setPositionType(String positionType) {
+		this.positionType = positionType;
 	}
 }

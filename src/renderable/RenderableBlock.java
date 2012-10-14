@@ -28,6 +28,7 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JToolTip;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -1708,6 +1709,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 		if (SwingUtilities.isLeftMouseButton(e)){
 			dragHandler.mousePressed(e);
 			pickedUp = true; //mark this block as currently being picked up
+			//System.out.println("Selected a block"+ this.getSaveString());
 		}
 	}
 

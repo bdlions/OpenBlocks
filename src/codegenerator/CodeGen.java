@@ -1,543 +1,420 @@
 package codegenerator;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
-import javax.xml.bind.JAXBContext;
+
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import codeblocks.BlockGenus;
 import codegenerator.xmlbind.Block;
 import codegenerator.xmlbind.BlockConnector;
-import codegenerator.xmlbind.Page;
-import codegenerator.xmlbind.Pages;
+import codegenerator.xmlbind.Plug;
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class CodeGen {
-	public HashMap<Integer, Block> blocks = new HashMap<Integer, Block>();
-	public HashMap<String, Block> actionOrFunctionBlockMap = new HashMap<String, Block>();
-	public List<Block> ifBlocks = new ArrayList<Block>();
-	public List<Block> ifelseBlocks = new ArrayList<Block>();
-	public List<Block> conditionBlocks = new ArrayList<Block>();
-	public List<Block> actionBlocks = new ArrayList<Block>();
-	public List<Block> functionBlocks = new ArrayList<Block>();
-	public List<Variable> variableBlocks = new ArrayList<Variable>();
 
+	private HashMap<Integer, Block> blocksMap = new HashMap<Integer, Block>();
+	private List<Variable> variableDecl = new ArrayList<Variable>();
+	private List<Block> allBlocks = new ArrayList<Block>();
+	private List<Block> differentCommand = new ArrayList<Block>();
+	private List<Block> allFunction = new ArrayList<Block>();
+	public String getGenerateCode(String xmlString) {
+		// TODO Auto-generated method stub
+		allBlocks = XMLToBlockGenerator.generateBlocks(xmlString);
+		HashMap<Integer, Block> functionsMap = new HashMap<Integer, Block>();
 
-	public List<Block> getConditionBlocks() {
-		return conditionBlocks;
-	}
+		// XMLToBlockGenerator.generateBlocks("<Pages><Page page-name=\"Blocks\" page-color=\"30 30 30\" page-width=\"797\" page-infullview=\"yes\" page-drawer=\"Blocks\" ><PageBlocks><Block id=\"125\" genus-name=\"product\" ><Label>x</Label><Location><X>427</X><Y>108</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"103\" ></BlockConnector></Plug><Sockets num-sockets=\"2\" ><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"bottom\" con-block-id=\"127\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"bottom\" con-block-id=\"115\" ></BlockConnector></Sockets></Block><Block id=\"115\" genus-name=\"userAge\" ><Label>Age</Label><Location><X>516</X><Y>111</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"single\" con-block-id=\"125\" ></BlockConnector></Plug><Sockets num-sockets=\"2\" ><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"p\" position-type=\"single\" con-block-id=\"117\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"x\" position-type=\"single\" con-block-id=\"119\" ></BlockConnector></Sockets></Block><Block id=\"119\" genus-name=\"integer\" ><Label>1.2</Label><Location><X>580</X><Y>135</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"115\" ></BlockConnector></Plug></Block><Block id=\"117\" genus-name=\"random-color\" ><Label>0</Label><Location><X>580</X><Y>111</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"115\" ></BlockConnector></Plug></Block><Block id=\"127\" genus-name=\"integer\" ><Label>1</Label><Location><X>437</X><Y>135</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"125\" ></BlockConnector></Plug></Block><Block id=\"129\" genus-name=\"and\" ><Label>and</Label><Location><X>35</X><Y>58</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"boolean\" init-type=\"boolean\" label=\"\" position-type=\"mirror\" ></BlockConnector></Plug><Sockets num-sockets=\"2\" ><BlockConnector connector-kind=\"socket\" connector-type=\"boolean\" init-type=\"boolean\" label=\"\" position-type=\"bottom\" con-block-id=\"133\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"boolean\" init-type=\"boolean\" label=\"\" position-type=\"bottom\" con-block-id=\"103\" ></BlockConnector></Sockets></Block><Block id=\"103\" genus-name=\"greaterthan\" ><Label>&gt;</Label><Location><X>158</X><Y>61</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"boolean\" init-type=\"boolean\" label=\"\" position-type=\"mirror\" con-block-id=\"129\" ></BlockConnector></Plug><Sockets num-sockets=\"2\" ><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"bottom\" con-block-id=\"105\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"bottom\" con-block-id=\"125\" ></BlockConnector></Sockets></Block><Block id=\"105\" genus-name=\"born\" ><Label>AdvancedAge</Label><Location><X>168</X><Y>64</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"single\" con-block-id=\"103\" ></BlockConnector></Plug><Sockets num-sockets=\"4\" ><BlockConnector connector-kind=\"socket\" connector-type=\"string\" init-type=\"string\" label=\"tcountry\" position-type=\"single\" con-block-id=\"107\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"tcolor\" position-type=\"single\" con-block-id=\"109\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"dateborn\" position-type=\"single\" con-block-id=\"111\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"A\" position-type=\"single\" con-block-id=\"113\" ></BlockConnector></Sockets></Block><Block id=\"113\" genus-name=\"integer\" ><Label>0</Label><Location><X>326</X><Y>136</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"105\" ></BlockConnector></Plug></Block><Block id=\"111\" genus-name=\"integer\" ><Label>1960</Label><Location><X>326</X><Y>112</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"105\" ></BlockConnector></Plug></Block><Block id=\"109\" genus-name=\"black\" ><Label>1</Label><Location><X>326</X><Y>88</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"105\" ></BlockConnector></Plug></Block><Block id=\"107\" genus-name=\"USA\" ><Label>USA</Label><Location><X>326</X><Y>64</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"string\" init-type=\"string\" label=\"\" position-type=\"mirror\" con-block-id=\"105\" ></BlockConnector></Plug></Block><Block id=\"133\" genus-name=\"true\" ><Label>true</Label><Location><X>45</X><Y>137</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"boolean\" init-type=\"boolean\" label=\"\" position-type=\"mirror\" con-block-id=\"129\" ></BlockConnector></Plug></Block></PageBlocks></Page><Page page-name=\"Code\" page-color=\"30 30 30\" page-width=\"966\" page-infullview=\"yes\" page-drawer=\"Code\" ></Page></Pages>");
 
-	public List<Block> getActionBlocks() {
-		return actionBlocks;
-	}
-
-	public List<Block> getIfBlocks() {
-		return ifBlocks;
-	}
-
-	public List<Block> getIfelseBlocks() {
-		return ifelseBlocks;
-	}
-
-	private List<Block> blockList = new ArrayList<Block>();
-
-	public static void main(String[] args) {
-
-		CodeGen codeGen = new CodeGen();
-		codeGen.getCode();
-	}
-	
-	
-	/**
-	 * Block parameters for command
-	 * */
-	
-	public String getParameters(Block block)
-	{
-		String params = "";
-		int count = 0;
-		for (BlockConnector connector : block.getSockets().getBlockConnectors()) {
-			Block bolck = blocks.get(connector.getConnectBlockId());
-			if(count > 0 )
-			{
-				params += ", ";
-			}
-			count ++;
-			params += bolck.getLabel();
-		}
-		
-		return params; 
-	}
-	
-	public List<Variable> getVariableBlocks()
-	{
-		return variableBlocks;
-	}
-
-	public String getCondition(Block block) throws Exception {
-		if (block == null) {
-			throw new NullPointerException("Block is null in getcondition");
-		}
-
-		String condition = null;
-
-		/**
-		 * this is a block which has a condition block or not
-		 * 
-		 * */
-		if (block.getPlug() == null && block.getSockets() != null) {
-			block = getConditionBlock(block);
-		}
-
-		/**
-		 * If we found a condition block
-		 * */
-		if (block != null) {
-			List<Block> conditionBlockList = new ArrayList<Block>();
-			generateConditionBlock(conditionBlockList, block);
-			condition = postfixToInfix(conditionBlockList);
-		}
-		return condition;
-	}
-
-	private Boolean isIfBlock(Block block)
-	{
-		if(block.getGenusName().equals("if")) return true;
-		else return false;
-	}
-	private Boolean isVariable(Block block)
-	{
-		BlockGenus blockGenus = BlockGenus.getGenusWithName(block.getGenusName());
-		return blockGenus.isVariableDeclBlock();
-	}
-	
-	private Boolean isIfElseBlock(Block block)
-	{
-		if(block.getGenusName().equals("ifelse")) return true;
-		else return false;
-	}
-	
-	
-	public List<Block> getActionsInIfBlock(Block block)
-	{
-		List<Block> actionBlocks = new ArrayList<Block>();
-		if(isIfBlock(block) == false && isIfElseBlock(block) == false)
-			return actionBlocks;
-		if(block.getSockets() != null)
+		for (Block block : allBlocks) 
 		{
-			for (BlockConnector connector : block.getSockets().getBlockConnectors()) {
-				if(connector.getLabel().equals("then"))
-				{
-					Block _block = blocks.get(connector.getConnectBlockId());
-					actionBlocks.add(_block);
-					
-					while(_block.getAfterBlockId() > 0)
-					{
-						_block = blocks.get(_block.getAfterBlockId());
-						actionBlocks.add(_block);
-					}
-					
-				}
-			}
+			blocksMap.put(block.getId(), block);
 		}
-		return actionBlocks;
-	}
-	
-	public List<Block> getActionsInElseBlock(Block block)
-	{
-		List<Block> actionBlocks = new ArrayList<Block>();
-		if(isIfBlock(block) == false && isIfElseBlock(block) == false)
-			return actionBlocks;
-		if(block.getSockets() != null)
+		
+		for (Block block : allBlocks) 
 		{
-			for (BlockConnector connector : block.getSockets().getBlockConnectors()) {
-				if(connector.getLabel().equals("else"))
-				{
-					Block _block = blocks.get(connector.getConnectBlockId());
-					actionBlocks.add(_block);
-					
-					while(_block.getAfterBlockId() > 0)
-					{
-						_block = blocks.get(_block.getAfterBlockId());
-						actionBlocks.add(_block);
-					}
-					
-				}
-			}
-		}
-		return actionBlocks;
-	}
-	private void arrangeBlocks() {
-		ifBlocks = new ArrayList<Block>();
-		ifelseBlocks = new ArrayList<Block>();
-		conditionBlocks = new ArrayList<Block>();
-		actionBlocks = new ArrayList<Block>();
-		
-		
-		for (Block block : blockList) {
-			String blockName = block.getGenusName();
-			BlockGenus blockGenus = BlockGenus.getGenusWithName(blockName);
-			/**
-			 * If there is no block name we cannot take decision what type of
-			 * block it is so we discard the block
-			 * */
-			if (blockName == "") {
-				continue;
-			}
-
-			/**
-			 * If the bolck name is "if" then we add the block in ifblocks
-			 * */
-			if (isIfBlock(block)) {
-				ifBlocks.add(block);
-				for (Block action : getActionsInIfBlock(block)) {
-					//actionBlocks.add(action);
-				}
-			}
-
-			/**
-			 * If the bolck name is "ifelse" then we add the block in
-			 * ifelseblocks
-			 * */
-			else if (isIfElseBlock(block)) {
-				ifelseBlocks.add(block);
-				for (Block action : getActionsInIfBlock(block)) {
-					//actionBlocks.add(action);
-				}
-				for (Block action : getActionsInElseBlock(block)) {
-					//actionBlocks.add(action);
-				}
-			}
-
-			/**
-			 * Adding condition blocks
-			 * */
-			if (isIfBlock(block) || isIfElseBlock(block)) {
-				Block conditionBlock = getConditionBlock(block);
-				if (conditionBlock != null) {
-					conditionBlocks.add(conditionBlock);
-				}
-			}
+			BlockGenus genus = getGenusWithName(block.getGenusName());
 			
-			/**
-			 * Adding action blocks
-			 * */
-			if(blockGenus.isCommandBlock() && !isIfElseBlock(block) && !isIfBlock(block))
+			if(genus.isCommandBlock() &&  block.getBeforeBlockId() <= 0)
 			{
-				if(!actionOrFunctionBlockMap.containsKey(block.getGenusName()))
-				{
-					actionOrFunctionBlockMap.put(block.getGenusName(), block);
-					actionBlocks.add(block);
-				}
-				
+				differentCommand.add(block);
 			}
-			
-			/**
-			 * Adding function blocks
-			 * */
-			if(blockGenus.isFunctionBlock() && !isIfElseBlock(block) && !isIfBlock(block))
+			if (genus.isFunctionBlock() || genus.isCommandBlock()) 
 			{
-				if(!actionOrFunctionBlockMap.containsKey(block.getGenusName()))
+				if(!functionsMap.containsKey(block.getId()))
 				{
-					actionOrFunctionBlockMap.put(block.getGenusName(), block);
-					functionBlocks.add(block);
+					functionsMap.put(block.getId(), block);
+					allFunction.add(block);
 				}
-				
 			}
-			
 			/**
 			 * Adding variables
 			 * 
 			 */
-			if(isVariable(block))
+			else if(genus.isVariableDeclBlock())
 			{
 				String pattern = "[^a-zA-Z_]+|[^a-zA-Z_0-9]+//g";
 				Variable variable = new Variable();
 				variable.setName(block.getLabel().replaceAll(pattern, ""));
+				variable.setId(block.getId());
 				
-				if(block.getSockets().getBlockConnectors().size()> 0)
+				if(block.getSockets() != null && block.getSockets().getBlockConnectors().size()> 0)
 				{
 					BlockConnector connector = block.getSockets().getBlockConnectors().get(0);
+					
 					variable.setType(connector.getType());
-					Block valueBlock = blocks.get(connector.getConnectBlockId());
-					variable.setValue(valueBlock.getLabel());
 					
-					
+					Block valueBlock = blocksMap.get(connector.getConnectBlockId());
+					/**
+					 * If there is really a value block
+					 * */
+					if(valueBlock != null)
+					{
+						BlockGenus connectorGenus = getGenusWithName(valueBlock.getGenusName());
+						List<ExpressionData> listExpressionBlocks = new ArrayList<ExpressionData>();
+						
+						
+						if(connectorGenus.isFunctionBlock())
+						{
+							listExpressionBlocks.add(getExpressionData(valueBlock.getId(), Integer.toString(valueBlock.getId())));
+							while (isCompleteProcessFunction(listExpressionBlocks)) ;
+							variable.setValue(listExpressionBlocks);
+						}
+						else
+						{
+							listExpressionBlocks.add(getExpressionData(valueBlock.getId(), valueBlock.getGenusName()));
+							variable.setValue(listExpressionBlocks);
+						}
+					}
 				}
-				variableBlocks.add(variable);
+				variableDecl.add(variable);
 			}
-
 		}
 		
-	}
-
-	/**
-	 * Give input a block who has a condition block
-	 * */
-	private Block getConditionBlock(Block block) {
-		for (BlockConnector connector : block.getSockets().getBlockConnectors()) {
-			Block connectorBlock = blocks.get(connector.getConnectBlockId());
-			if (connectorBlock != null && connectorBlock.getPlug() != null) {
-				return connectorBlock;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Generation condiontion block storing all the blocks in postfix notaion
-	 * */
-	private void generateConditionBlock(List<Block> condiontBlocks, Block block) {
-
-		/**
-		 * If the block has no socket then we do not need to check it's barnch
-		 * becasue this is the leaf node
-		 * */
-		if (block.getSockets() == null) {
-			/**
-			 * Added the leaf node
-			 * */
-			condiontBlocks.add(block);
-			return;
-		}
-
-		/**
-		 * if the block is a root node then we need to check the leaf node
-		 * */
-		for (BlockConnector connector : block.getSockets().getBlockConnectors()) {
-			Block connectorBlock = blocks.get(connector.getConnectBlockId());
-
-			/**
-			 * if the node is connected and root then we call again to search
-			 * the leaf node
-			 * */
-			if (connectorBlock.getPlug() != null) {
-				generateConditionBlock(condiontBlocks, connectorBlock);
-			}
-		}
-		/**
-		 * Added the root node
-		 * */
-		condiontBlocks.add(block);
-		return;
-	}
-
-	public final String postfixToInfix(final List<Block> postfix)
-			throws Exception {
-
-		/**
-		 * Stack to hold values
-		 * */
-		final Stack<String> tokenStack = new Stack<String>();
-
-		/**
-		 * Start processing tokens
-		 * */
-		for (Block block : postfix) {
-			/**
-			 * Evaluate the current token and push it onto the stack
-			 * */
-			tokenStack.push(evaluateToken(block, tokenStack));
-		}
-
-		/**
-		 * Last element of the stack is our result
-		 * */
-		String result = tokenStack.pop();
-		/**
-		 * If there is no brackets
-		 * */
-		if(result.indexOf("(") < 0)
+		try
 		{
-			return result;
-		}
-		/**
-		 * delete first and last brackets
-		 * */
-		if (result != null) {
-			result = result.substring(1, result.length() - 1);
-		}
-		return result;
-	}
-
-	/**
-	 * If token is a value, return the token. If token is an operator, perform
-	 * the operation and return the result.
-	 * 
-	 * @throws Exception
-	 */
-	private final String evaluateToken(final Block block,
-			final Stack<String> tokenStack) throws Exception {
-
-		/**
-		 * if the sockets is not null then this is the root node then we need to
-		 * search the left and righ leaf node
-		 * */
-		if (block.getSockets() != null) {
-			/**
-			 * We know each operator works on two numbers... Check for correct
-			 * number of values on stack
-			 * */
-
-			if (tokenStack.size() < 2) {
-				throw new Exception();
-			}
-
-			/**
-			 * Grab values to evaluate from stack
-			 * */
-			final String value2 = tokenStack.pop();
-			final String value1 = tokenStack.pop();
-
-			/**
-			 * Return evaluated expression
-			 * */
-			return "(" + value1 + " " + block.getGenusName() + " " + value2
-					+ ")";
-
-		} else {
-			/**
-			 * currentToken = leaf node If token is a number, it goes right onto
-			 * the stack
-			 * */
-
-			return block.getGenusName();
-		}
-	}
-
-	private Block getStartBlock() {
-		Block startBlock = null;
-
-		for (Block block : blockList) {
-			if (block.getBeforeBlockId() == 0 && block.getPlug() == null) {
-				startBlock = block;
-			}
-		}
-		return startBlock;
-	}
-
-	public void getCode() {
-		try {
-
-			InputStream inputStream = ClassLoader
-					.getSystemResourceAsStream("resources/blocksample.xml");
-			JAXBContext jaxbContext = JAXBContext.newInstance(Pages.class);
-
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			Pages pages = (Pages) jaxbUnmarshaller.unmarshal(inputStream);
-			blocks = new HashMap<Integer, Block>();
-
-			// get the block page
-			Page blockPage = pages.getPage().get(0);
-			blockList = blockPage.getPageBlocks().getBlocks();
-			// put all the blocks in a hash table
-			for (Block block : blockList) {
-				blocks.put(block.getId(), block);
-			}
-			arrangeBlocks();
-
-			for (Block block : ifelseBlocks) {
-				getActionsInElseBlock(block);
-			}
 			Configuration cfg = new Configuration();
 			String templateLocation = ((System.getProperty("application.home") != null) ? System
 					.getProperty("application.home") : System
 					.getProperty("user.dir"))
 					+ "/templates/";
-
+	
 			cfg.setDirectoryForTemplateLoading(new File(templateLocation));
 			cfg.setObjectWrapper(new DefaultObjectWrapper());
-
+	
 			Template temp = cfg.getTemplate("code.ftl");
-
+	
 			Map<String, CodeGen> root = new HashMap<String, CodeGen>();
 			root.put("codeGen", this);
-
+	
 			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			final Writer output = new OutputStreamWriter(outputStream);
-
-			temp.process(root, output);
-			output.flush();
-			System.out.println(outputStream.toString());
-		}
-
-		catch (JAXBException exception) {
-			exception.printStackTrace();
-		} catch (IOException exception) {
-			exception.printStackTrace();
-		} catch (TemplateException exception) {
-			exception.printStackTrace();
-		}
-	}
-
-	public String getCode(String xmlString) {
-
-		try {
-			ByteArrayInputStream input = new ByteArrayInputStream(
-					xmlString.getBytes());
-
-			JAXBContext jaxbContext = JAXBContext.newInstance(Pages.class);
-
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			Pages pages = (Pages) jaxbUnmarshaller.unmarshal(input);
-			blocks = new HashMap<Integer, Block>();
-
-			// get the block page
-			Page blockPage = pages.getPage().get(0);
-			if(blockPage.getPageBlocks() != null)
-			{
-				blockList = blockPage.getPageBlocks().getBlocks();
-			}
-			// put all the blocks in a hash table
-			for (Block block : blockList) {
-				blocks.put(block.getId(), block);
-			}
-			arrangeBlocks();
-
-			Configuration cfg = new Configuration();
-			String templateLocation = ((System.getProperty("application.home") != null) ? System
-					.getProperty("application.home") : System
-					.getProperty("user.dir"))
-					+ "/templates/";
-
-			cfg.setDirectoryForTemplateLoading(new File(templateLocation));
-			cfg.setObjectWrapper(new DefaultObjectWrapper());
-
-			Template temp = cfg.getTemplate("code.ftl");
-
-			Map<String, CodeGen> root = new HashMap<String, CodeGen>();
-			root.put("codeGen", this);
-
-			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			final Writer output = new OutputStreamWriter(outputStream);
-
+	
 			temp.process(root, output);
 			output.flush();
 			return outputStream.toString();
 		}
-
-		catch (JAXBException exception) {
-			exception.printStackTrace();
-		} catch (IOException exception) {
+		catch (IOException exception) {
 			exception.printStackTrace();
 		} catch (TemplateException exception) {
 			exception.printStackTrace();
 		}
 		return null;
+	}
+
+	private void printBlocks(List<ExpressionData> functionBlocks) {
+		for (ExpressionData expressionData : functionBlocks) {
+			if (blocksMap.containsKey(expressionData.getId())) {
+				Block functionBlock = blocksMap.get(expressionData.getId());
+				System.out.print(functionBlock.getLabel());
+			} else {
+				System.out.print(expressionData.getData());
+			}
+		}
+		System.out.println();
+	}
+	
+	public Boolean isCompleteProcessFunction(List<ExpressionData> list) {
+		boolean found = false;
+		List<ExpressionData> tempList = new ArrayList<ExpressionData>();
+
+		for (int i = 0; i < list.size(); i++) {
+			if (isNumber(list.get(i).getData())) {
+
+				Block block = blocksMap.get(list.get(i).getId());
+				if(block == null)
+				{
+					return false; 
+				}
+				BlockGenus blockGenus = getGenusWithName(block.getGenusName());
+
+				if (blockGenus.isDataBlock()) {
+					tempList.add(getExpressionData(block.getId(), block.getGenusName()));
+					continue;
+				} else if (blockGenus.isFunctionBlock()) {
+					/**
+					 * If there is a plug
+					 * */
+					if (block.getPlug() != null) {
+						Plug blockPlug = block.getPlug();
+						/**
+						 * If the block plug has a connector
+						 * */
+						if (blockPlug.getBlockConnectors() != null) {
+							BlockConnector connector = blockPlug.getBlockConnectors();
+							/**
+							 * if the connector is a mirror type that means and,
+							 * or, <, >, == or the connector type is a single
+							 * that means it's a function
+							 * */
+							if (connector.getPositionType().equals("mirror")) {
+
+								/**
+								 * this is a mirrored connector so it has two
+								 * sockets or not
+								 * */
+								if (block.getSockets() != null) {
+									List<BlockConnector> connectorList = block.getSockets().getBlockConnectors();
+									BlockConnector leftConnector = connectorList.get(0);
+									BlockConnector rightConnector = connectorList.get(1);
+									Block leftBlock = blocksMap.get(leftConnector.getConnectBlockId());
+									Block rightBlock = blocksMap.get(rightConnector.getConnectBlockId());
+
+									tempList.add(getExpressionData(0, "("));
+									/**
+									 * There will be no left block
+									 * */
+									if (leftBlock != null) {
+										tempList.add(getExpressionData(leftBlock.getId(), Integer.toString(leftBlock.getId())));
+									}
+									tempList.add(getExpressionData(block.getId(), block.getGenusName()));
+									if (rightBlock != null) {
+										tempList.add(getExpressionData(rightBlock.getId(), Integer.toString(rightBlock.getId())));
+									}
+									tempList.add(getExpressionData(0, ")"));
+
+								} else {
+									tempList.add(getExpressionData(block.getId(), block.getGenusName()));
+
+								}
+								found = true;
+							} else if (connector.getPositionType().equals("single")) {
+
+								/**
+								 * this is a function type connector so it has
+								 * lots of sockets or not
+								 * */
+								List<BlockConnector> connectorList = block.getSockets().getBlockConnectors();
+
+								tempList.add(getExpressionData(block.getId(),block.getGenusName()));
+								int paramCount = 0;
+
+								tempList.add(getExpressionData(0, "("));
+
+								for (BlockConnector blockConnector : connectorList) {
+									Block functionBlock = blocksMap.get(blockConnector.getConnectBlockId());
+									if (paramCount > 0) {
+										tempList.add(getExpressionData(0, ","));
+									}
+									if (functionBlock != null) {
+										tempList.add(getExpressionData(functionBlock.getId(), Integer.toString(functionBlock.getId())));
+									}
+
+									paramCount++;
+								}
+
+								tempList.add(getExpressionData(0, ")"));
+								found = true;
+							}
+
+						}
+					}
+
+				}
+			} else {
+				tempList.add(list.get(i));
+			}
+
+		}
+
+		list.clear();
+		list.addAll(tempList);
+		return found;
+	}
+	
+	public List<ExpressionData> getCommandExpression(Block block)
+	{
+		List<ExpressionData> expression = new ArrayList<ExpressionData>();
+		
+	
+		BlockGenus blockGenus = getGenusWithName(block.getGenusName());
+		expression.add(getExpressionData(block.getId(), block.getGenusName()));
+		if(blockGenus.isCommandBlock())
+		{
+			expression.add(getExpressionData(0, "("));
+			
+			if(block.getSockets() != null)
+			{
+				int count = 0;
+				for (BlockConnector blockConnector : block.getSockets().getBlockConnectors()) {
+					Block paramBlock = blocksMap.get(blockConnector.getConnectBlockId());
+					if(count > 0)
+					{
+						expression.add(getExpressionData(0, ","));
+					}
+					if(paramBlock != null)
+					{
+						expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
+					}
+					count ++;
+				}
+			}
+			expression.add(getExpressionData(0, ")"));
+			
+		}
+		
+		return expression;
+	}
+
+	private ExpressionData getExpressionData(int id, String data) {
+		ExpressionData expressionData = new ExpressionData();
+		expressionData.setData(data);
+		expressionData.setId(id);
+		return expressionData;
+	}
+
+	public Boolean isNumber(String number) {
+		try {
+			Integer.parseInt(number);
+			return true;
+		} catch (NumberFormatException ex) {
+
+		}
+		return false;
+	}
+
+	public Block getBlock(int id)
+	{
+		return blocksMap.get(id);
+	}
+	
+	public BlockGenus getGenusWithName(String blockName)
+	{
+		return BlockGenus.getGenusWithName(blockName);
+	}
+	public List<Variable> getVariableDeclBlocks()
+	{
+		return variableDecl;
+	}
+	public List<Block> getDifferentCommand() {
+		return differentCommand;
+	}
+	
+	public List<ExpressionData> getIfCondition(Block commandBlock)
+	{
+		List<ExpressionData> conditionData = new ArrayList<ExpressionData>();
+		if(commandBlock.getSockets() != null)
+		{
+			for (BlockConnector ifConnector : commandBlock.getSockets().getBlockConnectors())
+			{
+				if(ifConnector == null)
+				{
+					continue;
+				}
+				
+				if(ifConnector.getLabel().equals("test"))
+				{
+					conditionData.add(getExpressionData(ifConnector.getConnectBlockId(), Integer.toString(ifConnector.getConnectBlockId())));
+					while (isCompleteProcessFunction(conditionData));
+				}
+			}
+		}
+		
+		while(isCompleteProcessFunction(conditionData));
+		return conditionData;
+	}
+	public List<ExpressionData> getFullFunction(Block functionBlock)
+	{
+		List<ExpressionData> functionData = new ArrayList<ExpressionData>();
+
+		functionData.add(getExpressionData(functionBlock.getId(),Integer.toString(functionBlock.getId())));
+		
+		while(isCompleteProcessFunction(functionData));
+		return functionData;
+	}
+	public List<Block> getThenStatements(Block block)
+	{
+		List<Block> thenStatements = new ArrayList<Block>();
+		if(block.getSockets() != null)
+		{
+			for (BlockConnector ifConnector : block.getSockets().getBlockConnectors())
+			{
+				if(ifConnector == null)
+				{
+					continue;
+				}
+				else if(ifConnector.getLabel().equals("then"))
+				{
+					do
+					{
+						if(getBlock(ifConnector.getConnectBlockId()) != null)
+						{
+							thenStatements.add(getBlock(ifConnector.getConnectBlockId()));
+							block = getBlock(block.getAfterBlockId());
+						}
+					}
+					while( block != null && block.getAfterBlockId() > 0 );
+					
+				}
+				
+			}
+		}
+		return thenStatements;
+	}
+	
+	public List<Block> getElseStatements(Block block)
+	{
+		List<Block> elseStatements = new ArrayList<Block>();
+		if(block.getSockets() != null)
+		{
+			for (BlockConnector ifConnector : block.getSockets().getBlockConnectors())
+			{
+				if(ifConnector == null)
+				{
+					continue;
+				}
+				else if(ifConnector.getLabel().equals("else"))
+				{
+					do
+					{
+						if(getBlock(ifConnector.getConnectBlockId()) != null)
+						{
+							elseStatements.add(getBlock(ifConnector.getConnectBlockId()));
+							block = getBlock(block.getAfterBlockId());
+						}
+					}
+					while( block != null && block.getAfterBlockId() > 0 );
+					
+				}
+				
+			}
+		}
+		return elseStatements;
+	}
+	
+	public List<Block> getAllFunction() {
+		return allFunction;
+	}
+	public List<Block> getAllBlocks() {
+		return allBlocks;
 	}
 }
