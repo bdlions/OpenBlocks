@@ -15,8 +15,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.JToolBar;
 import javax.swing.text.JTextComponent;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -483,6 +489,134 @@ public class WorkspaceController {
         
         frame.setBounds(100, 100, 800, 500);
         
+        JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+		
+		JMenu menuFile = new JMenu("File");
+		menuBar.add(menuFile);
+		
+		JMenuItem menuItemNew = new JMenuItem("New");
+		menuFile.add(menuItemNew);
+		menuItemNew.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(null, "New Clicked.");				
+			}
+		});
+		JMenuItem menuItemOpen = new JMenuItem("Open");
+		menuFile.add(menuItemOpen);
+		menuItemOpen.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(null, "Open Clicked.");				
+			}
+		});
+		JMenuItem menuItemSave = new JMenuItem("Save");
+		menuFile.add(menuItemSave);
+		menuItemSave.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(null, "Save Clicked.");				
+			}
+		});
+		JMenuItem menuItemSaveAs = new JMenuItem("Save As");
+		menuFile.add(menuItemSaveAs);
+		menuItemSaveAs.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(null, "Save As Clicked.");				
+			}
+		});
+		JMenuItem menuItemPrint = new JMenuItem("Print");
+		menuFile.add(menuItemPrint);
+		menuItemPrint.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(null, "Print Clicked.");				
+			}
+		});
+		JMenuItem menuItemExit = new JMenuItem("Exit");
+		menuFile.add(menuItemExit);
+		menuItemExit.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(null, "Exit Clicked.");				
+			}
+		});
+		
+		JMenu menuCodeGeneration = new JMenu("Code Generation");
+		menuBar.add(menuCodeGeneration);
+		
+		JMenuItem menuItemValidate = new JMenuItem("Validate");
+		menuCodeGeneration.add(menuItemValidate);
+		menuItemValidate.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(null, "Validate Clicked.");				
+			}
+		});
+		JMenuItem menuItemGenerateCCode = new JMenuItem("Generate C Code");
+		menuCodeGeneration.add(menuItemGenerateCCode);
+		menuItemGenerateCCode.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(null, "Generate C Code Clicked.");				
+			}
+		});
+		JMenuItem menuItemGenerateJavaCode = new JMenuItem("Generate Java Code");
+		menuCodeGeneration.add(menuItemGenerateJavaCode);
+		menuItemGenerateJavaCode.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
+				System.out.println(workspace.getSaveString());
+                
+                //CodeGen codeGen = new CodeGen();
+                //editor.setText(codeGen.getCode(workspace.getSaveString()));
+                
+                CodeGen manageCode = new CodeGen();
+                StructureCode sCode = new StructureCode();                
+                editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(workspace.getSaveString())));
+			}
+		});
+		
+		JMenu menuConfiguration = new JMenu("Configuration");
+		menuBar.add(menuConfiguration);
+		
+		JMenu menuHelp= new JMenu("Help");
+		menuBar.add(menuHelp);
+		JMenuItem menuItemOnlineHelp = new JMenuItem("Online Help");
+		menuHelp.add(menuItemOnlineHelp);
+		menuItemOnlineHelp.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(null, "Online Help Clicked.");				
+			}
+		});
+		
+		JMenu menuAbout= new JMenu("About");
+		menuBar.add(menuAbout);
+		JMenuItem menuItemSnap = new JMenuItem("Snap");
+		menuAbout.add(menuItemSnap);
+		menuItemSnap.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				JOptionPane.showMessageDialog(null, "Snap Clicked.");				
+			}
+		});
+		
+		
         //create search bar
         SearchBar searchBar = new SearchBar("Search blocks", "Search for blocks in the drawers and workspace", workspace);
         for(SearchableContainer con : wc.getAllSearchableContainers()){
@@ -504,10 +638,122 @@ public class WorkspaceController {
         });
         
         JPanel topPane = new JPanel();
+        
+        JToolBar toolbar = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
+        //JButton cutbutton = new JButton(new ImageIcon("cut.gif"));
+        JButton newbutton = new JButton("New");
+        newbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "New button clicked toolbar.");
+            }
+        });
+        toolbar.add(newbutton);
+        
+        JButton openBbutton = new JButton("Open");
+        openBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Open button clicked toolbar.");
+            }
+        });
+        toolbar.add(openBbutton);
+        
+        JButton saveBbutton = new JButton("Save");
+        saveBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Save button clicked toolbar.");
+            }
+        });
+        toolbar.add(saveBbutton);
+        
+        JButton printBbutton = new JButton("Print");
+        printBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Print button clicked toolbar.");
+            }
+        });
+        toolbar.add(printBbutton);
+        
+        JButton undoBbutton = new JButton("Undo");
+        undoBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Undo button clicked toolbar.");
+            }
+        });
+        toolbar.add(undoBbutton);
+        JButton redoBbutton = new JButton("Redo");
+        redoBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Redo button clicked toolbar.");
+            }
+        });
+        toolbar.add(redoBbutton);
+        JButton cutBbutton = new JButton("Cut");
+        cutBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Cut button clicked toolbar.");
+            }
+        });
+        toolbar.add(cutBbutton);
+        JButton copyBbutton = new JButton("Copy");
+        copyBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Copy button clicked toolbar.");
+            }
+        });
+        toolbar.add(copyBbutton);
+        JButton pasteBbutton = new JButton("Paste");
+        pasteBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Paste button clicked toolbar.");
+            }
+        });
+        toolbar.add(pasteBbutton);
+        JButton deleteBbutton = new JButton("Delete");
+        deleteBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Delete button clicked toolbar.");
+            }
+        });
+        toolbar.add(deleteBbutton);
+        
+        JButton validateBbutton = new JButton("Validate");
+        validateBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Validate button clicked toolbar.");
+            }
+        });
+        toolbar.add(validateBbutton);        
+        JButton generateCCodeBbutton = new JButton("Generate C Code");
+        generateCCodeBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	JOptionPane.showMessageDialog(null, "Generate C Code button clicked toolbar.");
+            }
+        });
+        toolbar.add(generateCCodeBbutton);
+        JButton generateJavaCodeBbutton = new JButton("Generate Java Code");
+        generateJavaCodeBbutton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	//JOptionPane.showMessageDialog(null, "Generate Java Code button clicked toolbar.");
+            	System.out.println(workspace.getSaveString());
+                
+                //CodeGen codeGen = new CodeGen();
+                //editor.setText(codeGen.getCode(workspace.getSaveString()));
+                
+                CodeGen manageCode = new CodeGen();
+                StructureCode sCode = new StructureCode();                
+                editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(workspace.getSaveString())));
+            }
+        });
+        toolbar.add(generateJavaCodeBbutton);
+        
+        
+        frame.getContentPane().add(toolbar,BorderLayout.NORTH);
+        
+        
         searchBar.getComponent().setPreferredSize(new Dimension(130, 23));
         topPane.add(searchBar.getComponent());
         topPane.add(saveButton);
-        frame.add(topPane, BorderLayout.PAGE_START);
+        //frame.add(topPane, BorderLayout.PAGE_START);        
         frame.add(wc.getWorkspacePanel(), BorderLayout.CENTER);
         
         
