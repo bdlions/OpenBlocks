@@ -640,6 +640,7 @@ public class WorkspaceController {
         JPanel topPane = new JPanel();
         
         JToolBar toolbar = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
+        toolbar.setEnabled(false);
         //JButton cutbutton = new JButton(new ImageIcon("cut.gif"));
         JButton newbutton = new JButton("New");
         newbutton.addActionListener(new ActionListener() {
@@ -747,13 +748,17 @@ public class WorkspaceController {
         toolbar.add(generateJavaCodeBbutton);
         
         
-        frame.getContentPane().add(toolbar,BorderLayout.NORTH);
+        //frame.getContentPane().add(toolbar,BorderLayout.NORTH);
         
         
         searchBar.getComponent().setPreferredSize(new Dimension(130, 23));
-        topPane.add(searchBar.getComponent());
-        topPane.add(saveButton);
-        //frame.add(topPane, BorderLayout.PAGE_START);        
+        JPanel searchBarPanel = new JPanel();
+        searchBarPanel.add(searchBar.getComponent());
+        topPane.setLayout(new BorderLayout());
+        topPane.add(toolbar,BorderLayout.NORTH);
+        topPane.add(searchBarPanel, BorderLayout.CENTER);
+        //topPane.add(saveButton);
+        frame.add(topPane, BorderLayout.PAGE_START);        
         frame.add(wc.getWorkspacePanel(), BorderLayout.CENTER);
         
         
