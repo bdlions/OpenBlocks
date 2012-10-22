@@ -49,6 +49,7 @@ import workspace.WorkspaceWidget;
 import codeblocks.Block;
 import codeblocks.BlockConnector;
 import codeblocks.BlockConnectorShape;
+import codeblocks.BlockGenus;
 import codeblocks.BlockLink;
 import codeblocks.BlockLinkChecker;
 import codeblocks.BlockShape;
@@ -833,7 +834,6 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 			Iterator<BlockConnector> sockets = getBlock().getSockets().iterator();
 			Long id; 
 			BlockConnector socket;
-
 			// Store the ids, sockets, and blocks we need to update.
 			List<Long> idList = new ArrayList<Long>();
 			List<BlockConnector> socketList = new ArrayList<BlockConnector>();
@@ -869,11 +869,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 
 			int size = idList.size();
 			for (int i = 0; i < size; i++) {
-				Workspace.getInstance().notifyListeners(
-						new WorkspaceEvent(this.getParentWidget(), 
-								argList.get(i).getBlockID(), 
-								WorkspaceEvent.BLOCK_ADDED, true));
-
+				Workspace.getInstance().notifyListeners( new WorkspaceEvent(this.getParentWidget(),  argList.get(i).getBlockID(),  WorkspaceEvent.BLOCK_ADDED, true));
 				//must call this method to update the dimensions of this
 				//TODO ria in the future would be good to just link the default args
 				//but first creating a block link object and then connecting
@@ -884,6 +880,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 			}
 			this.redrawFromTop();
 			linkedDefArgsBefore = true;
+			
 		}
 	}
 

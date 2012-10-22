@@ -165,7 +165,7 @@ public class WorkspaceController {
     public void setLangDefFile(File langDefFile){
         //LANG_DEF_FILEPATH = langDefFile.getCanonicalPath();
         
-        DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         Document doc;
         try {
@@ -239,7 +239,7 @@ public class WorkspaceController {
     public String getSaveString(){
         StringBuffer saveString = new StringBuffer();
         //append the save data
-        saveString.append("<?xml version=\"1.0\" encoding=\"ISO-8859\"?>");
+        saveString.append("<?xml version=\"1.0\"?>");
         saveString.append("\r\n");
         //dtd file path may not be correct...
         //saveString.append("<!DOCTYPE StarLogo-TNG SYSTEM \""+SAVE_FORMAT_DTD_FILEPATH+"\">");
@@ -478,7 +478,7 @@ public class WorkspaceController {
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private static void createAndShowGUI(WorkspaceController wc) {
+    private static void createAndShowGUI(final WorkspaceController wc) {
         System.out.println("Creating GUI...");
         
         //Create and set up the window.
@@ -501,7 +501,15 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "New Clicked.");				
+				//JOptionPane.showMessageDialog(null, "New Clicked.");
+				//wc.setLangDefFilePath("support/copy_lang_def.xml");
+				//wc.resetWorkspace();
+				//wc.loadProjectFromPath("support/copy_lang_def.xml");
+				//wc.setLangDefFile(new File("support/lang_def.xml"));
+				//wc.loadProject(wc.getSaveString());
+				
+				String saveString = workspace.getSaveString();
+				//workspace.LoadProjectWithVariable();
 			}
 		});
 		JMenuItem menuItemOpen = new JMenuItem("Open");
@@ -577,15 +585,19 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
+				
+				workspace.loadProjectWithVariable(wc.getSaveString());
+				addCodeEditor();
+				
 				//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
-				System.out.println(workspace.getSaveString());
+				//System.out.println(wc.getSaveString());
                 
                 //CodeGen codeGen = new CodeGen();
                 //editor.setText(codeGen.getCode(workspace.getSaveString()));
                 
                 CodeGen manageCode = new CodeGen();
                 StructureCode sCode = new StructureCode();                
-                editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(workspace.getSaveString())));
+                editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(wc.getSaveString())));
 			}
 		});
 		
@@ -627,13 +639,16 @@ public class WorkspaceController {
         JButton saveButton = new JButton("Save");
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
-                System.out.println(workspace.getSaveString());
-                
+            	//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
+				//System.out.println(wc.getSaveString());
+				workspace.loadProjectWithVariable(wc.getSaveString());
+				addCodeEditor();
                 //CodeGen codeGen = new CodeGen();
                 //editor.setText(codeGen.getCode(workspace.getSaveString()));
                 
                 CodeGen manageCode = new CodeGen();
-                editor.setText(manageCode.getGenerateCode(workspace.getSaveString()));
+                StructureCode sCode = new StructureCode();                
+                editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(wc.getSaveString())));
             }
         });
         
@@ -734,15 +749,16 @@ public class WorkspaceController {
         JButton generateJavaCodeBbutton = new JButton("Generate Java Code");
         generateJavaCodeBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
-            	//JOptionPane.showMessageDialog(null, "Generate Java Code button clicked toolbar.");
-            	System.out.println(workspace.getSaveString());
-                
+            	//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
+				//System.out.println(wc.getSaveString());
+				workspace.loadProjectWithVariable(wc.getSaveString());
+				addCodeEditor();
                 //CodeGen codeGen = new CodeGen();
                 //editor.setText(codeGen.getCode(workspace.getSaveString()));
                 
                 CodeGen manageCode = new CodeGen();
                 StructureCode sCode = new StructureCode();                
-                editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(workspace.getSaveString())));
+                editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(wc.getSaveString())));
             }
         });
         toolbar.add(generateJavaCodeBbutton);
@@ -760,7 +776,12 @@ public class WorkspaceController {
         //topPane.add(saveButton);
         frame.add(topPane, BorderLayout.PAGE_START);        
         frame.add(wc.getWorkspacePanel(), BorderLayout.CENTER);
+        addCodeEditor();
+        frame.setVisible(true);
         
+    }
+    public static void addCodeEditor()
+    {
         
         Page editorPage = workspace.getPageNamed("Code");
         editor = new JTextPane();
@@ -774,18 +795,13 @@ public class WorkspaceController {
         
         editor.setBounds(updatedDimensionRect);
         editorPage.getRBParent().addToBlockLayer(editor);
-        
-        frame.setVisible(true);
-        
     }
-    
     public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() { 
                 //TODO grab file path from args array
-                
                 LANG_DEF_FILEPATH = "support/lang_def.xml";
                 
                 //Create a new WorkspaceController 

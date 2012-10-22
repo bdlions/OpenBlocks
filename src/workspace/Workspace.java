@@ -7,6 +7,10 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,19 +29,31 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 import renderable.BlockUtilities;
 import renderable.RenderableBlock;
 import workspace.typeblocking.FocusTraversalManager;
 import workspace.typeblocking.TypeBlockManager;
 import codeblocks.Block;
+import codeblocks.BlockConnectorShape;
+import codeblocks.BlockGenus;
+import codeblocks.BlockLinkChecker;
+import codeblocks.CommandRule;
+import codeblocks.SocketRule;
 import codeblockutil.Explorer;
 import codeblockutil.ExplorerEvent;
 import codeblockutil.ExplorerListener;
+import codegenerator.VariableMaker;
+import codegenerator.XMLToBlockGenerator;
 
 
 /**
@@ -489,8 +505,19 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
      * @param event
      */
     public void notifyListeners(WorkspaceEvent event){
+    	
         for(WorkspaceListener wl : workspaceListeners){
             wl.workspaceEventOccurred(event);
+        }
+        if(event.getEventType() == WorkspaceEvent.BLOCK_VARIABLE_RENAMED)
+        {
+        	loadProjectWithVariable(getWorkspaceSaveString());
+        }
+        if(event.getSourceBlockID() > 0 && 
+        		event.getEventType() == WorkspaceEvent.BLOCK_VARIABLE_ADDED &&
+        		BlockGenus.getGenusWithName(Block.getBlock(event.getSourceBlockID()).getGenusName()).isDeclaration())
+        {
+        	loadProjectWithVariable(getWorkspaceSaveString());
         }
     }
     
@@ -964,4 +991,95 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
 	public void addToHighlightLayer(Component c) {
 		this.add(c, DRAGGED_BLOCK_HIGHLIGHT_LAYER);
 	}
+	
+	public void loadProjectWithVariable(String projectContents)
+	{
+		
+		reset();
+		
+		//String projectContents = getWorkspaceSaveString();
+		//System.out.println(projectContents);
+		DocumentBuilderFactory lang_def_factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder lang_def_builder;
+        Document lang_def_doc;
+        Element langDefRoot = null;
+        try {
+
+        	lang_def_builder = lang_def_factory.newDocumentBuilder();
+        	lang_def_doc = lang_def_builder.parse(new File("support/lang_def.xml"));
+            langDefRoot = lang_def_doc.getDocumentElement();
+            
+            List<codegenerator.xmlbind.Block> allBlocks = XMLToBlockGenerator.generateBlocks(projectContents);
+            for (codegenerator.xmlbind.Block block : allBlocks) {
+				if(BlockGenus.getGenusWithName(block.getGenusName()).isVariableDeclBlock())
+				{
+					VariableMaker.addVariable(lang_def_doc, block.getLabel(), block.getSockets().getBlockConnectors().get(0).getType());
+				}
+			}
+            
+            
+            BlockConnectorShape.loadBlockConnectorShapes(langDefRoot);
+            
+            //load genuses
+            BlockGenus.loadBlockGenera(langDefRoot);
+            
+            
+            //load rules
+            BlockLinkChecker.addRule(new CommandRule());
+            BlockLinkChecker.addRule(new SocketRule());
+            
+            
+        }
+		catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		}catch (SAXException e) {
+		     e.printStackTrace();
+		} catch (IOException e) {
+		     e.printStackTrace();
+		}
+        
+        
+		DocumentBuilderFactory root_factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder root_builder;
+        Document root_doc;
+        try {
+        	root_builder = root_factory.newDocumentBuilder();
+        	root_doc = root_builder.parse(new InputSource(new StringReader(projectContents)));
+            Element root = root_doc.getDocumentElement();
+            
+            if(root.getElementsByTagName("Page").getLength() >= 2 )
+            {
+            	//System.out.println(projectContents);
+            	loadWorkspaceFrom(root, langDefRoot);
+            }
+            
+        }
+		catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		}catch (SAXException e) {
+		     e.printStackTrace();
+		} catch (IOException e) {
+		     e.printStackTrace();
+		}
+	}
+	
+    /**
+     * Returns the save string for the entire workspace.  This includes the block workspace, any 
+     * custom factories, canvas view state and position, pages
+     * @return the save string for the entire workspace.
+     */
+    public String getWorkspaceSaveString(){
+        StringBuffer saveString = new StringBuffer();
+        //append the save data
+        saveString.append("<?xml version=\"1.0\"?>");
+        saveString.append("\r\n");
+        //dtd file path may not be correct...
+        //saveString.append("<!DOCTYPE StarLogo-TNG SYSTEM \""+SAVE_FORMAT_DTD_FILEPATH+"\">");
+        //append root node
+        saveString.append("<CODEBLOCKS>");
+        saveString.append(getSaveString());
+        saveString.append("</CODEBLOCKS>");
+        return saveString.toString();
+    }
+
 }

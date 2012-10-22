@@ -82,6 +82,14 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 			protected boolean isTextValid(String text){
 				return textValid(text);
 			}
+			protected void blockLabelUpdateComplete(String text) {
+				if(BlockGenus.getGenusWithName(Block.getBlock(BlockLabel.this.blockID).getGenusName()).isDeclaration()){
+					RenderableBlock rb = RenderableBlock.getRenderableBlock(BlockLabel.this.blockID);
+					if (rb != null){
+						Workspace.getInstance().notifyListeners(new WorkspaceEvent(rb.getParentWidget(), BlockLabel.this.blockID, WorkspaceEvent.BLOCK_VARIABLE_RENAMED));
+					}
+				}
+			}
 		};
 		
 		widget.setInteger(Block.getBlock(this.blockID).getGenusName().equals("integer"));
@@ -243,6 +251,12 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 			return;
 		case KeyEvent.VK_ENTER:
 			RenderableBlock.getRenderableBlock(blockID).requestFocus();
+/*			if(BlockGenus.getGenusWithName(Block.getBlock(blockID).getGenusName()).isDeclaration()){
+				RenderableBlock rb = RenderableBlock.getRenderableBlock(blockID);
+				if (rb != null){
+					Workspace.getInstance().notifyListeners(new WorkspaceEvent(rb.getParentWidget(), blockID, WorkspaceEvent.BLOCK_VARIABLE_RENAMED));
+				}
+			}*/
 			return;
 		case KeyEvent.VK_TAB:
 			RenderableBlock.getRenderableBlock(blockID).processKeyPressed(e);

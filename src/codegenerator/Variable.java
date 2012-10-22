@@ -37,4 +37,21 @@ public class Variable {
 	public List<ExpressionData> getValue() {
 		return value;
 	}
+	
+	public static String getValidVariableName(String name)
+	{
+		StringBuilder sb = new StringBuilder();
+	    if(!Character.isJavaIdentifierStart(name.charAt(0))) {
+	        sb.append("_");
+	    }
+	    for (char c : name.toCharArray()) {
+	        if(!Character.isJavaIdentifierPart(c)) {
+	            sb.append("_");
+	        } else {
+	            sb.append(c);
+	        }
+	    }
+	    
+	    return sb.toString();
+	}
 }

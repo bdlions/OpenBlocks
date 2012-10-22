@@ -96,6 +96,7 @@ public abstract class LabelWidget extends JComponent{
 	protected abstract void fireGenusChanged(String value);
 	protected abstract void fireDimensionsChanged(Dimension value);
 	protected abstract boolean isTextValid(String text);
+	protected abstract void blockLabelUpdateComplete(String text);
 	
 	public void addKeyListenerToTextField(KeyListener l){
 		textField.addKeyListener(l);
@@ -139,7 +140,10 @@ public abstract class LabelWidget extends JComponent{
             	//make sure to remove leading and trailing spaces before testing if text is valid
             	//TODO if allow labels to have leading and trailing spaces, will need to modify this if statement
                 if(isTextValid(textField.getText().trim()))
+                {
                     setText(textField.getText());
+                    blockLabelUpdateComplete(getText());
+                }
                 else
                     setText(labelBeforeEdit);
             }

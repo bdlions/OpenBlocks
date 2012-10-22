@@ -18,14 +18,6 @@ class JavaCodeSample{
  		
  		--> 
 	public static void main(String[] args){
-		JavaCodeSample sample = new Sample();
-		sample.init();
-	}
-	<#-- 
- 		function init declaration code generation 
- 		
- 		--> 
-	public void init(){
 	<#list codeGen.getDifferentCommand() as command>
 		<#assign commandBlock = command />
 		<@commandMacro commandBlock/>
@@ -80,7 +72,7 @@ class JavaCodeSample{
 	<#if block.getGenusName() != "if" && block.getGenusName() != "ifelse">
 		<#assign blockGenus = codeGen.getGenusWithName(block.getGenusName()) />
 		<#if blockGenus.isFunctionBlock() >
-			<#list codeGen.getFullFunction(block) as functionBlock><#if functionBlock.getId() = 0>${functionBlock.getData()}<#else>${codeGen.getBlock(functionBlock.getId()).getLabel()}</#if></#list>
+			<#list codeGen.getFullFunction(block) as functionBlock><#if functionBlock.getId() = 0> ${functionBlock.getData()}<#else> ${codeGen.getBlock(functionBlock.getId()).getLabel()}</#if></#list>
 		</#if>
 	</#if> 
 </#list>
@@ -93,13 +85,13 @@ class JavaCodeSample{
 
 <#macro commandMacro command>
 	<#if command.getLabel() = "if">
- 		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0>${conditionBlocks.getData()}<#else>${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
+ 		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${conditionBlocks.getData()}<#else> ${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
 		<#list codeGen.getThenStatements(command) as commandStatement>
  			<@commandMacro command=commandStatement/>
 		</#list> 
 		}
 		<#elseif command.getLabel() = "ifelse">
-		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0>${conditionBlocks.getData()}<#else>${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
+		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${conditionBlocks.getData()}<#else> ${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
 			<#list codeGen.getThenStatements(command) as commandStatement>
 	 			<@commandMacro command=commandStatement/>
 			</#list> 
@@ -119,13 +111,13 @@ class JavaCodeSample{
 
 <#macro singleIfElse command>
 	<#if command.getLabel() = "if">
- 		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0>${conditionBlocks.getData()}<#else>${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
+ 		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${conditionBlocks.getData()}<#else> ${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
 		<#list codeGen.getThenStatements(command) as commandStatement>
  			<@commandMacro command=commandStatement/>
 		</#list> 
 		}
 		<#elseif command.getLabel() = "ifelse">
-		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0>${conditionBlocks.getData()}<#else>${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
+		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${conditionBlocks.getData()}<#else> ${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
 			<#list codeGen.getThenStatements(command) as commandStatement>
 	 			<@commandMacro command=commandStatement/>
 			</#list> 
@@ -135,7 +127,7 @@ class JavaCodeSample{
 			</#list> 
 		}
  		<#else>
- 		<#list codeGen.getCommandExpression(command) as commandStatement>${commandStatement.getData()}</#list>;
+ 		<#list codeGen.getCommandExpression(command) as commandStatement> ${commandStatement.getData()} </#list>;
  		<#if command.getAfterBlockId() != 0>
 			<#assign nextBlock = codeGen.getBlock(command.getAfterBlockId())/>
 			<@commandMacro command=nextBlock/>

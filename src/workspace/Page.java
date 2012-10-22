@@ -31,6 +31,7 @@ import org.w3c.dom.NodeList;
 
 import renderable.RenderableBlock;
 import codeblocks.Block;
+import codeblocks.BlockGenus;
 import codeblockutil.CToolTip;
 
 
@@ -579,6 +580,11 @@ public class Page  implements WorkspaceWidget, SearchableContainer, ISupportMeme
 		addBlock(block);
 		this.pageJComponent.setComponentZOrder(block, 0);
 		this.pageJComponent.revalidate();
+
+		RenderableBlock rb = RenderableBlock.getRenderableBlock(block.getBlockID());
+		if (rb != null && rb.getParentWidget() != null){
+			Workspace.getInstance().notifyListeners(new WorkspaceEvent(rb.getParentWidget(), block.getBlockID(), WorkspaceEvent.BLOCK_VARIABLE_ADDED));
+		}
 	}
 	
 	/** @ovverride WorkspaceWidget.blockDragged() */
@@ -633,11 +639,18 @@ public class Page  implements WorkspaceWidget, SearchableContainer, ISupportMeme
 			Workspace.getInstance().notifyListeners(new WorkspaceEvent(this, block.getBlockID(), WorkspaceEvent.BLOCK_ADDED, true));
 		}
 
-		// if the block is off the edge, shift everything or grow as needed to fully show it
-		this.reformBlockPosition(block);
-
-		this.pageJComponent.setComponentZOrder(block, 0);
-		//this.pageJComponent.revalidate();
+		try
+		{
+			// if the block is off the edge, shift everything or grow as needed to fully show it
+			this.reformBlockPosition(block);
+	
+			this.pageJComponent.setComponentZOrder(block, 0);
+			//this.pageJComponent.revalidate();
+		}
+		catch(Exception ex)
+		{
+			
+		}
 	}
 
 	/**

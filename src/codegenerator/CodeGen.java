@@ -62,9 +62,10 @@ public class CodeGen {
 			 */
 			else if(genus.isVariableDeclBlock())
 			{
-				String pattern = "[^a-zA-Z_]+|[^a-zA-Z_0-9]+//g";
+				
+				//String pattern = "^[a-zA-Z][a-zA-Z0-9]*?$";
 				Variable variable = new Variable();
-				variable.setName(block.getLabel().replaceAll(pattern, ""));
+				variable.setName(Variable.getValidVariableName(block.getLabel()));
 				variable.setId(block.getId());
 				
 				if(block.getSockets() != null && block.getSockets().getBlockConnectors().size()> 0)
@@ -121,6 +122,7 @@ public class CodeGen {
 	
 			temp.process(root, output);
 			output.flush();
+			System.out.println(outputStream.toString());
 			return outputStream.toString();
 		}
 		catch (IOException exception) {
@@ -255,8 +257,53 @@ public class CodeGen {
 	{
 		List<ExpressionData> expression = new ArrayList<ExpressionData>();
 		
-	
 		BlockGenus blockGenus = getGenusWithName(block.getGenusName());
+		Number number = block.getId();
+		
+		if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelPrefix().equals("set "))
+		{
+			expression.add(getExpressionData(0, block.getLabel()));
+			expression.add(getExpressionData(0, "="));
+			if(block.getSockets() != null)
+			{
+				Block paramBlock = blocksMap.get(block.getSockets().getBlockConnectors().get(0).getConnectBlockId());
+				
+				if(paramBlock != null)
+				{
+					expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
+				}
+			}
+			return expression;
+		}
+		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelPrefix().equals("reset "))
+		{
+			expression.add(getExpressionData(0, block.getLabel()));
+			expression.add(getExpressionData(0, "="));
+			for (Variable variable : variableDecl) {
+				if(variable.getName().equals(block.getLabel()))
+				{
+					
+					expression.add(getExpressionData(0, getBlock(variable.getValue().get(0).getId()).getLabel()));
+					break;
+				}
+			}
+			return expression;
+		}
+		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelSuffix().equals("++"))
+		{
+			expression.add(getExpressionData(0, block.getLabel()));
+			expression.add(getExpressionData(0, "++"));
+			
+			return expression;
+		}
+		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelSuffix().equals("--"))
+		{
+			expression.add(getExpressionData(0, block.getLabel()));
+			expression.add(getExpressionData(0, "--"));
+			
+			return expression;
+		}
+		
 		expression.add(getExpressionData(block.getId(), block.getGenusName()));
 		if(blockGenus.isCommandBlock())
 		{
@@ -331,7 +378,7 @@ public class CodeGen {
 					continue;
 				}
 				
-				if(ifConnector.getLabel().equals("test"))
+				if(ifConnector.getLabel().equals("condition"))
 				{
 					conditionData.add(getExpressionData(ifConnector.getConnectBlockId(), Integer.toString(ifConnector.getConnectBlockId())));
 					while (isCompleteProcessFunction(conditionData));
@@ -416,5 +463,5 @@ public class CodeGen {
 	}
 	public List<Block> getAllBlocks() {
 		return allBlocks;
-	}
+	} 
 }

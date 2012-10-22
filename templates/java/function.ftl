@@ -8,6 +8,12 @@
 	<#if functionName = "born">
 		<@advancedAge/>
 	</#if>
+	<#if functionName = "mail">
+		<@mail/>
+	</#if>
+	<#if functionName = "line">
+		<@line/>
+	</#if>
 </#macro>
 
 <#macro age>
@@ -32,3 +38,16 @@
 		}
 	}
 </#macro>
+
+<#macro mail>
+	mail (string txt) {
+	  mail(a@d.com,txt);
+	}
+</#macro>
+
+<#macro line>
+	line(style, width, color) {
+		draw("line",style,width,color);
+	}
+</#macro>
+

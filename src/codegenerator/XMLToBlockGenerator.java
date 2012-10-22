@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import codegenerator.xmlbind.Block;
+import codegenerator.xmlbind.CodeBlocks;
 import codegenerator.xmlbind.Page;
 import codegenerator.xmlbind.PageBlock;
 import codegenerator.xmlbind.Pages;
@@ -19,11 +20,15 @@ public class XMLToBlockGenerator {
 
 		try {
 			ByteArrayInputStream input = new ByteArrayInputStream(xml.getBytes());
-			JAXBContext jaxbContext = JAXBContext.newInstance(Pages.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(CodeBlocks.class);
 
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			Pages pages = (Pages) jaxbUnmarshaller.unmarshal(input);
+			CodeBlocks codeBlocks = (CodeBlocks) jaxbUnmarshaller.unmarshal(input);
+			Pages pages = codeBlocks.getPages();
 
+			//CodeBlocks codeBlocks = (CodeBlocks) jaxbUnmarshaller.unmarshal(input);
+			//Pages pages = (Pages) jaxbUnmarshaller.unmarshal(input);
+			
 			for (Page page : pages.getPage()) {
 				PageBlock pageBlock = page.getPageBlocks();
 				if (pageBlock != null) {
