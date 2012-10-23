@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
@@ -26,9 +28,11 @@ import java.util.regex.Pattern;
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.JTextComponent;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,6 +43,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import controller.StructureCode;
 import renderable.BlockUtilities;
 import renderable.RenderableBlock;
 import workspace.typeblocking.FocusTraversalManager;
@@ -52,6 +58,7 @@ import codeblocks.SocketRule;
 import codeblockutil.Explorer;
 import codeblockutil.ExplorerEvent;
 import codeblockutil.ExplorerListener;
+import codegenerator.CodeGen;
 import codegenerator.VariableMaker;
 import codegenerator.XMLToBlockGenerator;
 
@@ -67,7 +74,8 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
      * Single Workspace instance
      */
     private static Workspace ws = new Workspace();
-    
+    private static JTextComponent editor;
+    private static String selectedLanguage = "java"; 
 	/** WorkspaceListeners that monitor:
 	 * block: added, removed, dropped, label changed, connected, disconnected 
 	 * workspace: scrolled, zoom changed
@@ -1061,6 +1069,9 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
 		} catch (IOException e) {
 		     e.printStackTrace();
 		}
+        
+        addCodeEditor();
+        //setCodeInEditor(getWorkspaceSaveString());
 	}
 	
     /**
@@ -1082,4 +1093,33 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
         return saveString.toString();
     }
 
+    public static void addCodeEditor()
+    {
+        Page editorPage = ws.getPageNamed("Code");
+        editor = new JTextPane();
+        editor.setBackground(editorPage.getJComponent().getBackground());
+        editor.setForeground(Color.green);
+        editor.setFont(new Font("monospaced", Font.BOLD, 15));
+        
+        int width = (int)editorPage.getJComponent().getBounds().getWidth();
+        int height = (int)editorPage.getJComponent().getBounds().getHeight();
+        Rectangle updatedDimensionRect = new Rectangle(20,0,width,height);
+        
+        editor.setBounds(updatedDimensionRect);
+        editorPage.getRBParent().addToBlockLayer(editor);
+    }
+    
+    public static void setCodeInEditor()
+    {
+    	CodeGen manageCode = new CodeGen();
+        StructureCode sCode = new StructureCode();                
+        editor.setText(sCode.indentMyCode(manageCode.getGenerateCode( ws.getWorkspaceSaveString(), selectedLanguage)));
+    }
+    
+    public static void setPartialCodeInEditor(int blockID)
+    {
+    	CodeGen manageCode = new CodeGen();
+        StructureCode sCode = new StructureCode();                
+        editor.setText(sCode.indentMyCode(manageCode.getPartialGenerateCode( ws.getWorkspaceSaveString(), selectedLanguage, blockID)));
+    }
 }

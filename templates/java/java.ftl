@@ -1,7 +1,7 @@
  <#-- 
  	import function file 
  	-->
- <#import "java/function.ftl" as functions> 
+ <#import "function.ftl" as functions> 
  <#-- 
  	Java Style class declaration 
  	--> 
@@ -13,6 +13,7 @@ class JavaCodeSample{
 	<#list codeGen.getVariableDeclBlocks() as variable>
 	 	private ${variable.getType()} ${variable.getName()} = <#list variable.getValue() as expressionData><#if expressionData.getId()== 0>${expressionData.getData()}<#elseif variable.getType()?matches('string') >"${codeGen.getBlock(expressionData.getId()).getLabel()}"<#else>${codeGen.getBlock(expressionData.getId()).getLabel()}</#if></#list>;
 	 </#list>
+	 
 	<#-- 
  		main function declaration code generation 
  		--> 

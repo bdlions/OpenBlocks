@@ -73,7 +73,6 @@ public class WorkspaceController {
     //flag to indicate if a workspace has been loaded/initialized 
     private boolean workspaceLoaded = false;
     
-    private static JTextComponent editor;
     /**
      * Constructs a WorkspaceController instance that manages the
      * interaction with the codeblocks.Workspace
@@ -585,19 +584,8 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				
 				workspace.loadProjectWithVariable(wc.getSaveString());
-				addCodeEditor();
-				
-				//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
-				//System.out.println(wc.getSaveString());
-                
-                //CodeGen codeGen = new CodeGen();
-                //editor.setText(codeGen.getCode(workspace.getSaveString()));
-                
-                CodeGen manageCode = new CodeGen();
-                StructureCode sCode = new StructureCode();                
-                editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(wc.getSaveString())));
+				workspace.setCodeInEditor();
 			}
 		});
 		
@@ -642,13 +630,13 @@ public class WorkspaceController {
             	//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
 				//System.out.println(wc.getSaveString());
 				workspace.loadProjectWithVariable(wc.getSaveString());
-				addCodeEditor();
+				workspace.setCodeInEditor();
                 //CodeGen codeGen = new CodeGen();
                 //editor.setText(codeGen.getCode(workspace.getSaveString()));
                 
-                CodeGen manageCode = new CodeGen();
-                StructureCode sCode = new StructureCode();                
-                editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(wc.getSaveString())));
+                //CodeGen manageCode = new CodeGen();
+                //StructureCode sCode = new StructureCode();                
+                //editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(wc.getSaveString())));
             }
         });
         
@@ -752,13 +740,13 @@ public class WorkspaceController {
             	//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
 				//System.out.println(wc.getSaveString());
 				workspace.loadProjectWithVariable(wc.getSaveString());
-				addCodeEditor();
+				workspace.setCodeInEditor();
                 //CodeGen codeGen = new CodeGen();
                 //editor.setText(codeGen.getCode(workspace.getSaveString()));
                 
-                CodeGen manageCode = new CodeGen();
-                StructureCode sCode = new StructureCode();                
-                editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(wc.getSaveString())));
+                //CodeGen manageCode = new CodeGen();
+                //StructureCode sCode = new StructureCode();                
+                //editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(wc.getSaveString())));
             }
         });
         toolbar.add(generateJavaCodeBbutton);
@@ -776,26 +764,11 @@ public class WorkspaceController {
         //topPane.add(saveButton);
         frame.add(topPane, BorderLayout.PAGE_START);        
         frame.add(wc.getWorkspacePanel(), BorderLayout.CENTER);
-        addCodeEditor();
+        workspace.addCodeEditor();
         frame.setVisible(true);
         
     }
-    public static void addCodeEditor()
-    {
-        
-        Page editorPage = workspace.getPageNamed("Code");
-        editor = new JTextPane();
-        editor.setBackground(editorPage.getJComponent().getBackground());
-        editor.setForeground(Color.green);
-        editor.setFont(new Font("monospaced", Font.BOLD, 15));
-        
-        int width = (int)editorPage.getJComponent().getBounds().getWidth();
-        int height = (int)editorPage.getJComponent().getBounds().getHeight();
-        Rectangle updatedDimensionRect = new Rectangle(20,0,width,height);
-        
-        editor.setBounds(updatedDimensionRect);
-        editorPage.getRBParent().addToBlockLayer(editor);
-    }
+
     public static void main(String[] args) {
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.

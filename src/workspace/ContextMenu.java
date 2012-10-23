@@ -23,7 +23,11 @@ public class ContextMenu extends PopupMenu implements ActionListener{
     private static ContextMenu rndBlockMenu = new ContextMenu();
     private static ContextMenu addCommentMenu = new ContextMenu();
     private static MenuItem addCommentItem;
+    private static MenuItem generatePartialCodeItem;
+    private static MenuItem generateFullCodeItem;
     private final static String ADD_COMMENT_BLOCK = "ADDCOMMENT";
+    private final static String GENERATE_CODE_BLOCK = "GENERATECODE";
+    private final static String GENERATE_FULL_CODE = "GENERATEFULLCODE";
     private static boolean addCommentMenuInit = false;
     private static ContextMenu removeCommentMenu = new ContextMenu();
     private static MenuItem removeCommentItem;
@@ -49,9 +53,17 @@ public class ContextMenu extends PopupMenu implements ActionListener{
      */
     private static void initAddCommentMenu(){
     	addCommentItem = new MenuItem("Add Comment");
-        addCommentItem.setActionCommand(ADD_COMMENT_BLOCK);
-        addCommentItem.addActionListener(rndBlockMenu);
-        addCommentMenu.add(addCommentItem);
+    	generatePartialCodeItem = new MenuItem("Generate Code");
+       
+    	addCommentItem.setActionCommand(ADD_COMMENT_BLOCK);
+    	generatePartialCodeItem.setActionCommand(GENERATE_CODE_BLOCK);
+        
+    	addCommentItem.addActionListener(rndBlockMenu);
+    	generatePartialCodeItem.addActionListener(rndBlockMenu);
+        
+    	addCommentMenu.add(addCommentItem);
+    	addCommentMenu.add(generatePartialCodeItem);
+    	
         addCommentMenuInit = true;
     }
     
@@ -60,12 +72,17 @@ public class ContextMenu extends PopupMenu implements ActionListener{
      */
     private static void initRemoveCommentMenu(){
         
-        removeCommentItem = new MenuItem("Delete Comment");
-        removeCommentItem.setActionCommand(REMOVE_COMMENT_BLOCK);
-        removeCommentItem.addActionListener(rndBlockMenu);        
+    	removeCommentItem = new MenuItem("Delete Comment");
+    	generatePartialCodeItem = new MenuItem("Generate Code");
+       
+    	removeCommentItem.setActionCommand(REMOVE_COMMENT_BLOCK);
+    	generatePartialCodeItem.setActionCommand(GENERATE_CODE_BLOCK);
         
-        removeCommentMenu.add(removeCommentItem);
-        //rndBlockMenu.add(runBlockItem);
+    	removeCommentItem.addActionListener(rndBlockMenu); 
+    	generatePartialCodeItem.addActionListener(rndBlockMenu);
+        
+    	removeCommentMenu.add(removeCommentItem);
+    	removeCommentMenu.add(generatePartialCodeItem);
         
         removeCommentMenuInit = true;
     }
@@ -80,6 +97,12 @@ public class ContextMenu extends PopupMenu implements ActionListener{
         arrangeAllBlocks.addActionListener(canvasMenu);
         
         canvasMenu.add(arrangeAllBlocks);
+        
+        generateFullCodeItem = new MenuItem("Generate Full Code");
+    	generateFullCodeItem.setActionCommand(GENERATE_FULL_CODE);
+    	generateFullCodeItem.addActionListener(rndBlockMenu);
+    	
+    	canvasMenu.add(generateFullCodeItem);
         
         canvasMenuInit = true;
     }
@@ -127,6 +150,16 @@ public class ContextMenu extends PopupMenu implements ActionListener{
         	if(activeComponent != null && activeComponent instanceof RenderableBlock){
         		((RenderableBlock)activeComponent).removeComment();
         	}
+        }else if(a.getActionCommand() == GENERATE_CODE_BLOCK)
+        {
+        	if(activeComponent != null && activeComponent instanceof RenderableBlock){
+        		RenderableBlock renderableBlock = (RenderableBlock) activeComponent;
+        		Workspace.getInstance().setPartialCodeInEditor(renderableBlock.getBlockID().intValue());
+        	}
+        	
+        }else if(a.getActionCommand() == GENERATE_FULL_CODE)
+        {
+        	Workspace.getInstance().setCodeInEditor();
         }
     }
 }

@@ -28,7 +28,8 @@ public class CodeGen {
 	private List<Block> allBlocks = new ArrayList<Block>();
 	private List<Block> differentCommand = new ArrayList<Block>();
 	private List<Block> allFunction = new ArrayList<Block>();
-	public String getGenerateCode(String xmlString) {
+	public String getGenerateCode(String xmlString, String languageName) {
+		languageName = languageName+"/"+languageName;
 		// TODO Auto-generated method stub
 		allBlocks = XMLToBlockGenerator.generateBlocks(xmlString);
 		HashMap<Integer, Block> functionsMap = new HashMap<Integer, Block>();
@@ -100,7 +101,11 @@ public class CodeGen {
 				variableDecl.add(variable);
 			}
 		}
-		
+		return getCodeFromTemplate(languageName);
+	}
+	
+	public String getCodeFromTemplate(String languageName)
+	{
 		try
 		{
 			Configuration cfg = new Configuration();
@@ -112,7 +117,7 @@ public class CodeGen {
 			cfg.setDirectoryForTemplateLoading(new File(templateLocation));
 			cfg.setObjectWrapper(new DefaultObjectWrapper());
 	
-			Template temp = cfg.getTemplate("code.ftl");
+			Template temp = cfg.getTemplate(languageName+".ftl");
 	
 			Map<String, CodeGen> root = new HashMap<String, CodeGen>();
 			root.put("codeGen", this);
@@ -122,7 +127,7 @@ public class CodeGen {
 	
 			temp.process(root, output);
 			output.flush();
-			System.out.println(outputStream.toString());
+			//System.out.println(outputStream.toString());
 			return outputStream.toString();
 		}
 		catch (IOException exception) {
@@ -130,21 +135,88 @@ public class CodeGen {
 		} catch (TemplateException exception) {
 			exception.printStackTrace();
 		}
+		
 		return null;
 	}
+	
+	public String getPartialGenerateCode(String xmlString, String languageName, int blockID) {
+		languageName = languageName+"/"+languageName+"-partial";
+		// TODO Auto-generated method stub
+		allBlocks = XMLToBlockGenerator.generateBlocks(xmlString);
+		HashMap<Integer, Block> functionsMap = new HashMap<Integer, Block>();
 
-	private void printBlocks(List<ExpressionData> functionBlocks) {
-		for (ExpressionData expressionData : functionBlocks) {
-			if (blocksMap.containsKey(expressionData.getId())) {
-				Block functionBlock = blocksMap.get(expressionData.getId());
-				System.out.print(functionBlock.getLabel());
-			} else {
-				System.out.print(expressionData.getData());
+		// XMLToBlockGenerator.generateBlocks("<Pages><Page page-name=\"Blocks\" page-color=\"30 30 30\" page-width=\"797\" page-infullview=\"yes\" page-drawer=\"Blocks\" ><PageBlocks><Block id=\"125\" genus-name=\"product\" ><Label>x</Label><Location><X>427</X><Y>108</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"103\" ></BlockConnector></Plug><Sockets num-sockets=\"2\" ><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"bottom\" con-block-id=\"127\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"bottom\" con-block-id=\"115\" ></BlockConnector></Sockets></Block><Block id=\"115\" genus-name=\"userAge\" ><Label>Age</Label><Location><X>516</X><Y>111</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"single\" con-block-id=\"125\" ></BlockConnector></Plug><Sockets num-sockets=\"2\" ><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"p\" position-type=\"single\" con-block-id=\"117\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"x\" position-type=\"single\" con-block-id=\"119\" ></BlockConnector></Sockets></Block><Block id=\"119\" genus-name=\"integer\" ><Label>1.2</Label><Location><X>580</X><Y>135</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"115\" ></BlockConnector></Plug></Block><Block id=\"117\" genus-name=\"random-color\" ><Label>0</Label><Location><X>580</X><Y>111</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"115\" ></BlockConnector></Plug></Block><Block id=\"127\" genus-name=\"integer\" ><Label>1</Label><Location><X>437</X><Y>135</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"125\" ></BlockConnector></Plug></Block><Block id=\"129\" genus-name=\"and\" ><Label>and</Label><Location><X>35</X><Y>58</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"boolean\" init-type=\"boolean\" label=\"\" position-type=\"mirror\" ></BlockConnector></Plug><Sockets num-sockets=\"2\" ><BlockConnector connector-kind=\"socket\" connector-type=\"boolean\" init-type=\"boolean\" label=\"\" position-type=\"bottom\" con-block-id=\"133\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"boolean\" init-type=\"boolean\" label=\"\" position-type=\"bottom\" con-block-id=\"103\" ></BlockConnector></Sockets></Block><Block id=\"103\" genus-name=\"greaterthan\" ><Label>&gt;</Label><Location><X>158</X><Y>61</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"boolean\" init-type=\"boolean\" label=\"\" position-type=\"mirror\" con-block-id=\"129\" ></BlockConnector></Plug><Sockets num-sockets=\"2\" ><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"bottom\" con-block-id=\"105\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"bottom\" con-block-id=\"125\" ></BlockConnector></Sockets></Block><Block id=\"105\" genus-name=\"born\" ><Label>AdvancedAge</Label><Location><X>168</X><Y>64</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"single\" con-block-id=\"103\" ></BlockConnector></Plug><Sockets num-sockets=\"4\" ><BlockConnector connector-kind=\"socket\" connector-type=\"string\" init-type=\"string\" label=\"tcountry\" position-type=\"single\" con-block-id=\"107\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"tcolor\" position-type=\"single\" con-block-id=\"109\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"dateborn\" position-type=\"single\" con-block-id=\"111\" ></BlockConnector><BlockConnector connector-kind=\"socket\" connector-type=\"integer\" init-type=\"integer\" label=\"A\" position-type=\"single\" con-block-id=\"113\" ></BlockConnector></Sockets></Block><Block id=\"113\" genus-name=\"integer\" ><Label>0</Label><Location><X>326</X><Y>136</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"105\" ></BlockConnector></Plug></Block><Block id=\"111\" genus-name=\"integer\" ><Label>1960</Label><Location><X>326</X><Y>112</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"105\" ></BlockConnector></Plug></Block><Block id=\"109\" genus-name=\"black\" ><Label>1</Label><Location><X>326</X><Y>88</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"integer\" init-type=\"integer\" label=\"\" position-type=\"mirror\" con-block-id=\"105\" ></BlockConnector></Plug></Block><Block id=\"107\" genus-name=\"USA\" ><Label>USA</Label><Location><X>326</X><Y>64</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"string\" init-type=\"string\" label=\"\" position-type=\"mirror\" con-block-id=\"105\" ></BlockConnector></Plug></Block><Block id=\"133\" genus-name=\"true\" ><Label>true</Label><Location><X>45</X><Y>137</Y></Location><Plug><BlockConnector connector-kind=\"plug\" connector-type=\"boolean\" init-type=\"boolean\" label=\"\" position-type=\"mirror\" con-block-id=\"129\" ></BlockConnector></Plug></Block></PageBlocks></Page><Page page-name=\"Code\" page-color=\"30 30 30\" page-width=\"966\" page-infullview=\"yes\" page-drawer=\"Code\" ></Page></Pages>");
+
+		for (Block block : allBlocks) 
+		{
+			blocksMap.put(block.getId(), block);
+		}
+		
+		for (Block block : allBlocks) 
+		{
+			if(block.getId() != blockID) continue;
+			BlockGenus genus = getGenusWithName(block.getGenusName());
+			
+			if(genus.isCommandBlock())
+			{
+				differentCommand.add(block);
+			}
+			if (genus.isFunctionBlock() || genus.isCommandBlock()) 
+			{
+				if(!functionsMap.containsKey(block.getId()))
+				{
+					functionsMap.put(block.getId(), block);
+					allFunction.add(block);
+				}
+			}
+			/**
+			 * Adding variables
+			 * 
+			 */
+			else if(genus.isVariableDeclBlock())
+			{
+				
+				//String pattern = "^[a-zA-Z][a-zA-Z0-9]*?$";
+				Variable variable = new Variable();
+				variable.setName(Variable.getValidVariableName(block.getLabel()));
+				variable.setId(block.getId());
+				
+				if(block.getSockets() != null && block.getSockets().getBlockConnectors().size()> 0)
+				{
+					BlockConnector connector = block.getSockets().getBlockConnectors().get(0);
+					
+					variable.setType(connector.getType());
+					
+					Block valueBlock = blocksMap.get(connector.getConnectBlockId());
+					/**
+					 * If there is really a value block
+					 * */
+					if(valueBlock != null)
+					{
+						BlockGenus connectorGenus = getGenusWithName(valueBlock.getGenusName());
+						List<ExpressionData> listExpressionBlocks = new ArrayList<ExpressionData>();
+						
+						
+						if(connectorGenus.isFunctionBlock())
+						{
+							listExpressionBlocks.add(getExpressionData(valueBlock.getId(), Integer.toString(valueBlock.getId())));
+							while (isCompleteProcessFunction(listExpressionBlocks)) ;
+							variable.setValue(listExpressionBlocks);
+						}
+						else
+						{
+							listExpressionBlocks.add(getExpressionData(valueBlock.getId(), valueBlock.getGenusName()));
+							variable.setValue(listExpressionBlocks);
+						}
+					}
+				}
+				variableDecl.add(variable);
 			}
 		}
-		System.out.println();
+		
+		return getCodeFromTemplate(languageName);
 	}
-	
+
 	public Boolean isCompleteProcessFunction(List<ExpressionData> list) {
 		boolean found = false;
 		List<ExpressionData> tempList = new ArrayList<ExpressionData>();
@@ -266,11 +338,25 @@ public class CodeGen {
 			expression.add(getExpressionData(0, "="));
 			if(block.getSockets() != null)
 			{
-				Block paramBlock = blocksMap.get(block.getSockets().getBlockConnectors().get(0).getConnectBlockId());
-				
-				if(paramBlock != null)
+				BlockConnector blockConnector = block.getSockets().getBlockConnectors().get(0);
+				if(blockConnector != null && blocksMap.get(blockConnector.getConnectBlockId()) != null)
 				{
-					expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
+					Block paramBlock = blocksMap.get(blockConnector.getConnectBlockId());
+					//expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
+					
+					if(blockConnector.getType().equals("string") && !codeblocks.Block.getBlock(number.longValue()).getLabelPrefix().equals("get "))
+						expression.add(getExpressionData(paramBlock.getId(), "\""+paramBlock.getLabel()+"\""));
+					else
+						expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
+					
+					/*if( blockConnector.getType().equals("string"))
+					{
+						expression.add(getExpressionData(paramBlock.getId(), "\""+paramBlock.getLabel()+"\""));
+					}
+					else
+					{
+						expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
+					}*/
 				}
 			}
 			return expression;
@@ -282,7 +368,6 @@ public class CodeGen {
 			for (Variable variable : variableDecl) {
 				if(variable.getName().equals(block.getLabel()))
 				{
-					
 					expression.add(getExpressionData(0, getBlock(variable.getValue().get(0).getId()).getLabel()));
 					break;
 				}
@@ -305,6 +390,7 @@ public class CodeGen {
 		}
 		
 		expression.add(getExpressionData(block.getId(), block.getGenusName()));
+		
 		if(blockGenus.isCommandBlock())
 		{
 			expression.add(getExpressionData(0, "("));
@@ -320,7 +406,12 @@ public class CodeGen {
 					}
 					if(paramBlock != null)
 					{
-						expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
+						Number paramBlockId = paramBlock.getId();
+						
+						if(blockConnector.getType().equals("string") && !codeblocks.Block.getBlock(paramBlockId.longValue()).getLabelPrefix().equals("get "))
+							expression.add(getExpressionData(paramBlock.getId(), "\""+paramBlock.getLabel()+"\""));
+						else
+							expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
 					}
 					count ++;
 				}

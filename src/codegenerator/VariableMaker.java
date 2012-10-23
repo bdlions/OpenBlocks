@@ -98,6 +98,7 @@ public class VariableMaker {
 		
 		Element blockGenus = doc.createElement("BlockGenus");
 		blockGenus.setAttribute("name", name);
+		blockGenus.setAttribute("label-prefix", "get ");
 		blockGenus.setAttribute("kind", "data");
 		blockGenus.setAttribute("initlabel", name);
 		blockGenus.setAttribute("label-unique", "yes");
