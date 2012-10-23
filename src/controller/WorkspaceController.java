@@ -11,8 +11,11 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -54,7 +57,7 @@ import codegenerator.CodeGen;
  */
 public class WorkspaceController {
              
-    private static String LANG_DEF_FILEPATH;
+	private static String LANG_DEF_FILEPATH;
     
     private static Element langDefRoot;
     
@@ -569,7 +572,39 @@ public class WorkspaceController {
 				JOptionPane.showMessageDialog(null, "Validate Clicked.");				
 			}
 		});
-		JMenuItem menuItemGenerateCCode = new JMenuItem("Generate C Code");
+		
+		final ButtonGroup generateCodeButtonGroup = new ButtonGroup();
+		JCheckBoxMenuItem checkBoxMenuItemGenerateCCode = new JCheckBoxMenuItem("Generate C Code");
+		JCheckBoxMenuItem checkBoxMenuItemGenerateJavaCode = new JCheckBoxMenuItem("Generate Java Code");
+		
+		generateCodeButtonGroup.add(checkBoxMenuItemGenerateCCode);
+		menuCodeGeneration.add(checkBoxMenuItemGenerateCCode);
+		checkBoxMenuItemGenerateCCode.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				//JOptionPane.showMessageDialog(null, "Generate C Code Clicked.");	
+				workspace.setSelectedLanguage("c");
+            	workspace.loadProjectWithVariable(wc.getSaveString());
+				workspace.setCodeInEditor();
+			}
+		});
+		
+		generateCodeButtonGroup.add(checkBoxMenuItemGenerateJavaCode);
+		menuCodeGeneration.add(checkBoxMenuItemGenerateJavaCode);
+		checkBoxMenuItemGenerateJavaCode.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				//JOptionPane.showMessageDialog(null, "Generate C Code Clicked.");	
+				workspace.setSelectedLanguage("java");
+            	workspace.loadProjectWithVariable(wc.getSaveString());
+				workspace.setCodeInEditor();
+			}
+		});
+		
+		
+		/*JMenuItem menuItemGenerateCCode = new JMenuItem("Generate C Code");
 		menuCodeGeneration.add(menuItemGenerateCCode);
 		menuItemGenerateCCode.addActionListener(new ActionListener() 
 		{
@@ -587,10 +622,20 @@ public class WorkspaceController {
 				workspace.loadProjectWithVariable(wc.getSaveString());
 				workspace.setCodeInEditor();
 			}
-		});
+		});*/
 		
 		JMenu menuConfiguration = new JMenu("Configuration");
 		menuBar.add(menuConfiguration);
+		
+		final ButtonGroup languageButtonGroup = new ButtonGroup();
+		JCheckBoxMenuItem checkBoxMenuItemEnglish = new JCheckBoxMenuItem("English");
+		JCheckBoxMenuItem checkBoxMenuItemFrancis = new JCheckBoxMenuItem("Francis");
+		
+		languageButtonGroup.add(checkBoxMenuItemEnglish);
+		menuConfiguration.add(checkBoxMenuItemEnglish);
+		
+		languageButtonGroup.add(checkBoxMenuItemFrancis);
+		menuConfiguration.add(checkBoxMenuItemFrancis);
 		
 		JMenu menuHelp= new JMenu("Help");
 		menuBar.add(menuHelp);
@@ -730,13 +775,18 @@ public class WorkspaceController {
         JButton generateCCodeBbutton = new JButton("Generate C Code");
         generateCCodeBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
-            	JOptionPane.showMessageDialog(null, "Generate C Code button clicked toolbar.");
+            	//JOptionPane.showMessageDialog(null, "Generate C Code button clicked toolbar.");
+            	workspace.setSelectedLanguage("c");
+            	workspace.loadProjectWithVariable(wc.getSaveString());
+				workspace.setCodeInEditor();
+            	
             }
         });
         toolbar.add(generateCCodeBbutton);
         JButton generateJavaCodeBbutton = new JButton("Generate Java Code");
         generateJavaCodeBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
+            	workspace.setSelectedLanguage("java");
             	//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
 				//System.out.println(wc.getSaveString());
 				workspace.loadProjectWithVariable(wc.getSaveString());
