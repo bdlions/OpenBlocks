@@ -76,6 +76,10 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
     private static Workspace ws = new Workspace();
     private static JTextComponent editor;
     private static String selectedLanguage = "java"; 
+	public static void setSelectedLanguage(String selectedLanguage) {
+		Workspace.selectedLanguage = selectedLanguage;
+	}
+
 	/** WorkspaceListeners that monitor:
 	 * block: added, removed, dropped, label changed, connected, disconnected 
 	 * workspace: scrolled, zoom changed
