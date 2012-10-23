@@ -377,14 +377,14 @@ public class CodeGen {
 		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelSuffix().equals("++"))
 		{
 			expression.add(getExpressionData(0, block.getLabel()));
-			expression.add(getExpressionData(0, "++"));
+			expression.add(getExpressionData(0, "="+block.getLabel()+"+1"));
 			
 			return expression;
 		}
 		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelSuffix().equals("--"))
 		{
 			expression.add(getExpressionData(0, block.getLabel()));
-			expression.add(getExpressionData(0, "--"));
+			expression.add(getExpressionData(0, "="+block.getLabel()+"-1"));
 			
 			return expression;
 		}
