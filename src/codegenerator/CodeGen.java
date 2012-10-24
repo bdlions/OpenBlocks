@@ -395,19 +395,29 @@ public class CodeGen {
 			}
 			return expression;
 		}
-		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelSuffix().equals("++"))
+		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelSuffix().equals("+="))
 		{
 			expression.add(getExpressionData(0, block.getLabel()));
-			expression.add(getExpressionData(0, "="+block.getLabel()+"+1"));
 			
+			BlockConnector blockConnector = block.getSockets().getBlockConnectors().get(0);
+			if(blockConnector != null && blocksMap.get(blockConnector.getConnectBlockId()) != null)
+			{
+				Block paramBlock = blocksMap.get(blockConnector.getConnectBlockId());
+				expression.add(getExpressionData(0, "="+block.getLabel()+"+"+paramBlock.getLabel()));
+			}
 			return expression;
 		}
-		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelSuffix().equals("--"))
+		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelSuffix().equals("-="))
 		{
 			expression.add(getExpressionData(0, block.getLabel()));
-			expression.add(getExpressionData(0, "="+block.getLabel()+"-1"));
-			
+			BlockConnector blockConnector = block.getSockets().getBlockConnectors().get(0);
+			if(blockConnector != null && blocksMap.get(blockConnector.getConnectBlockId()) != null)
+			{
+				Block paramBlock = blocksMap.get(blockConnector.getConnectBlockId());
+				expression.add(getExpressionData(0, "="+block.getLabel()+"-"+paramBlock.getLabel()));
+			}
 			return expression;
+			
 		}
 		
 		expression.add(getExpressionData(block.getId(), block.getGenusName()));

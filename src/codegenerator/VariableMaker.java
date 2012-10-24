@@ -175,19 +175,23 @@ public class VariableMaker {
 		blockGenus.setAttribute("name", "inc_"+name);
 		blockGenus.setAttribute("kind", "command");
 		blockGenus.setAttribute("initlabel", name);
-		blockGenus.setAttribute("label-suffix", "++");
+		blockGenus.setAttribute("label-suffix", "+=");
 		//blockGenus.setAttribute("label-unique", "yes");
 		//blockGenus.setAttribute("is-label-value", "yes");
 		blockGenus.setAttribute("color", "230 0 255");
 		
-		//Element blockConnectors = doc.createElement("BlockConnectors");
-		//Element blokConnector = doc.createElement("BlockConnector");
-		//blokConnector.setAttribute("connector-kind", "socket");
-		//blokConnector.setAttribute("connector-type", type);
+		Element blockConnectors = doc.createElement("BlockConnectors");
+		Element blockConnector = doc.createElement("BlockConnector");
+		blockConnector.setAttribute("connector-kind", "socket");
+		blockConnector.setAttribute("connector-type", type);
 		//blokConnector.setAttribute("position-type", "single");
+		Element defaultArgument = doc.createElement("DefaultArg");
+		defaultArgument.setAttribute("genus-name", type);
+		defaultArgument.setAttribute("label", "1");
+		blockConnector.appendChild(defaultArgument);
 		
-		//blockConnectors.appendChild(blokConnector);
-		//blockGenus.appendChild(blockConnectors);
+		blockConnectors.appendChild(blockConnector);
+		blockGenus.appendChild(blockConnectors);
 		blockGenuses.appendChild(blockGenus);
 		
 		NodeList nodeList = doc.getElementsByTagName("BlockFamily");
@@ -210,19 +214,21 @@ public class VariableMaker {
 		blockGenus.setAttribute("name", "dec_"+name);
 		blockGenus.setAttribute("kind", "command");
 		blockGenus.setAttribute("initlabel", name);
-		blockGenus.setAttribute("label-suffix", "--");
+		blockGenus.setAttribute("label-suffix", "-=");
 		//blockGenus.setAttribute("label-unique", "yes");
 		//blockGenus.setAttribute("is-label-value", "yes");
 		blockGenus.setAttribute("color", "230 0 255");
 		
-		//Element blockConnectors = doc.createElement("BlockConnectors");
-		//Element blokConnector = doc.createElement("BlockConnector");
-		//blokConnector.setAttribute("connector-kind", "socket");
-		//blokConnector.setAttribute("connector-type", type);
-		//blokConnector.setAttribute("position-type", "single");
+		Element blockConnectors = doc.createElement("BlockConnectors");
+		Element blockConnector = doc.createElement("BlockConnector");
+		blockConnector.setAttribute("connector-kind", "socket");
+		blockConnector.setAttribute("connector-type", type);
+		blockConnector.setAttribute("position-type", "single");
+		Element defaultArgument = doc.createElement("DefaultArg");
+		defaultArgument.setAttribute("genus-name", type);
+		defaultArgument.setAttribute("label", "1");
+		blockConnector.appendChild(defaultArgument);
 		
-		//blockConnectors.appendChild(blokConnector);
-		//blockGenus.appendChild(blockConnectors);
 		blockGenuses.appendChild(blockGenus);
 		
 		NodeList nodeList = doc.getElementsByTagName("BlockFamily");
