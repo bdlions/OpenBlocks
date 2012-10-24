@@ -50,4 +50,12 @@
 		draw("line",style,width,color);
 	}
 </#macro>
+	
+<#assign mapping = {"and":"&&", "or":"||", "integer": "int", "tomorrow":"false", "now":"true", "yes":"1.0", "no":"0.0"}>
 
+<#function getalternatename word>
+	<#if mapping[word]??>
+		<#return mapping[word]>
+	</#if>
+  	<#return word>
+</#function>
