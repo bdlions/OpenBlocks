@@ -40,7 +40,7 @@
 </#macro>
 
 <#macro mail>
-	mail (string txt) {
+	mail (String txt) {
 	  mail(a@d.com,txt);
 	}
 </#macro>
@@ -51,7 +51,7 @@
 	}
 </#macro>
 	
-<#assign mapping = {"and":"&&", "or":"||", "integer": "int", "tomorrow":"false", "now":"true", "yes":"1.0", "no":"0.0"}>
+<#assign mapping = {"and":"&&", "or":"||", "integer": "int", "string": "String", "tomorrow":"false", "now":"true", "yes":"1.0", "no":"0.0"}>
 
 <#function getalternatename word>
 	<#if mapping[word]??>
