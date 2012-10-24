@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
@@ -44,7 +45,10 @@ import codeblocks.BlockGenus;
 import codeblocks.BlockLinkChecker;
 import codeblocks.CommandRule;
 import codeblocks.SocketRule;
+import codegenerator.BlockValidator;
 import codegenerator.CodeGen;
+import codegenerator.ValidationErrorDisplayer;
+import codegenerator.XMLToBlockGenerator;
 
 /**
  * 
@@ -768,7 +772,16 @@ public class WorkspaceController {
         JButton validateBbutton = new JButton("Validate");
         validateBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
-            	JOptionPane.showMessageDialog(null, "Validate button clicked toolbar.");
+            	//System.out.println(BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString())));
+            	List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
+            	if(errors.size() > 0){
+            		ValidationErrorDisplayer displayer = new ValidationErrorDisplayer();
+                	displayer.displayError(errors);
+                	displayer.setVisible(true);
+            	}else{
+            		JOptionPane.showMessageDialog(null, "No error found");
+            	}
+            	
             }
         });
         toolbar.add(validateBbutton);        

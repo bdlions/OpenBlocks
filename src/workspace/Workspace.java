@@ -44,7 +44,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import controller.StructureCode;
 import renderable.BlockUtilities;
 import renderable.RenderableBlock;
 import workspace.typeblocking.FocusTraversalManager;
@@ -59,6 +58,7 @@ import codeblockutil.Explorer;
 import codeblockutil.ExplorerEvent;
 import codeblockutil.ExplorerListener;
 import codegenerator.CodeGen;
+import codegenerator.StructureCode;
 import codegenerator.VariableMaker;
 import codegenerator.XMLToBlockGenerator;
 
@@ -78,6 +78,9 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
     private static String selectedLanguage = "java"; 
 	public static void setSelectedLanguage(String selectedLanguage) {
 		Workspace.selectedLanguage = selectedLanguage;
+	}
+	public static String getSelectedLanguage() {
+		return selectedLanguage;
 	}
 
 	/** WorkspaceListeners that monitor:
