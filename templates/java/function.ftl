@@ -56,7 +56,7 @@
 "now":"true", "yes":"1.0", "no":"0.0",
 "USA":"1", "CAN":"2", "EUR":"3",
 "white":"0", "black":"1", "green":"2",
-"\"Jan\"":"\"Jan10\"", "Feb":"\"Feb20\"", "March":"\"March1\""
+"\"Jan\"":"\"Jan10\"", "\"Feb\"":"\"Feb20\"", "\"March\"":"\"March1\""
 }>
 
 <#function getalternatename word>
