@@ -23,7 +23,7 @@
 </#macro>
 
 <#macro userAge>
-	int userAge(int in, float x){
+	int userAge(in, x){
 		return in * 2/x;
 	}
 </#macro>
