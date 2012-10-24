@@ -329,8 +329,41 @@ public class CodeGen {
 		
 		BlockGenus blockGenus = getGenusWithName(block.getGenusName());
 		Number number = block.getId();
-		
-		if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelPrefix().equals("set "))
+		if(blockGenus.isCommandBlock() && block.getGenusName().equals("run"))
+		{
+			expression.add(getExpressionData(0, "run("));
+			
+			if(block.getSockets() != null)
+			{
+				int count = 0;
+				for (BlockConnector blockConnector : block.getSockets().getBlockConnectors()) {
+					Block paramBlock = blocksMap.get(blockConnector.getConnectBlockId());
+					if(count > 0)
+					{
+						expression.add(getExpressionData(0, ","));
+					}
+					if(paramBlock != null)
+					{
+						Number paramBlockId = paramBlock.getId();
+						if(count == 3){
+							expression.add(getExpressionData(paramBlock.getId(), "2*"+paramBlock.getLabel()));
+						}else if(blockConnector.getType().equals("string") && !codeblocks.Block.getBlock(paramBlockId.longValue()).getLabelPrefix().equals("get "))
+							expression.add(getExpressionData(paramBlock.getId(), "\""+paramBlock.getLabel()+"\""));
+						else
+							expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
+					}
+					count ++;
+				}
+			}
+			expression.add(getExpressionData(0, ")"));
+			return expression;
+		}
+		else if(blockGenus.isCommandBlock() && block.getGenusName().equals("play"))
+		{
+			expression.add(getExpressionData(0, "play(100)"));
+			return expression;
+		}
+		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelPrefix().equals("set "))
 		{
 			expression.add(getExpressionData(0, block.getLabel()));
 			expression.add(getExpressionData(0, "="));
