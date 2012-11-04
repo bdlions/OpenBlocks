@@ -835,7 +835,7 @@ public class WorkspaceController {
             		VariableMaker.addVariable(langDefRoot.getOwnerDocument(), variableName.getValue(), variableName.getVariableType());
             		wc.loadProject(wc.getSaveString());
             		
-            		JOptionPane.showMessageDialog(null, variableName.getValue());
+            		JOptionPane.showMessageDialog(null, "A "+ variableName.getVariableType() +" variable named \""+ variableName.getValue() +"\" has been added");
             	}
             	
             }
