@@ -85,8 +85,9 @@ public class CodeGen {
 						
 						if(connectorGenus.isFunctionBlock())
 						{
-							listExpressionBlocks.add(getExpressionData(valueBlock.getId(), Integer.toString(valueBlock.getId())));
-							while (isCompleteProcessFunction(listExpressionBlocks)) ;
+							//listExpressionBlocks.add(getExpressionData(valueBlock.getId(), Integer.toString(valueBlock.getId())));
+							//while (isCompleteProcessFunction(listExpressionBlocks)) ;
+							listExpressionBlocks = getFullFunction(valueBlock.getId());
 							variable.setValue(listExpressionBlocks);
 						}
 						else
@@ -197,8 +198,9 @@ public class CodeGen {
 						
 						if(connectorGenus.isFunctionBlock())
 						{
-							listExpressionBlocks.add(getExpressionData(valueBlock.getId(), Integer.toString(valueBlock.getId())));
-							while (isCompleteProcessFunction(listExpressionBlocks)) ;
+							//listExpressionBlocks.add(getExpressionData(valueBlock.getId(), Integer.toString(valueBlock.getId())));
+							//while (isCompleteProcessFunction(listExpressionBlocks)) ;
+							listExpressionBlocks = getFullFunction(valueBlock.getId());
 							variable.setValue(listExpressionBlocks);
 						}
 						else
@@ -374,7 +376,9 @@ public class CodeGen {
 				{
 					Block paramBlock = blocksMap.get(blockConnector.getConnectBlockId());
 					
-					if(blockConnector.getType().equals("string") && !codeblocks.Block.getBlock(number.longValue()).getLabelPrefix().equals("get "))
+					if(getGenusWithName(paramBlock.getGenusName()).isFunctionBlock())
+						expression.addAll(getFullFunction(paramBlock));
+					else if(blockConnector.getType().equals("string") && !codeblocks.Block.getBlock(number.longValue()).getLabelPrefix().equals("get "))
 						expression.add(getExpressionData(paramBlock.getId(), "\""+paramBlock.getLabel()+"\""));
 					else
 						expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
@@ -438,8 +442,9 @@ public class CodeGen {
 					if(paramBlock != null)
 					{
 						Number paramBlockId = paramBlock.getId();
-						
-						if(blockConnector.getType().equals("string") && !codeblocks.Block.getBlock(paramBlockId.longValue()).getLabelPrefix().equals("get "))
+						if(getGenusWithName(paramBlock.getGenusName()).isFunctionBlock())
+							expression.addAll(getFullFunction(paramBlock));
+						else if(blockConnector.getType().equals("string") && !codeblocks.Block.getBlock(paramBlockId.longValue()).getLabelPrefix().equals("get "))
 							expression.add(getExpressionData(paramBlock.getId(), "\""+paramBlock.getLabel()+"\""));
 						else
 							expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));
@@ -503,12 +508,13 @@ public class CodeGen {
 				if(ifConnector.getLabel().equals("condition"))
 				{
 					conditionData.add(getExpressionData(ifConnector.getConnectBlockId(), Integer.toString(ifConnector.getConnectBlockId())));
-					while (isCompleteProcessFunction(conditionData));
+					//while (isCompleteProcessFunction(conditionData));
+					conditionData = getFullFunction(ifConnector.getConnectBlockId());
 				}
 			}
 		}
 		
-		while(isCompleteProcessFunction(conditionData));
+		//while(isCompleteProcessFunction(conditionData));
 		return conditionData;
 	}
 	public List<ExpressionData> getFullFunction(Block functionBlock)
@@ -519,6 +525,10 @@ public class CodeGen {
 		
 		while(isCompleteProcessFunction(functionData));
 		return functionData;
+	}
+	public List<ExpressionData> getFullFunction(int blockId)
+	{
+		return getFullFunction(getBlock(blockId));
 	}
 	public List<Block> getThenStatements(Block block)
 	{

@@ -1,10 +1,17 @@
 package workspace;
 
+import java.awt.Color;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JTextArea;
+
+import codeblockutil.CTracklessScrollPane;
+import codeblockutil.CScrollPane.ScrollPolicy;
+
+import renderable.Comment;
 import renderable.RenderableBlock;
 
 
@@ -102,7 +109,7 @@ public class ContextMenu extends PopupMenu implements ActionListener{
     	generateFullCodeItem.setActionCommand(GENERATE_FULL_CODE);
     	generateFullCodeItem.addActionListener(rndBlockMenu);
     	
-    	canvasMenu.add(generateFullCodeItem);
+    	//canvasMenu.add(generateFullCodeItem);
         
         canvasMenuInit = true;
     }
@@ -154,7 +161,9 @@ public class ContextMenu extends PopupMenu implements ActionListener{
         {
         	if(activeComponent != null && activeComponent instanceof RenderableBlock){
         		RenderableBlock renderableBlock = (RenderableBlock) activeComponent;
-        		Workspace.getInstance().setPartialCodeInEditor(renderableBlock.getBlockID().intValue());
+        		//Workspace.getInstance();
+				//Workspace.getInstance().setPartialCodeInEditor(renderableBlock.getBlockID().intValue());
+        		renderableBlock.setTextInCodeDisplayer(Workspace.getBlockText(renderableBlock.getBlockID().intValue()));
         	}
         	
         }else if(a.getActionCommand() == GENERATE_FULL_CODE)

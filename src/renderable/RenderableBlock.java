@@ -28,7 +28,6 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 import javax.swing.JToolTip;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -49,7 +48,6 @@ import workspace.WorkspaceWidget;
 import codeblocks.Block;
 import codeblocks.BlockConnector;
 import codeblocks.BlockConnectorShape;
-import codeblocks.BlockGenus;
 import codeblocks.BlockLink;
 import codeblocks.BlockLinkChecker;
 import codeblocks.BlockShape;
@@ -97,6 +95,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 	private WorkspaceWidget lastDragWidget = null;
 	/** The comment of this.  May be null */
 	private Comment comment=null;
+	private PartialCodeDisplayer codeDisplayer=null;
 	/**  set true when comment is added or removed from this block */
 	private boolean commentLabelChanged = false;
 	/**
@@ -834,6 +833,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 			Iterator<BlockConnector> sockets = getBlock().getSockets().iterator();
 			Long id; 
 			BlockConnector socket;
+
 			// Store the ids, sockets, and blocks we need to update.
 			List<Long> idList = new ArrayList<Long>();
 			List<BlockConnector> socketList = new ArrayList<BlockConnector>();
@@ -869,7 +869,11 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 
 			int size = idList.size();
 			for (int i = 0; i < size; i++) {
-				Workspace.getInstance().notifyListeners( new WorkspaceEvent(this.getParentWidget(),  argList.get(i).getBlockID(),  WorkspaceEvent.BLOCK_ADDED, true));
+				Workspace.getInstance().notifyListeners(
+						new WorkspaceEvent(this.getParentWidget(), 
+								argList.get(i).getBlockID(), 
+								WorkspaceEvent.BLOCK_ADDED, true));
+
 				//must call this method to update the dimensions of this
 				//TODO ria in the future would be good to just link the default args
 				//but first creating a block link object and then connecting
@@ -880,7 +884,6 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 			}
 			this.redrawFromTop();
 			linkedDefArgsBefore = true;
-			
 		}
 	}
 
@@ -1398,6 +1401,35 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 	}
 
 	/**
+	 * If this does NOT have comment, then add a new comment to
+	 * this parent Container at a point (10,-20) away from upper-right
+	 * hand corner.  Modify such that this.hasComment will now return true.
+	 */
+	public void setTextInCodeDisplayer(String code){
+		
+		int x = this.getX() + this.getWidth() + 30;
+		int y = this.getY() - 40;
+		if(codeDisplayer != null)
+			codeDisplayer.delete();
+		
+		codeDisplayer = new PartialCodeDisplayer(code, this, this.getBlock().getColor(), zoom);
+		if (this.getParentWidget() != null) {
+			codeDisplayer.setParent(this.getParentWidget().getJComponent());
+		} else {
+			codeDisplayer.setParent(this.getParent());
+		}
+		codeDisplayer.setLocation(x, y);
+		//commentLabelChanged = true;
+	
+    	
+		revalidate();
+		getHighlightHandler().revalidate();
+		updateBuffImg();
+		//codeDisplayer.getArrow().updateArrow();
+		getParent().repaint();
+	}
+	
+	/**
 	 * remove this comment from this parent Container and modify such that
 	 * this.hasComment returns false.
 	 */
@@ -1706,7 +1738,6 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 		if (SwingUtilities.isLeftMouseButton(e)){
 			dragHandler.mousePressed(e);
 			pickedUp = true; //mark this block as currently being picked up
-			//System.out.println("Selected a block"+ this.getSaveString());
 		}
 	}
 

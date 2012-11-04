@@ -526,13 +526,13 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
         }
         if(event.getEventType() == WorkspaceEvent.BLOCK_VARIABLE_RENAMED)
         {
-        	loadProjectWithVariable(getWorkspaceSaveString());
+        	//loadProjectWithVariable(getWorkspaceSaveString());
         }
         if(event.getSourceBlockID() > 0 && 
         		event.getEventType() == WorkspaceEvent.BLOCK_VARIABLE_ADDED &&
         		BlockGenus.getGenusWithName(Block.getBlock(event.getSourceBlockID()).getGenusName()).isDeclaration())
         {
-        	loadProjectWithVariable(getWorkspaceSaveString());
+        	//loadProjectWithVariable(getWorkspaceSaveString());
         }
     }
     
@@ -1007,7 +1007,7 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
 		this.add(c, DRAGGED_BLOCK_HIGHLIGHT_LAYER);
 	}
 	
-	public void loadProjectWithVariable(String projectContents)
+	/*public void loadProjectWithVariable(String projectContents)
 	{
 		
 		reset();
@@ -1079,7 +1079,7 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
         
         addCodeEditor();
         //setCodeInEditor(getWorkspaceSaveString());
-	}
+	}*/
 	
     /**
      * Returns the save string for the entire workspace.  This includes the block workspace, any 
@@ -1128,5 +1128,12 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
     	CodeGen manageCode = new CodeGen();
         StructureCode sCode = new StructureCode();                
         editor.setText(sCode.indentMyCode(manageCode.getPartialGenerateCode( ws.getWorkspaceSaveString(), selectedLanguage, blockID)));
+    }
+    
+    public static String getBlockText(int blockID)
+    {
+    	CodeGen manageCode = new CodeGen();
+        StructureCode sCode = new StructureCode();                
+        return sCode.indentMyCode(manageCode.getPartialGenerateCode( ws.getWorkspaceSaveString(), selectedLanguage, blockID));
     }
 }

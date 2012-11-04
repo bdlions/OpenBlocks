@@ -35,6 +35,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import com.sun.xml.internal.ws.util.xml.XmlUtil;
+
 import workspace.Page;
 import workspace.SearchBar;
 import workspace.SearchableContainer;
@@ -47,7 +50,9 @@ import codeblocks.CommandRule;
 import codeblocks.SocketRule;
 import codegenerator.BlockValidator;
 import codegenerator.CodeGen;
+import codegenerator.PromptVariableName;
 import codegenerator.ValidationErrorDisplayer;
+import codegenerator.VariableMaker;
 import codegenerator.XMLToBlockGenerator;
 
 /**
@@ -120,7 +125,7 @@ public class WorkspaceController {
             doc = builder.parse(new File(langDefLocation));
             
             langDefRoot = doc.getDocumentElement();
-            
+           
             //set the dirty flag for the language definition file 
             //to true now that a new file has been set
             langDefDirty = true;
@@ -339,6 +344,7 @@ public class WorkspaceController {
             workspace.loadWorkspaceFrom(root, langDefRoot);
 
             workspaceLoaded = true;
+            workspace.addCodeEditor();
             
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -524,6 +530,9 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
+				wc.langDefDirty = true;
+				VariableMaker.addVariable(langDefRoot.getOwnerDocument(), "string_var", "string");
+				wc.loadProject(wc.getSaveString());
 				JOptionPane.showMessageDialog(null, "Open Clicked.");				
 			}
 		});
@@ -589,7 +598,7 @@ public class WorkspaceController {
 			{
 				//JOptionPane.showMessageDialog(null, "Generate C Code Clicked.");	
 				workspace.setSelectedLanguage("c");
-            	workspace.loadProjectWithVariable(wc.getSaveString());
+            	//workspace.loadProjectWithVariable(wc.getSaveString());
 				workspace.setCodeInEditor();
 			}
 		});
@@ -602,7 +611,7 @@ public class WorkspaceController {
 			{
 				//JOptionPane.showMessageDialog(null, "Generate C Code Clicked.");	
 				workspace.setSelectedLanguage("java");
-            	workspace.loadProjectWithVariable(wc.getSaveString());
+            	//workspace.loadProjectWithVariable(wc.getSaveString());
 				workspace.setCodeInEditor();
 			}
 		});
@@ -678,7 +687,7 @@ public class WorkspaceController {
             public void actionPerformed(ActionEvent evt){
             	//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
 				//System.out.println(wc.getSaveString());
-				workspace.loadProjectWithVariable(wc.getSaveString());
+				//workspace.loadProjectWithVariable(wc.getSaveString());
 				workspace.setCodeInEditor();
                 //CodeGen codeGen = new CodeGen();
                 //editor.setText(codeGen.getCode(workspace.getSaveString()));
@@ -790,7 +799,7 @@ public class WorkspaceController {
             public void actionPerformed(ActionEvent evt){
             	//JOptionPane.showMessageDialog(null, "Generate C Code button clicked toolbar.");
             	workspace.setSelectedLanguage("c");
-            	workspace.loadProjectWithVariable(wc.getSaveString());
+            	//workspace.loadProjectWithVariable(wc.getSaveString());
 				workspace.setCodeInEditor();
             	
             }
@@ -802,7 +811,7 @@ public class WorkspaceController {
             	workspace.setSelectedLanguage("java");
             	//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
 				//System.out.println(wc.getSaveString());
-				workspace.loadProjectWithVariable(wc.getSaveString());
+				//workspace.loadProjectWithVariable(wc.getSaveString());
 				workspace.setCodeInEditor();
                 //CodeGen codeGen = new CodeGen();
                 //editor.setText(codeGen.getCode(workspace.getSaveString()));
@@ -814,6 +823,24 @@ public class WorkspaceController {
         });
         toolbar.add(generateJavaCodeBbutton);
         
+        JButton buttonAddVariable = new JButton("Add Variable");
+        buttonAddVariable.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	PromptVariableName variableName = new PromptVariableName();
+            	variableName.setModal(true);
+            	variableName.setVisible(true);
+            	if(variableName.getOption() == JOptionPane.OK_OPTION)
+            	{
+            		wc.langDefDirty = true;
+            		VariableMaker.addVariable(langDefRoot.getOwnerDocument(), variableName.getValue(), variableName.getVariableType());
+            		wc.loadProject(wc.getSaveString());
+            		
+            		JOptionPane.showMessageDialog(null, variableName.getValue());
+            	}
+            	
+            }
+        });
+        toolbar.add(buttonAddVariable);
         
         //frame.getContentPane().add(toolbar,BorderLayout.NORTH);
         

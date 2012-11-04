@@ -89,7 +89,7 @@ class JavaCodeSample{
  			<@commandMacro command=commandStatement/>
 		</#list> 
 		}
-		<#elseif command.getLabel() = "ifelse">
+	<#elseif command.getLabel() = "ifelse">
 		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${functions.getalternatename(conditionBlocks.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(conditionBlocks.getId()).getLabel())}</#if></#list>){
 			<#list codeGen.getThenStatements(command) as commandStatement>
 	 			<@commandMacro command=commandStatement/>
@@ -99,8 +99,8 @@ class JavaCodeSample{
 	 			<@commandMacro command=commandStatement/>
 			</#list> 
 		}
- 		<#else>
- 		<#list codeGen.getCommandExpression(command) as commandStatement>${functions.getalternatename(commandStatement.getData())}</#list>;
+	<#else>
+ 		<#list codeGen.getCommandExpression(command) as commandStatement><#if commandStatement.getId() = 0> ${functions.getalternatename(commandStatement.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(commandStatement.getId()).getLabel())}</#if></#list>
  	</#if>
 	<#if command.getAfterBlockId() != 0>
 		<#assign nextBlock = codeGen.getBlock(command.getAfterBlockId())/>
@@ -126,7 +126,7 @@ class JavaCodeSample{
 			</#list> 
 		}
  		<#else>
- 		<#list codeGen.getCommandExpression(command) as commandStatement> ${functions.getalternatename(commandStatement.getData())} </#list>;
+ 			<#list codeGen.getCommandExpression(command) as commandStatement><#if commandStatement.getId() = 0> ${functions.getalternatename(commandStatement.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(commandStatement.getId()).getLabel())}</#if></#list>
  		<#if command.getAfterBlockId() != 0>
 			<#assign nextBlock = codeGen.getBlock(command.getAfterBlockId())/>
 			<@commandMacro command=nextBlock/>

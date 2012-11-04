@@ -39,14 +39,17 @@ public class VariableMaker {
 		blockGenus.appendChild(blockConnectors);
 		blockGenuses.appendChild(blockGenus);
 		
-		NodeList nodeList = doc.getElementsByTagName("BlockFamily");
-		for (int i = 0; i < nodeList.getLength(); i ++) {
-			Element element = (Element) nodeList.item(i);
-			if( element.getAttribute("type").equals("set_"+type))
+		NodeList blockDrawers = doc.getElementsByTagName("BlockDrawer");
+		for (int i = 0; i < blockDrawers.getLength(); i ++) {
+			Element blockDrawer = (Element)blockDrawers.item(i);
+			if(blockDrawer.getAttribute("name").equals("Variables"))
 			{
-				Element familyMember = doc.createElement("FamilyMember");
-				familyMember.appendChild(doc.createTextNode("set_"+name));
-				element.appendChild(familyMember);
+				Element blockGenusMember = doc.createElement("BlockGenusMember");
+				
+				blockGenusMember.appendChild(doc.createTextNode("set_"+name));
+				blockDrawer.appendChild(blockGenusMember);
+				
+				break;
 			}
 		}
 	}
@@ -75,7 +78,7 @@ public class VariableMaker {
 		blockGenus.appendChild(blockConnectors);*/
 		blockGenuses.appendChild(blockGenus);
 		
-		NodeList nodeList = doc.getElementsByTagName("BlockFamily");
+		/*NodeList nodeList = doc.getElementsByTagName("BlockFamily");
 		for (int i = 0; i < nodeList.getLength(); i ++) {
 			Element element = (Element) nodeList.item(i);
 			if( element.getAttribute("type").equals("reset_"+type))
@@ -84,7 +87,33 @@ public class VariableMaker {
 				familyMember.appendChild(doc.createTextNode("reset_"+name));
 				element.appendChild(familyMember);
 			}
+		}*/
+		
+		/*NodeList nodeList = doc.getElementsByTagName("BlockFamily");
+		for (int i = 0; i < nodeList.getLength(); i ++) {
+			Element element = (Element) nodeList.item(i);
+			if( element.getAttribute("type").equals("reset_"+type))
+			{
+				Element familyMember = doc.createElement("FamilyMember");
+				familyMember.appendChild(doc.createTextNode("reset_"+name));
+				element.appendChild(familyMember);
+			}
+		}*/
+		
+		NodeList blockDrawers = doc.getElementsByTagName("BlockDrawer");
+		for (int i = 0; i < blockDrawers.getLength(); i ++) {
+			Element blockDrawer = (Element)blockDrawers.item(i);
+			if(blockDrawer.getAttribute("name").equals("Variables"))
+			{
+				Element blockGenusMember = doc.createElement("BlockGenusMember");
+				
+				blockGenusMember.appendChild(doc.createTextNode("reset_"+name));
+				blockDrawer.appendChild(blockGenusMember);
+				
+				break;
+			}
 		}
+		
 	}
 	
 	
@@ -95,6 +124,7 @@ public class VariableMaker {
 		name = Variable.getValidVariableName(name);
 		String xmlString = null;
 		Node blockGenuses = doc.getElementsByTagName("BlockGenuses").item(0);
+		
 		
 		Element blockGenus = doc.createElement("BlockGenus");
 		blockGenus.setAttribute("name", name);
@@ -115,6 +145,47 @@ public class VariableMaker {
 		blockGenus.appendChild(blockConnectors);
 		blockGenuses.appendChild(blockGenus);
 		
+		Element blockGenusDecl = doc.createElement("BlockGenus");
+		blockGenusDecl.setAttribute("name", name+"_decl");
+		blockGenusDecl.setAttribute("kind", "variable");
+		blockGenusDecl.setAttribute("label-prefix", type +" ");
+		blockGenusDecl.setAttribute("initlabel",  name);
+		blockGenusDecl.setAttribute("label-unique", "no");
+		blockGenusDecl.setAttribute("is-label-value", "yes");
+		blockGenusDecl.setAttribute("color", "65 170 225");
+		
+		Element defaultArgument = doc.createElement("DefaultArg");
+		defaultArgument.setAttribute("genus-name", type);
+		if(type.equals("string"))
+		{
+			defaultArgument.setAttribute("label", "please add some text here");
+		}
+		else if(type.equals("boolean"))
+		{
+			defaultArgument.setAttribute("label", "true");
+			defaultArgument.setAttribute("genus-name", "true");
+		}
+		else if(type.equals("integer"))
+		{
+			defaultArgument.setAttribute("label", "0");
+		}
+		else if(type.equals("double"))
+		{
+			defaultArgument.setAttribute("label", "0.0");
+		}
+		
+		
+		Element blockDeclConnectors = doc.createElement("BlockConnectors");
+		Element blokDeclConnector = doc.createElement("BlockConnector");
+		blokDeclConnector.setAttribute("connector-kind", "socket");
+		blokDeclConnector.appendChild(defaultArgument);
+		blokDeclConnector.setAttribute("connector-type", type);
+		
+		blockDeclConnectors.appendChild(blokDeclConnector);
+		blockGenusDecl.appendChild(blockDeclConnectors);
+		blockGenuses.appendChild(blockGenusDecl);
+
+			
 		/*NodeList blockDrawers = doc.getElementsByTagName("BlockDrawer");
 		for (int i = 0; i < blockDrawers.getLength(); i ++) {
 			Element blockDrawer = (Element)blockDrawers.item(i);
@@ -126,7 +197,7 @@ public class VariableMaker {
 			}
 		}*/
 		
-		NodeList nodeList = doc.getElementsByTagName("BlockFamily");
+		/*NodeList nodeList = doc.getElementsByTagName("BlockFamily");
 		for (int i = 0; i < nodeList.getLength(); i ++) {
 			Element element = (Element) nodeList.item(i);
 			if( element.getAttribute("type").equals(type))
@@ -134,6 +205,28 @@ public class VariableMaker {
 				Element familyMember = doc.createElement("FamilyMember");
 				familyMember.appendChild(doc.createTextNode(name));
 				element.appendChild(familyMember);
+			}
+		}*/
+		
+		NodeList blockDrawers = doc.getElementsByTagName("BlockDrawer");
+		for (int i = 0; i < blockDrawers.getLength(); i ++) {
+			Element blockDrawer = (Element)blockDrawers.item(i);
+			if(blockDrawer.getAttribute("name").equals("Variables"))
+			{
+				Element blockGenusDeclMember = doc.createElement("BlockGenusMember");
+				
+				blockGenusDeclMember.appendChild(doc.createTextNode(name+"_decl"));
+				blockDrawer.appendChild(blockGenusDeclMember);
+				
+			}
+			else if(blockDrawer.getAttribute("name").equals("Logic"))
+			{
+				Element blockGenusMember = doc.createElement("BlockGenusMember");
+				
+				blockGenusMember.appendChild(doc.createTextNode(name));
+				blockDrawer.appendChild(blockGenusMember);
+				
+				
 			}
 		}
 		
@@ -194,7 +287,7 @@ public class VariableMaker {
 		blockGenus.appendChild(blockConnectors);
 		blockGenuses.appendChild(blockGenus);
 		
-		NodeList nodeList = doc.getElementsByTagName("BlockFamily");
+		/*NodeList nodeList = doc.getElementsByTagName("BlockFamily");
 		for (int i = 0; i < nodeList.getLength(); i ++) {
 			Element element = (Element) nodeList.item(i);
 			if( element.getAttribute("type").equals("inc_"+type))
@@ -202,6 +295,20 @@ public class VariableMaker {
 				Element familyMember = doc.createElement("FamilyMember");
 				familyMember.appendChild(doc.createTextNode("inc_"+name));
 				element.appendChild(familyMember);
+			}
+		}*/
+		
+		NodeList blockDrawers = doc.getElementsByTagName("BlockDrawer");
+		for (int i = 0; i < blockDrawers.getLength(); i ++) {
+			Element blockDrawer = (Element)blockDrawers.item(i);
+			if(blockDrawer.getAttribute("name").equals("Variables"))
+			{
+				Element blockGenusMember = doc.createElement("BlockGenusMember");
+				
+				blockGenusMember.appendChild(doc.createTextNode("inc_"+name));
+				blockDrawer.appendChild(blockGenusMember);
+				
+				break;
 			}
 		}
 	}
@@ -223,22 +330,38 @@ public class VariableMaker {
 		Element blockConnector = doc.createElement("BlockConnector");
 		blockConnector.setAttribute("connector-kind", "socket");
 		blockConnector.setAttribute("connector-type", type);
-		blockConnector.setAttribute("position-type", "single");
+		//blokConnector.setAttribute("position-type", "single");
 		Element defaultArgument = doc.createElement("DefaultArg");
 		defaultArgument.setAttribute("genus-name", type);
 		defaultArgument.setAttribute("label", "1");
 		blockConnector.appendChild(defaultArgument);
 		
+		blockConnectors.appendChild(blockConnector);
+		blockGenus.appendChild(blockConnectors);
 		blockGenuses.appendChild(blockGenus);
 		
-		NodeList nodeList = doc.getElementsByTagName("BlockFamily");
+		/*NodeList nodeList = doc.getElementsByTagName("BlockFamily");
 		for (int i = 0; i < nodeList.getLength(); i ++) {
 			Element element = (Element) nodeList.item(i);
-			if( element.getAttribute("type").equals("dec_"+type))
+			if( element.getAttribute("type").equals("inc_"+type))
 			{
 				Element familyMember = doc.createElement("FamilyMember");
-				familyMember.appendChild(doc.createTextNode("dec_"+name));
+				familyMember.appendChild(doc.createTextNode("inc_"+name));
 				element.appendChild(familyMember);
+			}
+		}*/
+		
+		NodeList blockDrawers = doc.getElementsByTagName("BlockDrawer");
+		for (int i = 0; i < blockDrawers.getLength(); i ++) {
+			Element blockDrawer = (Element)blockDrawers.item(i);
+			if(blockDrawer.getAttribute("name").equals("Variables"))
+			{
+				Element blockGenusMember = doc.createElement("BlockGenusMember");
+				
+				blockGenusMember.appendChild(doc.createTextNode("dec_"+name));
+				blockDrawer.appendChild(blockGenusMember);
+				
+				break;
 			}
 		}
 	}
