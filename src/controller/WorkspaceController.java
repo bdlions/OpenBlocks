@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Hashtable;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -31,12 +32,17 @@ import javax.swing.text.JTextComponent;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import language.*;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.sun.xml.internal.ws.util.xml.XmlUtil;
+
+
+import sun.rmi.runtime.NewThreadAction;
 
 import workspace.Page;
 import workspace.SearchBar;
@@ -65,7 +71,47 @@ import codegenerator.XMLToBlockGenerator;
  * @author Ricarose Roque
  */
 public class WorkspaceController {
-             
+    
+	private static LanguageGenerator languageGenerator;
+	private static Hashtable syntaxMap;
+	
+	public static JMenu menuFile;
+	public static JMenuItem menuItemNew;
+	public static JMenuItem menuItemOpen;
+	public static JMenuItem menuItemSave;
+	public static JMenuItem menuItemSaveAs;
+	public static JMenuItem menuItemPrint;
+	public static JMenuItem menuItemExit;
+	
+	public static JMenu menuCodeGeneration;
+	public static JMenuItem menuItemValidate;
+	public static JCheckBoxMenuItem checkBoxMenuItemGenerateCCode;
+	public static JCheckBoxMenuItem checkBoxMenuItemGenerateJavaCode;
+	
+	public static JMenu menuConfiguration;
+	public static JCheckBoxMenuItem checkBoxMenuItemEnglish;
+	public static JCheckBoxMenuItem checkBoxMenuItemFrancis;
+	
+	public static JMenu menuHelp;
+	public static JMenuItem menuItemOnlineHelp;
+	
+	public static JMenu menuAbout;
+	public static JMenuItem menuItemSnap;
+	
+	public static JButton newButton;
+	public static JButton openButton;
+	public static JButton saveBbutton;
+	public static JButton printBbutton;
+	public static JButton validateBbutton;
+	public static JButton generateCCodeBbutton;
+	public static JButton generateJavaCodeBbutton;
+	public static JButton undoButton;
+	public static JButton redoButton;
+	public static JButton cutButton;
+	public static JButton copyButton;
+	public static JButton pasteButton;
+	public static JButton deleteButton;
+	
 	private static String LANG_DEF_FILEPATH;
     
     private static Element langDefRoot;
@@ -492,7 +538,13 @@ public class WorkspaceController {
      */
     private static void createAndShowGUI(final WorkspaceController wc) {
         System.out.println("Creating GUI...");
-        
+        syntaxMap = languageGenerator.getSyntaxMapLanguage();
+        String testString = "File";
+		if (syntaxMap.containsKey(testString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(testString);
+			testString = titleEntry.getLabel();
+		}
+		System.out.println("testString"+testString);
         //Create and set up the window.
         JFrame frame = new JFrame("OpenBlocks Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -504,10 +556,20 @@ public class WorkspaceController {
         JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
-		JMenu menuFile = new JMenu("File");
+		String fileString = "File";
+		if (syntaxMap.containsKey(fileString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(fileString);
+			fileString = titleEntry.getLabel();
+		}
+		menuFile = new JMenu(fileString);
 		menuBar.add(menuFile);
 		
-		JMenuItem menuItemNew = new JMenuItem("New");
+		String newString = "New";
+		if (syntaxMap.containsKey(newString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(newString);
+			newString = titleEntry.getLabel();
+		}
+		menuItemNew = new JMenuItem(newString);
 		menuFile.add(menuItemNew);
 		menuItemNew.addActionListener(new ActionListener() 
 		{
@@ -524,7 +586,12 @@ public class WorkspaceController {
 				//workspace.LoadProjectWithVariable();
 			}
 		});
-		JMenuItem menuItemOpen = new JMenuItem("Open");
+		String openString = "Open";
+		if (syntaxMap.containsKey(openString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(openString);
+			openString = titleEntry.getLabel();
+		}
+		menuItemOpen = new JMenuItem(openString);
 		menuFile.add(menuItemOpen);
 		menuItemOpen.addActionListener(new ActionListener() 
 		{
@@ -536,7 +603,12 @@ public class WorkspaceController {
 				JOptionPane.showMessageDialog(null, "Open Clicked.");				
 			}
 		});
-		JMenuItem menuItemSave = new JMenuItem("Save");
+		String saveString = "Save";
+		if (syntaxMap.containsKey(saveString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveString);
+			saveString = titleEntry.getLabel();
+		}
+		menuItemSave = new JMenuItem(saveString);
 		menuFile.add(menuItemSave);
 		menuItemSave.addActionListener(new ActionListener() 
 		{
@@ -545,7 +617,12 @@ public class WorkspaceController {
 				JOptionPane.showMessageDialog(null, "Save Clicked.");				
 			}
 		});
-		JMenuItem menuItemSaveAs = new JMenuItem("Save As");
+		String saveAsString = "Save As";
+		if (syntaxMap.containsKey(saveAsString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveAsString);
+			saveAsString = titleEntry.getLabel();
+		}
+		menuItemSaveAs = new JMenuItem(saveAsString);
 		menuFile.add(menuItemSaveAs);
 		menuItemSaveAs.addActionListener(new ActionListener() 
 		{
@@ -554,7 +631,12 @@ public class WorkspaceController {
 				JOptionPane.showMessageDialog(null, "Save As Clicked.");				
 			}
 		});
-		JMenuItem menuItemPrint = new JMenuItem("Print");
+		String printString = "Print";
+		if (syntaxMap.containsKey(printString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(printString);
+			printString = titleEntry.getLabel();
+		}
+		menuItemPrint = new JMenuItem(printString);
 		menuFile.add(menuItemPrint);
 		menuItemPrint.addActionListener(new ActionListener() 
 		{
@@ -563,7 +645,12 @@ public class WorkspaceController {
 				JOptionPane.showMessageDialog(null, "Print Clicked.");				
 			}
 		});
-		JMenuItem menuItemExit = new JMenuItem("Exit");
+		String exitString = "Exit";
+		if (syntaxMap.containsKey(exitString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(exitString);
+			exitString = titleEntry.getLabel();
+		}
+		menuItemExit = new JMenuItem(exitString);
 		menuFile.add(menuItemExit);
 		menuItemExit.addActionListener(new ActionListener() 
 		{
@@ -572,11 +659,20 @@ public class WorkspaceController {
 				JOptionPane.showMessageDialog(null, "Exit Clicked.");				
 			}
 		});
-		
-		JMenu menuCodeGeneration = new JMenu("Code Generation");
+		String codeGenerationString = "Code Generation";
+		if (syntaxMap.containsKey(codeGenerationString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(codeGenerationString);
+			codeGenerationString = titleEntry.getLabel();
+		}
+		menuCodeGeneration = new JMenu(codeGenerationString);
 		menuBar.add(menuCodeGeneration);
 		
-		JMenuItem menuItemValidate = new JMenuItem("Validate");
+		String validateString = "Validate";
+		if (syntaxMap.containsKey(validateString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(validateString);
+			validateString = titleEntry.getLabel();
+		}
+		menuItemValidate = new JMenuItem(validateString);
 		menuCodeGeneration.add(menuItemValidate);
 		menuItemValidate.addActionListener(new ActionListener() 
 		{
@@ -587,8 +683,18 @@ public class WorkspaceController {
 		});
 		
 		final ButtonGroup generateCodeButtonGroup = new ButtonGroup();
-		JCheckBoxMenuItem checkBoxMenuItemGenerateCCode = new JCheckBoxMenuItem("Generate C Code");
-		JCheckBoxMenuItem checkBoxMenuItemGenerateJavaCode = new JCheckBoxMenuItem("Generate Java Code");
+		String generateCCodeString = "Generate C Code";
+		if (syntaxMap.containsKey(generateCCodeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(generateCCodeString);
+			generateCCodeString = titleEntry.getLabel();
+		}
+		checkBoxMenuItemGenerateCCode = new JCheckBoxMenuItem(generateCCodeString);
+		String generateJavaCodeString = "Generate Java Code";
+		if (syntaxMap.containsKey(generateJavaCodeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(generateJavaCodeString);
+			generateJavaCodeString = titleEntry.getLabel();
+		}
+		checkBoxMenuItemGenerateJavaCode = new JCheckBoxMenuItem(generateJavaCodeString);
 		
 		generateCodeButtonGroup.add(checkBoxMenuItemGenerateCCode);
 		menuCodeGeneration.add(checkBoxMenuItemGenerateCCode);
@@ -636,13 +742,53 @@ public class WorkspaceController {
 				workspace.setCodeInEditor();
 			}
 		});*/
-		
-		JMenu menuConfiguration = new JMenu("Configuration");
+		String configurationString = "Configuration";
+		if (syntaxMap.containsKey(configurationString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(configurationString);
+			configurationString = titleEntry.getLabel();
+		}
+		menuConfiguration = new JMenu(configurationString);
 		menuBar.add(menuConfiguration);
 		
 		final ButtonGroup languageButtonGroup = new ButtonGroup();
-		JCheckBoxMenuItem checkBoxMenuItemEnglish = new JCheckBoxMenuItem("English");
-		JCheckBoxMenuItem checkBoxMenuItemFrancis = new JCheckBoxMenuItem("Francis");
+		String englishString = "English";
+		if (syntaxMap.containsKey(englishString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(englishString);
+			englishString = titleEntry.getLabel();
+		}
+		checkBoxMenuItemEnglish = new JCheckBoxMenuItem(englishString);
+		String francisString = "Francis";
+		if (syntaxMap.containsKey(francisString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(francisString);
+			francisString = titleEntry.getLabel();
+		}
+		checkBoxMenuItemFrancis = new JCheckBoxMenuItem(francisString);
+		
+		checkBoxMenuItemEnglish.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				//JOptionPane.showMessageDialog(null, "English Clicked.");		
+				languageGenerator.setLanguage("English");
+				languageGenerator.updateLanguageMapLoadLanguage();
+				syntaxMap = languageGenerator.getSyntaxMapLanguage();			
+				
+				updateLabelText();
+			}
+		});
+		checkBoxMenuItemFrancis.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				//JOptionPane.showMessageDialog(null, "Francis Clicked.");		
+				languageGenerator.setLanguage("Francis");
+				languageGenerator.updateLanguageMapLoadLanguage();
+				syntaxMap = languageGenerator.getSyntaxMapLanguage();
+				
+				updateLabelText();				
+			}
+		});
+		
 		
 		languageButtonGroup.add(checkBoxMenuItemEnglish);
 		menuConfiguration.add(checkBoxMenuItemEnglish);
@@ -650,9 +796,20 @@ public class WorkspaceController {
 		languageButtonGroup.add(checkBoxMenuItemFrancis);
 		menuConfiguration.add(checkBoxMenuItemFrancis);
 		
-		JMenu menuHelp= new JMenu("Help");
+		String helpString = "Help";
+		if (syntaxMap.containsKey(helpString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(helpString);
+			helpString = titleEntry.getLabel();
+		}
+		menuHelp= new JMenu(helpString);
 		menuBar.add(menuHelp);
-		JMenuItem menuItemOnlineHelp = new JMenuItem("Online Help");
+		
+		String onlineHelpString = "Online Help";
+		if (syntaxMap.containsKey(onlineHelpString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(onlineHelpString);
+			onlineHelpString = titleEntry.getLabel();
+		}
+		menuItemOnlineHelp = new JMenuItem(onlineHelpString);
 		menuHelp.add(menuItemOnlineHelp);
 		menuItemOnlineHelp.addActionListener(new ActionListener() 
 		{
@@ -662,9 +819,20 @@ public class WorkspaceController {
 			}
 		});
 		
-		JMenu menuAbout= new JMenu("About");
+		String aboutString = "About";
+		if (syntaxMap.containsKey(aboutString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(aboutString);
+			aboutString = titleEntry.getLabel();
+		}
+		menuAbout= new JMenu(aboutString);
 		menuBar.add(menuAbout);
-		JMenuItem menuItemSnap = new JMenuItem("Snap");
+		
+		String snapString = "Snap";
+		if (syntaxMap.containsKey(snapString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(snapString);
+			snapString = titleEntry.getLabel();
+		}
+		menuItemSnap = new JMenuItem(snapString);
 		menuAbout.add(menuItemSnap);
 		menuItemSnap.addActionListener(new ActionListener() 
 		{
@@ -703,23 +871,23 @@ public class WorkspaceController {
         JToolBar toolbar = new JToolBar("Toolbar", JToolBar.HORIZONTAL);
         toolbar.setEnabled(false);
         //JButton cutbutton = new JButton(new ImageIcon("cut.gif"));
-        JButton newbutton = new JButton("New");
-        newbutton.addActionListener(new ActionListener() {
+        newButton = new JButton(newString);
+        newButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "New button clicked toolbar.");
             }
         });
-        toolbar.add(newbutton);
+        toolbar.add(newButton);
         
-        JButton openBbutton = new JButton("Open");
-        openBbutton.addActionListener(new ActionListener() {
+        openButton = new JButton(openString);
+        openButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "Open button clicked toolbar.");
             }
         });
-        toolbar.add(openBbutton);
+        toolbar.add(openButton);
         
-        JButton saveBbutton = new JButton("Save");
+        saveBbutton = new JButton(saveString);
         saveBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "Save button clicked toolbar.");
@@ -727,7 +895,7 @@ public class WorkspaceController {
         });
         toolbar.add(saveBbutton);
         
-        JButton printBbutton = new JButton("Print");
+        printBbutton = new JButton(printString);
         printBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "Print button clicked toolbar.");
@@ -735,50 +903,80 @@ public class WorkspaceController {
         });
         toolbar.add(printBbutton);
         
-        JButton undoBbutton = new JButton("Undo");
-        undoBbutton.addActionListener(new ActionListener() {
+        String undoString = "Undo";
+		if (syntaxMap.containsKey(undoString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(undoString);
+			undoString = titleEntry.getLabel();
+		}
+        undoButton = new JButton(undoString);
+        undoButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "Undo button clicked toolbar.");
             }
         });
-        toolbar.add(undoBbutton);
-        JButton redoBbutton = new JButton("Redo");
-        redoBbutton.addActionListener(new ActionListener() {
+        toolbar.add(undoButton);
+        String redoString = "Redo";
+		if (syntaxMap.containsKey(redoString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(redoString);
+			redoString = titleEntry.getLabel();
+		}        
+        redoButton = new JButton(redoString);
+        redoButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "Redo button clicked toolbar.");
             }
         });
-        toolbar.add(redoBbutton);
-        JButton cutBbutton = new JButton("Cut");
-        cutBbutton.addActionListener(new ActionListener() {
+        toolbar.add(redoButton);
+        String cutString = "Cut";
+		if (syntaxMap.containsKey(cutString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(cutString);
+			cutString = titleEntry.getLabel();
+		}
+        cutButton = new JButton(cutString);
+        cutButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "Cut button clicked toolbar.");
             }
         });
-        toolbar.add(cutBbutton);
-        JButton copyBbutton = new JButton("Copy");
-        copyBbutton.addActionListener(new ActionListener() {
+        toolbar.add(cutButton);
+        String copyString = "Copy";
+		if (syntaxMap.containsKey(copyString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(copyString);
+			copyString = titleEntry.getLabel();
+		}
+        copyButton = new JButton(copyString);
+        copyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "Copy button clicked toolbar.");
             }
         });
-        toolbar.add(copyBbutton);
-        JButton pasteBbutton = new JButton("Paste");
-        pasteBbutton.addActionListener(new ActionListener() {
+        toolbar.add(copyButton);
+        String pasteString = "Paste";
+		if (syntaxMap.containsKey(pasteString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(pasteString);
+			pasteString = titleEntry.getLabel();
+		}
+        pasteButton = new JButton(pasteString);
+        pasteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "Paste button clicked toolbar.");
             }
         });
-        toolbar.add(pasteBbutton);
-        JButton deleteBbutton = new JButton("Delete");
-        deleteBbutton.addActionListener(new ActionListener() {
+        toolbar.add(pasteButton);
+        String deleteString = "Delete";
+		if (syntaxMap.containsKey(deleteString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(deleteString);
+			deleteString = titleEntry.getLabel();
+		}
+        deleteButton = new JButton(deleteString);
+        deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "Delete button clicked toolbar.");
             }
         });
-        toolbar.add(deleteBbutton);
+        toolbar.add(deleteButton);
         
-        JButton validateBbutton = new JButton("Validate");
+        validateBbutton = new JButton(validateString);
         validateBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	//System.out.println(BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString())));
@@ -794,7 +992,7 @@ public class WorkspaceController {
             }
         });
         toolbar.add(validateBbutton);        
-        JButton generateCCodeBbutton = new JButton("Generate C Code");
+        generateCCodeBbutton = new JButton(generateCCodeString);
         generateCCodeBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	//JOptionPane.showMessageDialog(null, "Generate C Code button clicked toolbar.");
@@ -805,7 +1003,7 @@ public class WorkspaceController {
             }
         });
         toolbar.add(generateCCodeBbutton);
-        JButton generateJavaCodeBbutton = new JButton("Generate Java Code");
+        generateJavaCodeBbutton = new JButton(generateJavaCodeString);
         generateJavaCodeBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	workspace.setSelectedLanguage("java");
@@ -866,14 +1064,14 @@ public class WorkspaceController {
             public void run() { 
                 //TODO grab file path from args array
                 LANG_DEF_FILEPATH = "support/lang_def.xml";
-                
+                      
                 //Create a new WorkspaceController 
                 WorkspaceController wc = new WorkspaceController();
-                
+                wc.loadLanguage("English");    
                 wc.setLangDefFilePath(LANG_DEF_FILEPATH);
                 wc.loadFreshWorkspace();
                 createAndShowGUI(wc);
-               
+                      
             }
         });
     }
@@ -892,5 +1090,185 @@ public class WorkspaceController {
                 createAndShowGUI(wc);
             }
         });
+	}
+	
+	public void loadLanguage(String language)
+	{
+		languageGenerator = new LanguageGenerator();
+		languageGenerator.generateLoadLanguage();
+	}
+	
+	public static void updateLabelText()
+	{
+		String fileString = "File";
+		if (syntaxMap.containsKey(fileString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(fileString);
+			fileString = titleEntry.getLabel();
+		}
+		menuFile.setText(fileString);
+		
+		String newString = "New";
+		if (syntaxMap.containsKey(newString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(newString);
+			newString = titleEntry.getLabel();
+		}
+		menuItemNew.setText(newString);
+		
+		String openString = "Open";
+		if (syntaxMap.containsKey(openString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(openString);
+			openString = titleEntry.getLabel();
+		}
+		menuItemOpen.setText(openString);
+		
+		String saveString = "Save";
+		if (syntaxMap.containsKey(saveString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveString);
+			saveString = titleEntry.getLabel();
+		}
+		menuItemSave.setText(saveString);
+		
+		String saveAsString = "Save As";
+		if (syntaxMap.containsKey(saveAsString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveAsString);
+			saveAsString = titleEntry.getLabel();
+		}
+		menuItemSaveAs.setText(saveAsString);
+		
+		String printString = "Print";
+		if (syntaxMap.containsKey(printString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(printString);
+			printString = titleEntry.getLabel();
+		}
+		menuItemPrint.setText(printString);
+		
+		String exitString = "Exit";
+		if (syntaxMap.containsKey(exitString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(exitString);
+			exitString = titleEntry.getLabel();
+		}
+		menuItemExit.setText(exitString);
+		
+		String codeGenerationString = "Code Generation";
+		if (syntaxMap.containsKey(codeGenerationString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(codeGenerationString);
+			codeGenerationString = titleEntry.getLabel();
+		}
+		menuCodeGeneration.setText(codeGenerationString);
+		
+		String validateString = "Validate";
+		if (syntaxMap.containsKey(validateString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(validateString);
+			validateString = titleEntry.getLabel();
+		}
+		menuItemValidate.setText(validateString);
+		
+		String generateCCodeString = "Generate C Code";
+		if (syntaxMap.containsKey(generateCCodeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(generateCCodeString);
+			generateCCodeString = titleEntry.getLabel();
+		}
+		checkBoxMenuItemGenerateCCode.setText(generateCCodeString);
+		
+		String generateJavaCodeString = "Generate Java Code";
+		if (syntaxMap.containsKey(generateJavaCodeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(generateJavaCodeString);
+			generateJavaCodeString = titleEntry.getLabel();
+		}
+		checkBoxMenuItemGenerateJavaCode.setText(generateJavaCodeString);
+		
+		String configurationString = "Configuration";
+		if (syntaxMap.containsKey(configurationString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(configurationString);
+			configurationString = titleEntry.getLabel();
+		}
+		menuConfiguration.setText(configurationString);
+		
+		String englishString = "English";
+		if (syntaxMap.containsKey(englishString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(englishString);
+			englishString = titleEntry.getLabel();
+		}
+		checkBoxMenuItemEnglish.setText(englishString);
+		
+		String francisString = "Francis";
+		if (syntaxMap.containsKey(francisString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(francisString);
+			francisString = titleEntry.getLabel();
+		}
+		checkBoxMenuItemFrancis.setText(francisString);
+		
+		String helpString = "Help";
+		if (syntaxMap.containsKey(helpString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(helpString);
+			helpString = titleEntry.getLabel();
+		}
+		menuHelp.setText(helpString);
+		
+		String onlineHelpString = "Online Help";
+		if (syntaxMap.containsKey(onlineHelpString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(onlineHelpString);
+			onlineHelpString = titleEntry.getLabel();
+		}
+		menuItemOnlineHelp.setText(onlineHelpString);
+		
+		String aboutString = "About";
+		if (syntaxMap.containsKey(aboutString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(aboutString);
+			aboutString = titleEntry.getLabel();
+		}
+		menuAbout.setText(aboutString);
+		
+		String snapString = "Snap";
+		if (syntaxMap.containsKey(snapString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(snapString);
+			snapString = titleEntry.getLabel();
+		}
+		menuItemSnap.setText(snapString);
+		
+		newButton.setText(newString);
+		openButton.setText(openString);
+		saveBbutton.setText(saveString);
+		printBbutton.setText(printString);
+		validateBbutton.setText(validateString);
+		generateCCodeBbutton.setText(generateCCodeString);
+		generateJavaCodeBbutton.setText(generateJavaCodeString);
+		
+		String undoString = "Undo";
+		if (syntaxMap.containsKey(undoString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(undoString);
+			undoString = titleEntry.getLabel();
+		}
+		undoButton.setText(undoString);
+		String redoString = "Redo";
+		if (syntaxMap.containsKey(redoString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(redoString);
+			redoString = titleEntry.getLabel();
+		}
+		redoButton.setText(redoString);
+		String cutString = "Cut";
+		if (syntaxMap.containsKey(cutString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(cutString);
+			cutString = titleEntry.getLabel();
+		}
+		cutButton.setText(cutString);
+		String copyString = "Copy";
+		if (syntaxMap.containsKey(copyString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(copyString);
+			copyString = titleEntry.getLabel();
+		}
+		copyButton.setText(copyString);
+		String pasteString = "Paste";
+		if (syntaxMap.containsKey(pasteString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(pasteString);
+			pasteString = titleEntry.getLabel();
+		}
+		pasteButton.setText(pasteString);
+		String deleteString = "Delete";
+		if (syntaxMap.containsKey(deleteString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(deleteString);
+			deleteString = titleEntry.getLabel();
+		}
+		deleteButton.setText(deleteString);
 	}
 }

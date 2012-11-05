@@ -36,7 +36,7 @@ class JavaCodeSample{
  		complete sequential code generation
  		--> 
 
-
+//all variabes blocks
 <#list codeGen.getVariableDeclBlocks() as variable>
 	private ${functions.getalternatename(variable.getType())} ${functions.getalternatename(variable.getName())} = <#list variable.getValue() as expressionData><#if expressionData.getId()== 0>${functions.getalternatename(expressionData.getData())}<#elseif variable.getType()?matches('string') >"${functions.getalternatename(codeGen.getBlock(expressionData.getId()).getLabel())}"<#else>${functions.getalternatename(codeGen.getBlock(expressionData.getId()).getLabel())}</#if></#list>;
 </#list>

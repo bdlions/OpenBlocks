@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<myform1 title="Form1">
+	<languages>
+		<language name="English">
+			<entry name="File">
+				<label>EnglishFile</label>
+			</entry>
+			<entry name="New">
+				<label>EnglishNew</label>
+			</entry>	
+			<entry name="Open">
+				<label>EnglishOpen</label>
+			</entry>
+			<entry name="Save">
+				<label>EnglishSave</label>
+			</entry>
+			<entry name="Save As">
+				<label>EnglishSave As</label>
+			</entry>	
+			<entry name="Print">
+				<label>EnglishPrint</label>
+			</entry>	
+			<entry name="Exit">
+				<label>EnglishExit</label>
+			</entry>	
+			<entry name="Code Generation">
+				<label>EnglishCode Generation</label>
+			</entry>
+			<entry name="Validate">
+				<label>EnglishValidate</label>
+			</entry>
+			<entry name="Generate C Code">
+				<label>EnglishGenerate C Code</label>
+			</entry>	
+			<entry name="Generate Java Code">
+				<label>EnglishGenerate Java Code</label>
+			</entry>
+			<entry name="Configuration">
+				<label>EnglishConfiguration</label>
+			</entry>
+			<entry name="English">
+				<label>EnglishEnglish</label>
+			</entry>	
+			<entry name="Francis">
+				<label>EnglishFrancis</label>
+			</entry>
+			<entry name="Help">
+				<label>EnglishHelp</label>
+			</entry>
+			<entry name="Online Help">
+				<label>EnglishOnline Help</label>
+			</entry>
+			<entry name="About">
+				<label>EnglishAbout</label>
+			</entry>
+			<entry name="Snap">
+				<label>EnglishSnap</label>
+			</entry>
+			<entry name="Undo">
+				<label>EnglishUndo</label>
+			</entry>
+			<entry name="Redo">
+				<label>EnglishRedo</label>
+			</entry>
+			<entry name="Cut">
+				<label>EnglishCut</label>
+			</entry>
+			<entry name="Copy">
+				<label>EnglishCopy</label>
+			</entry>
+			<entry name="Paste">
+				<label>EnglishPaste</label>
+			</entry>
+			<entry name="Delete">
+				<label>EnglishDelete</label>
+			</entry>
+		</language>
+		<language name="Francis">
+			<entry name="File">
+				<label>FrancisFile</label>
+			</entry>
+			<entry name="New">
+				<label>FrancisNew</label>
+			</entry>	
+			<entry name="Open">
+				<label>FrancisOpen</label>
+			</entry>
+			<entry name="Save">
+				<label>FrancisSave</label>
+			</entry>
+			<entry name="Save As">
+				<label>FrancisSave As</label>
+			</entry>	
+			<entry name="Print">
+				<label>FrancisPrint</label>
+			</entry>
+			<entry name="Exit">
+				<label>FrancisExit</label>
+			</entry>
+			<entry name="Code Generation">
+				<label>FrancisCode Generation</label>
+			</entry>
+			<entry name="Validate">
+				<label>FrancisValidate</label>
+			</entry>
+			<entry name="Generate C Code">
+				<label>FrancisGenerate C Code</label>
+			</entry>
+			<entry name="Generate Java Code">
+				<label>FrancisGenerate Java Code</label>
+			</entry>
+			<entry name="Configuration">
+				<label>FrancisConfiguration</label>
+			</entry>
+			<entry name="English">
+				<label>FrancisEnglish</label>
+			</entry>	
+			<entry name="Francis">
+				<label>FrancisFrancis</label>
+			</entry>
+			<entry name="Help">
+				<label>FrancisHelp</label>
+			</entry>	
+			<entry name="Online Help">
+				<label>FrancisOnline Help</label>
+			</entry>
+			<entry name="About">
+				<label>FrancisAbout</label>
+			</entry>
+			<entry name="Snap">
+				<label>FrancisSnap</label>
+			</entry>
+			<entry name="Undo">
+				<label>FrancisUndo</label>
+			</entry>
+			<entry name="Redo">
+				<label>FrancisRedo</label>
+			</entry>
+			<entry name="Cut">
+				<label>FrancisCut</label>
+			</entry>
+			<entry name="Copy">
+				<label>FrancisCopy</label>
+			</entry>
+			<entry name="Paste">
+				<label>FrancisPaste</label>
+			</entry>
+			<entry name="Delete">
+				<label>FrancisDelete</label>
+			</entry>	
+		</language>
+	</languages>
+</myform1>
