@@ -54,4 +54,17 @@ public class Variable {
 	    
 	    return sb.toString();
 	}
+	
+	public static boolean isValidVariableName(String name)
+	{
+		
+		if(name == null) return false;
+	    if(!Character.isJavaIdentifierStart(name.charAt(0))) return false;
+	    
+	    for (char c : name.toCharArray()) {
+	        if(!Character.isJavaIdentifierPart(c))  return false;
+	    }
+	    
+	    return true;
+	}
 }

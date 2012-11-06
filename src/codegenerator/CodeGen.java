@@ -55,12 +55,12 @@ public class CodeGen {
 					allFunction.add(block);
 				}
 			}
-			/**
-			 * Adding variables
-			 * 
-			 */
 			else if(genus.isVariableDeclBlock())
 			{
+				/**
+				 * Adding variables
+				 * 
+				 */
 				
 				//String pattern = "^[a-zA-Z][a-zA-Z0-9]*?$";
 				Variable variable = new Variable();

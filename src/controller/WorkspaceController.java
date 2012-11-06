@@ -58,8 +58,10 @@ import codegenerator.BlockValidator;
 import codegenerator.CodeGen;
 import codegenerator.PromptVariableName;
 import codegenerator.ValidationErrorDisplayer;
+import codegenerator.Variable;
 import codegenerator.VariableMaker;
 import codegenerator.XMLToBlockGenerator;
+import codegenerator.xmlbind.Block;
 
 /**
  * 
@@ -1027,13 +1029,21 @@ public class WorkspaceController {
             	PromptVariableName variableName = new PromptVariableName();
             	variableName.setModal(true);
             	variableName.setVisible(true);
+            	
+            	
             	if(variableName.getOption() == JOptionPane.OK_OPTION)
             	{
-            		wc.langDefDirty = true;
-            		VariableMaker.addVariable(langDefRoot.getOwnerDocument(), variableName.getValue(), variableName.getVariableType());
-            		wc.loadProject(wc.getSaveString());
-            		
-            		JOptionPane.showMessageDialog(null, "A "+ variableName.getVariableType() +" variable named \""+ variableName.getValue() +"\" has been added");
+                	if( BlockGenus.getGenusWithName(Variable.getValidVariableName(variableName.getValue())) != null){
+                		JOptionPane.showMessageDialog(null, "Alerady a variable exist with the same name.");
+                	}
+                	else{
+                	
+	            		wc.langDefDirty = true;
+	            		VariableMaker.addVariable(langDefRoot.getOwnerDocument(), variableName.getValue(), variableName.getVariableType());
+	            		wc.loadProject(wc.getSaveString());
+	            		
+	            		JOptionPane.showMessageDialog(null, "A "+ variableName.getVariableType() +" variable named \""+ variableName.getValue() +"\" has been added");
+                	}
             	}
             	
             }

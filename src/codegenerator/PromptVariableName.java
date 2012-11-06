@@ -114,8 +114,13 @@ public class PromptVariableName extends JDialog {
 			JButton okButton = new JButton("OK");
 			okButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					options = JOptionPane.OK_OPTION;
-					dispose();
+					if(!Variable.isValidVariableName(textField.getText())){
+						JOptionPane.showMessageDialog(null, "This name is invalid. please add a vaild variable name.");
+					}
+					else{
+						options = JOptionPane.OK_OPTION;
+						dispose();
+					}
 				}
 			});
 			okButton.setActionCommand("OK");
