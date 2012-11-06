@@ -1,6 +1,7 @@
 package renderable;
 
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
@@ -12,6 +13,8 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -23,6 +26,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.RoundRectangle2D;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.undo.CannotRedoException;
@@ -63,6 +67,7 @@ public class PartialCodeDisplayer extends JPanel {
     private final Color borderColor;
     /**Text field UI*/
     private  JTextArea textArea;//textArea belonging to editingPane
+    private JPanel contentPane;
 	/**ScrollPane UI*/
     private  CTracklessScrollPane scrollPane;
     /**Dragging handler of this PartialCodeDisplayer*/
@@ -94,9 +99,10 @@ public class PartialCodeDisplayer extends JPanel {
   	private int height = DEFAULT_HEIGHT;
   	private double zoom = 1.0;
   	private String fontname = "Monospaced";
-  	private Shape  body, resize, textarea;
+  	private Shape  body, resize, textarea, contentpane;
   	private boolean pressed = false;
   	private boolean active = false;
+  	
   	
     /**
      * Constructs a PartialCodeDisplayer
@@ -121,6 +127,29 @@ public class PartialCodeDisplayer extends JPanel {
     	this.setBounds(0,0,DEFAULT_WIDTH,DEFAULT_HEIGHT);
     	this.borderColor=borderColor;
     	this.commentSource = source;
+    	
+    	contentPane = new JPanel(new BorderLayout());
+    	
+    	JButton closeButton = new JButton("X");
+    	closeButton.setBackground(background);
+    	closeButton.setPreferredSize(new Dimension(50, 20));
+    	closeButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				delete();
+			}
+		});
+    	
+    	JPanel closeButtonPanel = new JPanel(new BorderLayout());
+    	closeButtonPanel.setBackground(background);
+    	closeButtonPanel.add(closeButton, BorderLayout.EAST);
+    	
+    	
+    	closeButton.setSize(10, 10);
+    	contentPane.add(closeButtonPanel, BorderLayout.NORTH);
+    	//contentPane.add(comp)
     	
     	//set up editingPanel, labelPanel and their listeners
     	//initialize textArea with autowrap AROUND WORDS not characters
@@ -152,8 +181,9 @@ public class PartialCodeDisplayer extends JPanel {
 			}
 		});
 
+		contentPane.add(textArea, BorderLayout.CENTER);
     	//initialize scrollPane
-		scrollPane = new CTracklessScrollPane(textArea,
+		scrollPane = new CTracklessScrollPane(contentPane,
 				ScrollPolicy.VERTICAL_BAR_AS_NEEDED,
 				ScrollPolicy.HORIZONTAL_BAR_NEVER,
     			10, this.borderColor, PartialCodeDisplayer.background);
@@ -202,7 +232,7 @@ public class PartialCodeDisplayer extends JPanel {
 			RenderableBlock rb = (RenderableBlock) commentSource;
 
 			rb.remove(commentLabel);
-	    	commentLabel = null;
+	    	//commentLabel = null;
 		}
     }
     
@@ -282,7 +312,7 @@ public class PartialCodeDisplayer extends JPanel {
     	path2.lineTo(w-m, h-m);
     	path2.lineTo(m-1, h-m);
     	path2.closePath();
-    	textarea = path2;
+    	contentpane = path2;
   
     	body = new RoundRectangle2D.Double(0,0,w-1,h-1,3*m,3*m);
     	
@@ -402,13 +432,13 @@ public class PartialCodeDisplayer extends JPanel {
  		} else {
  			g2.setColor(PartialCodeDisplayer.background);
  		}
- 		g2.fill(textarea);
+ 		g2.fill(contentpane);
  		if (active) {
  	 		g2.setColor(Color.white);
  		} else {
  	 		g2.setColor(Color.lightGray);
  		}
- 		g2.draw(textarea);
+ 		g2.draw(contentpane);
  		if (active) {
  	 		g2.setColor(Color.lightGray.brighter());
  		} else {
