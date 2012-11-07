@@ -42,6 +42,7 @@ import org.xml.sax.SAXException;
 import com.sun.xml.internal.ws.util.xml.XmlUtil;
 
 
+import renderable.RenderableBlock;
 import sun.rmi.runtime.NewThreadAction;
 
 import workspace.Page;
@@ -1041,7 +1042,7 @@ public class WorkspaceController {
 	            		wc.langDefDirty = true;
 	            		VariableMaker.addVariable(langDefRoot.getOwnerDocument(), variableName.getValue(), variableName.getVariableType());
 	            		wc.loadProject(wc.getSaveString());
-	            		
+	            		//Workspace.getInstance().getPageNamed("Blocks").
 	            		JOptionPane.showMessageDialog(null, "A "+ variableName.getVariableType() +" variable named \""+ variableName.getValue() +"\" has been added");
                 	}
             	}

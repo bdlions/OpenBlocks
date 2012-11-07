@@ -35,11 +35,24 @@ public class BlockValidator {
 		BlockGenus blockGenus = BlockGenus.getGenusWithName(block.getGenusName());
 		Number number = block.getId();
 		
-		/**
-		 * set method validation
-		 * */
-		if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelPrefix().equals("set "))
+		if(blockGenus.isDeclaration()){
+			List<BlockConnector> blockConnectors = block.getSockets().getBlockConnectors();
+			if (blockConnectors.size() > 1) {
+				errors.add("Declaration block " + block.getLabel() + "  has more than one parameters but declaration block should only one param.");
+			} else if (blockConnectors.size() < 1) {
+				errors.add("Declaration block " + block.getLabel() + "  has no parameter but  declaration block need at least one param.");
+			} else if (blockConnectors.get(0).getConnectBlockId() <= 0) {
+				errors.add("Declaration block " + block.getLabel() + "  has no parameter but need at least one param.");
+			} else if(!blocksMap.containsKey(blockConnectors.get(0).getConnectBlockId())){
+				errors.add("Declaration block " + block.getLabel() + "  has an illigal parameter that doesn't really exist.");
+			}
+			
+		}
+		else if(blockGenus.isCommandBlock() && codeblocks.Block.getBlock(number.longValue()).getLabelPrefix().equals("set "))
 		{
+			/**
+			 * set method validation
+			 * */
 			if(block.getSockets() == null)
 			{
 				errors.add(block.getGenusName() + "  block has no socket defined.");

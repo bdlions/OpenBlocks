@@ -7,7 +7,7 @@
 	variable declaration code generation
 	--> 
 <#list codeGen.getVariableDeclBlocks() as variable>
- 	private ${variable.getType()} ${variable.getName()} = <#list variable.getValue() as expressionData><#if expressionData.getId()== 0>${expressionData.getData()}<#elseif variable.getType()?matches('string') >"${codeGen.getBlock(expressionData.getId()).getLabel()}"<#else>${codeGen.getBlock(expressionData.getId()).getLabel()}</#if></#list>;
+ 	${variable.getType()} ${variable.getName()} = <#list variable.getValue() as expressionData><#if expressionData.getId()== 0>${expressionData.getData()}<#elseif variable.getType()?matches('string') >"${codeGen.getBlock(expressionData.getId()).getLabel()}"<#else>${codeGen.getBlock(expressionData.getId()).getLabel()}</#if></#list>;
  </#list>
  
 <#list codeGen.getDifferentCommand() as command>

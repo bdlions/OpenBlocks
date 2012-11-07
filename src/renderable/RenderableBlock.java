@@ -3,6 +3,7 @@ package renderable;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JToolTip;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
@@ -40,6 +42,7 @@ import workspace.ContextMenu;
 import workspace.FactoryManager;
 import workspace.ISupportMemento;
 import workspace.MiniMap;
+import workspace.Page;
 import workspace.RBParent;
 import workspace.SearchableElement;
 import workspace.Workspace;
@@ -48,6 +51,7 @@ import workspace.WorkspaceWidget;
 import codeblocks.Block;
 import codeblocks.BlockConnector;
 import codeblocks.BlockConnectorShape;
+import codeblocks.BlockGenus;
 import codeblocks.BlockLink;
 import codeblocks.BlockLinkChecker;
 import codeblocks.BlockShape;
@@ -57,6 +61,7 @@ import codeblocks.JComponentDragHandler;
 import codeblocks.rendering.BlockShapeUtil;
 import codeblockutil.CToolTip;
 import codeblockutil.GraphicsManager;
+import codegenerator.XMLToBlockGenerator;
 
 
 /**
@@ -329,7 +334,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 				getComment().setParent(getParent(), Workspace.DRAGGED_BLOCK_LAYER);
 			}
 			getComment().translatePosition(dx, dy);
-		}		
+		}	
     }
     
 
@@ -1556,6 +1561,19 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
     		renderable.comment.setLocation(renderable.comment.getLocation());
     		renderable.comment.getArrow().updateArrow();
     	}
+        
+        if(widget instanceof Page)
+    	{
+    		Page page = (Page)widget;
+    		Page firstPage = Workspace.getInstance().getPageNamed("Blocks");
+    	
+    		if(!page.equals(firstPage))
+    		{
+    			// move to the new location
+    			//myComponent.setLocation(newX, newY);
+    			BlockUtilities.deleteBlock(renderable);
+    		}
+    	}
     }
     
     private static void drag(RenderableBlock renderable, int dx, int dy, WorkspaceWidget widget, boolean isTopLevelBlock){
@@ -1695,6 +1713,28 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 					//NOTIFY WORKSPACE LISTENERS OF DISCONNECTION
 					Workspace.getInstance().notifyListeners(new WorkspaceEvent(widget, link, WorkspaceEvent.BLOCKS_DISCONNECTED));
 				}
+				
+				String genusName = this.getBlock().getGenusName();
+				if(genusName.equals("var-execute") || genusName.equals("var-userexternal") || BlockGenus.getGenusWithName(genusName).isDeclaration())
+				{
+					StringBuffer saveString = new StringBuffer();
+			        saveString.append("<?xml version=\"1.0\"?>");
+			        saveString.append("\r\n");
+			        saveString.append("<CODEBLOCKS>");
+			        saveString.append(Workspace.getInstance().getSaveString());
+			        saveString.append("</CODEBLOCKS>");
+			        
+			        List<codegenerator.xmlbind.Block> allBlocks = XMLToBlockGenerator.generateBlocks(saveString.toString());
+			        for (codegenerator.xmlbind.Block currentblock : allBlocks) {
+						
+			        	if(currentblock.getGenusName().equals(this.getBlock().getGenusName()))
+						{
+							JOptionPane.showMessageDialog(null, "You are not allowed to drop this element twice.");
+							BlockUtilities.deleteBlock(this);
+						}
+					}
+				}
+				
 				startDragging(this, widget);
 			}
 

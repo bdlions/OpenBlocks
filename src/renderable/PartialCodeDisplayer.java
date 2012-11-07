@@ -496,6 +496,7 @@ public class PartialCodeDisplayer extends JPanel {
 	        } else if (x  + getWidth() + 1> this.getParent().getWidth()) {
 	            x = Math.max(this.getParent().getWidth() - getWidth() - 1, 0);
 	        }
+	        
     	}
         super.setLocation(x, y);
     	//arrow.updateArrow();
