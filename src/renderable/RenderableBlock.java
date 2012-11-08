@@ -1713,28 +1713,6 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 					//NOTIFY WORKSPACE LISTENERS OF DISCONNECTION
 					Workspace.getInstance().notifyListeners(new WorkspaceEvent(widget, link, WorkspaceEvent.BLOCKS_DISCONNECTED));
 				}
-				
-				String genusName = this.getBlock().getGenusName();
-				if(genusName.equals("var-execute") || genusName.equals("var-userexternal"))
-				{
-					StringBuffer saveString = new StringBuffer();
-			        saveString.append("<?xml version=\"1.0\"?>");
-			        saveString.append("\r\n");
-			        saveString.append("<CODEBLOCKS>");
-			        saveString.append(Workspace.getInstance().getSaveString());
-			        saveString.append("</CODEBLOCKS>");
-			        
-			        List<codegenerator.xmlbind.Block> allBlocks = XMLToBlockGenerator.generateBlocks(saveString.toString());
-			        for (codegenerator.xmlbind.Block currentblock : allBlocks) {
-						
-			        	if(currentblock.getGenusName().equals(this.getBlock().getGenusName()))
-						{
-							JOptionPane.showMessageDialog(null, "You are not allowed to drop this element twice.");
-							BlockUtilities.deleteBlock(this);
-						}
-					}
-				}
-				
 				startDragging(this, widget);
 			}
 

@@ -22,6 +22,7 @@ import java.util.TreeSet;
 
 import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolTip;
 import javax.swing.SwingUtilities;
@@ -29,10 +30,12 @@ import javax.swing.SwingUtilities;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import renderable.BlockUtilities;
 import renderable.RenderableBlock;
 import codeblocks.Block;
 import codeblocks.BlockGenus;
 import codeblockutil.CToolTip;
+import codegenerator.XMLToBlockGenerator;
 
 
 /**
@@ -575,16 +578,56 @@ public class Page  implements WorkspaceWidget, SearchableContainer, ISupportMeme
 	public void blockDropped(RenderableBlock block) {
 		//add to view at the correct location
 		Component oldParent = block.getParent();
-		block.setLocation(SwingUtilities.convertPoint(oldParent, 
-				block.getLocation(), this.pageJComponent));
-		addBlock(block);
-		this.pageJComponent.setComponentZOrder(block, 0);
-		this.pageJComponent.revalidate();
-
-		RenderableBlock rb = RenderableBlock.getRenderableBlock(block.getBlockID());
-		if (rb != null && rb.getParentWidget() != null){
-			Workspace.getInstance().notifyListeners(new WorkspaceEvent(rb.getParentWidget(), block.getBlockID(), WorkspaceEvent.BLOCK_VARIABLE_ADDED));
+		
+		boolean isAddingAllowed = true;
+		WorkspaceWidget oldWidget = block.getParentWidget();
+		if(oldWidget != this){
+			if (oldWidget != null) {
+				oldWidget.removeBlock(block);
+				if (block.hasComment()) {
+					block.getComment().getParent().remove(block.getComment());
+				}
+				
+				//System.out.println(block.getBlock().getGenusName());
+				String genusName = block.getBlock().getGenusName();
+				if(genusName.equals("var-execute") || genusName.equals("var-userexternal"))
+				{
+					StringBuffer saveString = new StringBuffer();
+			        saveString.append("<?xml version=\"1.0\"?>");
+			        saveString.append("\r\n");
+			        saveString.append("<CODEBLOCKS>");
+			        saveString.append(Workspace.getInstance().getSaveString());
+			        saveString.append("</CODEBLOCKS>");
+			        
+			        List<codegenerator.xmlbind.Block> allBlocks = XMLToBlockGenerator.generateBlocks(saveString.toString());
+			        for (codegenerator.xmlbind.Block currentblock : allBlocks) {
+						
+			        	if(currentblock.getGenusName().equals(block.getBlock().getGenusName()))
+						{
+							JOptionPane.showMessageDialog(null, "You are not allowed to drop this element twice.");
+							isAddingAllowed = false;
+							BlockUtilities.deleteBlock(block);
+						}
+					}
+				}
+			}
 		}
+			
+		if(isAddingAllowed)
+		{
+			block.setLocation(SwingUtilities.convertPoint(oldParent, block.getLocation(), this.pageJComponent));
+			
+			addBlock(block);
+			
+			this.pageJComponent.setComponentZOrder(block, 0);
+			this.pageJComponent.revalidate();
+	
+			RenderableBlock rb = RenderableBlock.getRenderableBlock(block.getBlockID());
+			if (rb != null && rb.getParentWidget() != null){
+				Workspace.getInstance().notifyListeners(new WorkspaceEvent(rb.getParentWidget(), block.getBlockID(), WorkspaceEvent.BLOCK_VARIABLE_ADDED));
+			}
+		}
+	
 	}
 	
 	/** @ovverride WorkspaceWidget.blockDragged() */
