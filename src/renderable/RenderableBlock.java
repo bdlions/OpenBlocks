@@ -1715,7 +1715,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 				}
 				
 				String genusName = this.getBlock().getGenusName();
-				if(genusName.equals("var-execute") || genusName.equals("var-userexternal") || BlockGenus.getGenusWithName(genusName).isDeclaration())
+				if(genusName.equals("var-execute") || genusName.equals("var-userexternal"))
 				{
 					StringBuffer saveString = new StringBuffer();
 			        saveString.append("<?xml version=\"1.0\"?>");

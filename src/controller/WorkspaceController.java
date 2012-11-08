@@ -5,12 +5,14 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -42,6 +44,7 @@ import org.xml.sax.SAXException;
 import com.sun.xml.internal.ws.util.xml.XmlUtil;
 
 
+import renderable.BlockUtilities;
 import renderable.RenderableBlock;
 import sun.rmi.runtime.NewThreadAction;
 
@@ -50,6 +53,7 @@ import workspace.SearchBar;
 import workspace.SearchableContainer;
 import workspace.TrashCan;
 import workspace.Workspace;
+import workspace.WorkspaceWidget;
 import codeblocks.BlockConnectorShape;
 import codeblocks.BlockGenus;
 import codeblocks.BlockLinkChecker;
@@ -818,7 +822,7 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Online Help Clicked.");				
+				JOptionPane.showMessageDialog(null, "Online Help Clicked.");	
 			}
 		});
 		
@@ -1038,12 +1042,16 @@ public class WorkspaceController {
                 		JOptionPane.showMessageDialog(null, "Alerady a variable exist with the same name.");
                 	}
                 	else{
-                	
 	            		wc.langDefDirty = true;
 	            		VariableMaker.addVariable(langDefRoot.getOwnerDocument(), variableName.getValue(), variableName.getVariableType());
 	            		wc.loadProject(wc.getSaveString());
-	            		//Workspace.getInstance().getPageNamed("Blocks").
 	            		JOptionPane.showMessageDialog(null, "A "+ variableName.getVariableType() +" variable named \""+ variableName.getValue() +"\" has been added");
+
+	            		codeblocks.Block block = new codeblocks.Block(variableName.getValue()+"_decl");
+	            		Page blockPage = workspace.getPageNamed("Blocks");
+	            		WorkspaceWidget ww = workspace.getWidgetAt(new Point(blockPage.getJComponent().getX(), blockPage.getJComponent().getY()));
+	            		blockPage.blockDropped(new RenderableBlock(ww, block.getBlockID()));
+	            		
                 	}
             	}
             	
