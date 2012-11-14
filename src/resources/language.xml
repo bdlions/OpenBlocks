@@ -3,151 +3,234 @@
 	<languages>
 		<language name="English">
 			<entry name="File">
-				<label>EnglishFile</label>
+				<label>File</label>
 			</entry>
 			<entry name="New">
-				<label>EnglishNew</label>
+				<label>New</label>
 			</entry>	
 			<entry name="Open">
-				<label>EnglishOpen</label>
+				<label>Open</label>
 			</entry>
 			<entry name="Save">
-				<label>EnglishSave</label>
+				<label>Save</label>
 			</entry>
 			<entry name="Save As">
-				<label>EnglishSave As</label>
+				<label>Save As</label>
 			</entry>	
 			<entry name="Print">
-				<label>EnglishPrint</label>
+				<label>Print</label>
 			</entry>	
 			<entry name="Exit">
-				<label>EnglishExit</label>
+				<label>Exit</label>
 			</entry>	
 			<entry name="Code Generation">
-				<label>EnglishCode Generation</label>
+				<label>Code Generation</label>
 			</entry>
 			<entry name="Validate">
-				<label>EnglishValidate</label>
+				<label>Validate</label>
 			</entry>
 			<entry name="Generate C Code">
-				<label>EnglishGenerate C Code</label>
+				<label>Generate C Code</label>
 			</entry>	
 			<entry name="Generate Java Code">
-				<label>EnglishGenerate Java Code</label>
+				<label>Generate Java Code</label>
 			</entry>
 			<entry name="Configuration">
-				<label>EnglishConfiguration</label>
+				<label>Configuration</label>
 			</entry>
 			<entry name="English">
-				<label>EnglishEnglish</label>
-			</entry>	
+				<label>English</label>
+			</entry>
+			<entry name="Spanish">
+				<label>Spanish</label>
+			</entry>			
 			<entry name="Francis">
-				<label>EnglishFrancis</label>
+				<label>Francis</label>
 			</entry>
 			<entry name="Help">
-				<label>EnglishHelp</label>
+				<label>Help</label>
 			</entry>
 			<entry name="Online Help">
-				<label>EnglishOnline Help</label>
+				<label>Online Help</label>
 			</entry>
 			<entry name="About">
-				<label>EnglishAbout</label>
+				<label>About</label>
 			</entry>
 			<entry name="Snap">
-				<label>EnglishSnap</label>
+				<label>Snap</label>
 			</entry>
 			<entry name="Undo">
-				<label>EnglishUndo</label>
+				<label>Undo</label>
 			</entry>
 			<entry name="Redo">
-				<label>EnglishRedo</label>
+				<label>Redo</label>
 			</entry>
 			<entry name="Cut">
-				<label>EnglishCut</label>
+				<label>Cut</label>
 			</entry>
 			<entry name="Copy">
-				<label>EnglishCopy</label>
+				<label>Copy</label>
 			</entry>
 			<entry name="Paste">
-				<label>EnglishPaste</label>
+				<label>Paste</label>
 			</entry>
 			<entry name="Delete">
-				<label>EnglishDelete</label>
+				<label>Delete</label>
+			</entry>
+		</language>
+		<language name="Spanish">
+			<entry name="File">
+				<label>Archivo</label>
+			</entry>
+			<entry name="New">
+				<label>Nuevo</label>
+			</entry>	
+			<entry name="Open">
+				<label>Abrir</label>
+			</entry>
+			<entry name="Save">
+				<label>Grabar</label>
+			</entry>
+			<entry name="Save As">
+				<label>Grabar como</label>
+			</entry>	
+			<entry name="Print">
+				<label>Imprimir</label>
+			</entry>	
+			<entry name="Exit">
+				<label>Salir</label>
+			</entry>	
+			<entry name="Code Generation">
+				<label>Generar Codigo</label>
+			</entry>
+			<entry name="Validate">
+				<label>Validar</label>
+			</entry>
+			<entry name="Generate C Code">
+				<label>Generar Codigo C</label>
+			</entry>	
+			<entry name="Generate Java Code">
+				<label>Generar Codigo Java</label>
+			</entry>
+			<entry name="Configuration">
+				<label>Configuracion</label>
+			</entry>
+			<entry name="English">
+				<label>Ingles</label>
+			</entry>
+			<entry name="Spanish">
+				<label>Espanol</label>
+			</entry>			
+			<entry name="Francis">
+				<label>Frances</label>
+			</entry>
+			<entry name="Help">
+				<label>Ayuda</label>
+			</entry>
+			<entry name="Online Help">
+				<label>Ayuda en linea</label>
+			</entry>
+			<entry name="About">
+				<label>Infomacion</label>
+			</entry>
+			<entry name="Snap">
+				<label>Snap</label>
+			</entry>
+			<entry name="Undo">
+				<label>Undo</label>
+			</entry>
+			<entry name="Redo">
+				<label>Redo</label>
+			</entry>
+			<entry name="Cut">
+				<label>Cortar</label>
+			</entry>
+			<entry name="Copy">
+				<label>Copiar</label>
+			</entry>
+			<entry name="Paste">
+				<label>Pegar</label>
+			</entry>
+			<entry name="Delete">
+				<label>Borrar</label>
 			</entry>
 		</language>
 		<language name="Francis">
 			<entry name="File">
-				<label>FrancisFile</label>
+				<label>Dosier</label>
 			</entry>
 			<entry name="New">
-				<label>FrancisNew</label>
+				<label>Neuf</label>
 			</entry>	
 			<entry name="Open">
-				<label>FrancisOpen</label>
+				<label>Ouvrir</label>
 			</entry>
 			<entry name="Save">
-				<label>FrancisSave</label>
+				<label>Grabar</label>
 			</entry>
 			<entry name="Save As">
-				<label>FrancisSave As</label>
+				<label>Grabar como</label>
 			</entry>	
 			<entry name="Print">
-				<label>FrancisPrint</label>
-			</entry>
+				<label>Imprime</label>
+			</entry>	
 			<entry name="Exit">
-				<label>FrancisExit</label>
-			</entry>
+				<label>Ferme</label>
+			</entry>	
 			<entry name="Code Generation">
-				<label>FrancisCode Generation</label>
+				<label>Gen Codigo</label>
 			</entry>
 			<entry name="Validate">
-				<label>FrancisValidate</label>
+				<label>Validee</label>
 			</entry>
 			<entry name="Generate C Code">
-				<label>FrancisGenerate C Code</label>
-			</entry>
+				<label>Gen Codigo C</label>
+			</entry>	
 			<entry name="Generate Java Code">
-				<label>FrancisGenerate Java Code</label>
+				<label>Gen Codigo Java</label>
 			</entry>
 			<entry name="Configuration">
-				<label>FrancisConfiguration</label>
+				<label>Configuracion</label>
 			</entry>
 			<entry name="English">
-				<label>FrancisEnglish</label>
+				<label>Ingle</label>
 			</entry>	
 			<entry name="Francis">
-				<label>FrancisFrancis</label>
+				<label>Frances</label>
+			</entry>
+			<entry name="Spanish">
+				<label>Espanol</label>
 			</entry>
 			<entry name="Help">
-				<label>FrancisHelp</label>
-			</entry>	
+				<label>Aidee</label>
+			</entry>
 			<entry name="Online Help">
-				<label>FrancisOnline Help</label>
+				<label>Aidee en linea</label>
 			</entry>
 			<entry name="About">
-				<label>FrancisAbout</label>
+				<label>Infomacion</label>
 			</entry>
 			<entry name="Snap">
-				<label>FrancisSnap</label>
+				<label>Snap</label>
 			</entry>
 			<entry name="Undo">
-				<label>FrancisUndo</label>
+				<label>Undo</label>
 			</entry>
 			<entry name="Redo">
-				<label>FrancisRedo</label>
+				<label>Redo</label>
 			</entry>
 			<entry name="Cut">
-				<label>FrancisCut</label>
+				<label>Coupe</label>
 			</entry>
 			<entry name="Copy">
-				<label>FrancisCopy</label>
+				<label>Copie</label>
 			</entry>
 			<entry name="Paste">
-				<label>FrancisPaste</label>
+				<label>Pegar</label>
 			</entry>
 			<entry name="Delete">
-				<label>FrancisDelete</label>
-			</entry>	
+				<label>Eliminne</label>
+			</entry>
 		</language>
 	</languages>
 </myform1>

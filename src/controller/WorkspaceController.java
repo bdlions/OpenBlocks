@@ -1,6 +1,7 @@
 package controller;
 
 
+import general.JavaFilter;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,8 +10,14 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -21,6 +28,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -31,6 +39,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.JToolBar;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -41,6 +52,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 import com.sun.xml.internal.ws.util.xml.XmlUtil;
 
 
@@ -61,6 +73,7 @@ import codeblocks.CommandRule;
 import codeblocks.SocketRule;
 import codegenerator.BlockValidator;
 import codegenerator.CodeGen;
+import codegenerator.ExternalOption;
 import codegenerator.PromptVariableName;
 import codegenerator.ValidationErrorDisplayer;
 import codegenerator.Variable;
@@ -79,6 +92,11 @@ import codegenerator.xmlbind.Block;
  */
 public class WorkspaceController {
     
+	//JavaFilter class, which supports only text file to upload
+    private static JavaFilter fJavaFilter;
+	private static String fileSavePath = ""; 
+	private static boolean isFileSaved = false;
+	
 	private static LanguageGenerator languageGenerator;
 	private static Hashtable syntaxMap;
 	
@@ -98,6 +116,7 @@ public class WorkspaceController {
 	public static JMenu menuConfiguration;
 	public static JCheckBoxMenuItem checkBoxMenuItemEnglish;
 	public static JCheckBoxMenuItem checkBoxMenuItemFrancis;
+	public static JCheckBoxMenuItem checkBoxMenuItemSpanish;
 	
 	public static JMenu menuHelp;
 	public static JMenuItem menuItemOnlineHelp;
@@ -544,7 +563,8 @@ public class WorkspaceController {
      * event-dispatching thread.
      */
     private static void createAndShowGUI(final WorkspaceController wc) {
-        System.out.println("Creating GUI...");
+    	fJavaFilter = new JavaFilter();
+    	System.out.println("Creating GUI...");
         syntaxMap = languageGenerator.getSyntaxMapLanguage();
         String testString = "File";
 		if (syntaxMap.containsKey(testString)) {
@@ -604,10 +624,11 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				wc.langDefDirty = true;
-				VariableMaker.addVariable(langDefRoot.getOwnerDocument(), "string_var", "string");
-				wc.loadProject(wc.getSaveString());
-				JOptionPane.showMessageDialog(null, "Open Clicked.");				
+				//wc.langDefDirty = true;
+				//VariableMaker.addVariable(langDefRoot.getOwnerDocument(), "string_var", "string");
+				//wc.loadProject(wc.getSaveString());
+				//JOptionPane.showMessageDialog(null, "Open Clicked.");			
+				wc.openPressed();
 			}
 		});
 		String saveString = "Save";
@@ -621,7 +642,7 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Save Clicked.");				
+				wc.savePressed(wc);			
 			}
 		});
 		String saveAsString = "Save As";
@@ -635,7 +656,7 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Save As Clicked.");				
+				wc.saveAsPressed(wc);
 			}
 		});
 		String printString = "Print";
@@ -649,7 +670,12 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Print Clicked.");				
+				JOptionPane.showMessageDialog(null, "Print Clicked.");		
+				wc.langDefDirty = true;
+        		ExternalOption.addCustombyUser(langDefRoot.getOwnerDocument(), "nazmul", "string");
+        		wc.loadProject(wc.getSaveString());
+        		
+        		
 			}
 		});
 		String exitString = "Exit";
@@ -764,6 +790,14 @@ public class WorkspaceController {
 			englishString = titleEntry.getLabel();
 		}
 		checkBoxMenuItemEnglish = new JCheckBoxMenuItem(englishString);
+		
+		String spanishString = "Spanish";
+		if (syntaxMap.containsKey(spanishString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(spanishString);
+			spanishString = titleEntry.getLabel();
+		}
+		checkBoxMenuItemSpanish = new JCheckBoxMenuItem(spanishString);
+		
 		String francisString = "Francis";
 		if (syntaxMap.containsKey(francisString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(francisString);
@@ -783,6 +817,18 @@ public class WorkspaceController {
 				updateLabelText();
 			}
 		});
+		checkBoxMenuItemSpanish.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				//JOptionPane.showMessageDialog(null, "Francis Clicked.");		
+				languageGenerator.setLanguage("Spanish");
+				languageGenerator.updateLanguageMapLoadLanguage();
+				syntaxMap = languageGenerator.getSyntaxMapLanguage();
+				
+				updateLabelText();				
+			}
+		});
 		checkBoxMenuItemFrancis.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent e) 
@@ -799,6 +845,9 @@ public class WorkspaceController {
 		
 		languageButtonGroup.add(checkBoxMenuItemEnglish);
 		menuConfiguration.add(checkBoxMenuItemEnglish);
+		
+		languageButtonGroup.add(checkBoxMenuItemSpanish);
+		menuConfiguration.add(checkBoxMenuItemSpanish);
 		
 		languageButtonGroup.add(checkBoxMenuItemFrancis);
 		menuConfiguration.add(checkBoxMenuItemFrancis);
@@ -1039,7 +1088,7 @@ public class WorkspaceController {
             	if(variableName.getOption() == JOptionPane.OK_OPTION)
             	{
                 	if( BlockGenus.getGenusWithName(Variable.getValidVariableName(variableName.getValue())) != null){
-                		JOptionPane.showMessageDialog(null, "Alerady a variable exist with the same name.");
+                		JOptionPane.showMessageDialog(null, "Variable exists with the same name.");
                 	}
                 	else{
 	            		wc.langDefDirty = true;
@@ -1290,4 +1339,155 @@ public class WorkspaceController {
 		}
 		deleteButton.setText(deleteString);
 	}
+	
+	public void openPressed(){
+		String uploadedFileContent = "";
+		File openedFile = new File("samle.xml");
+		JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Open XML File");
+
+        // Choose only files, not directories
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        // Start in current directory
+        fc.setCurrentDirectory(new File("."));
+
+        // Set filter for text file only.
+        fc.setFileFilter(fJavaFilter);
+
+        // Now open chooser
+        int result = fc.showOpenDialog(fc);
+
+        //user selects a file
+        if (result == JFileChooser.APPROVE_OPTION) {
+        	openedFile = fc.getSelectedFile();
+            fileSavePath = fc.getSelectedFile().getPath();
+            //retrieving text content of the uploaded file
+            uploadedFileContent = readFile(fc.getSelectedFile().getPath());
+
+            if (uploadedFileContent != null) {
+                //upload xml file here
+            	//JOptionPane.showMessageDialog(null, uploadedFileContent);
+            	loadProject(uploadedFileContent);
+            }            
+        }
+
+	}
+	/*
+	 * This method takes action when Save is selected from menu
+	 * and saves block content
+	 * */
+	public void savePressed(final WorkspaceController wc)
+	{
+		//saving the block content into a xml file
+		File file = new File(fileSavePath);
+        //saving this block content for the first time
+		if (!isFileSaved) {
+            JFileChooser fc = new JFileChooser();
+            // Start in current directory
+            fc.setCurrentDirectory(new File("."));
+            // Set filter for text files.
+            fc.setFileFilter(fJavaFilter);
+            // Set to a specific name for saving
+            fc.setSelectedFile(file);
+            // Open chooser dialog
+            int result = fc.showSaveDialog(fc);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                file = fc.getSelectedFile();
+                if (file.exists()) {
+                    int response = JOptionPane.showConfirmDialog(null,
+                            "Overwrite existing file?", "Confirm Overwrite",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE);
+                    if (response == JOptionPane.CANCEL_OPTION) {
+                        return;
+                    }
+                }
+                //writing text content into file
+                writeFile(file, wc.getSaveString());
+                //updating changed file path
+                fileSavePath = fc.getSelectedFile().getPath();	                
+                isFileSaved = true;
+            }
+        }
+        else{
+            try {
+                FileWriter fstream = new FileWriter(fileSavePath);
+                BufferedWriter out = new BufferedWriter(fstream);
+                out.write(wc.getSaveString());
+                out.close();
+            }
+            catch(Exception ex){
+
+            }
+        }
+	}
+	
+	public void saveAsPressed(final WorkspaceController wc)
+	{
+		File file = new File(fileSavePath);
+        JFileChooser fc = new JFileChooser();
+        // Start in current directory
+        fc.setCurrentDirectory(new File("."));
+        // Set filter for text files.
+        fc.setFileFilter(fJavaFilter);
+        // Set to a specific name for save.
+        fc.setSelectedFile(file);
+        // Open chooser dialog
+        int result = fc.showSaveDialog(fc);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            file = fc.getSelectedFile();
+            if (file.exists()) {
+                int response = JOptionPane.showConfirmDialog(null,
+                        "Overwrite existing file?", "Confirm Overwrite",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                if (response == JOptionPane.CANCEL_OPTION) {
+                    return;
+                }
+            }
+            writeFile(file,wc.getSaveString());
+            fileSavePath = fc.getSelectedFile().getPath();
+            isFileSaved = true;
+        }
+	}
+	/*
+	 * This method takes a file url and returns content of that file
+	 * */
+	public String readFile(String fileUrl) {
+        File aFile = new File(fileUrl);
+        StringBuilder contents = new StringBuilder();
+        try {
+            BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(aFile)));
+            try {
+                String line = null;
+                while ((line = input.readLine()) != null) {
+                    contents.append(line+"\n");
+                }
+            } finally {
+                input.close();
+            }
+        } catch (IOException ex) {
+            System.out.println("Error while loading file.");
+        }
+        return contents.toString();
+    }
+	
+	/*
+     * This method takes file and file content and store the file content
+     * */
+    public static boolean writeFile(File file, String dataString) {
+    	String newLine = System.getProperty("line.separator");
+    	dataString = dataString.replaceAll("\n", newLine);
+        try {
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+            out.print(dataString);
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
 }
