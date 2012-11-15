@@ -30,10 +30,13 @@
 				<label>Validate</label>
 			</entry>
 			<entry name="Generate C Code">
-				<label>Generate C Code</label>
+				<label>View C Code</label>
 			</entry>	
 			<entry name="Generate Java Code">
-				<label>Generate Java Code</label>
+				<label>View Java Code</label>
+			</entry>
+			<entry name="View Code">
+				<label>View Code</label>
 			</entry>
 			<entry name="Configuration">
 				<label>Configuration</label>
@@ -112,6 +115,9 @@
 			<entry name="Generate Java Code">
 				<label>Generar Codigo Java</label>
 			</entry>
+			<entry name="View Code">
+				<label>View Code</label>
+			</entry>
 			<entry name="Configuration">
 				<label>Configuracion</label>
 			</entry>
@@ -188,6 +194,9 @@
 			</entry>	
 			<entry name="Generate Java Code">
 				<label>Gen Codigo Java</label>
+			</entry>
+			<entry name="View Code">
+				<label>View Code</label>
 			</entry>
 			<entry name="Configuration">
 				<label>Configuracion</label>

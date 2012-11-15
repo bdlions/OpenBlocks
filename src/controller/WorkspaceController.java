@@ -2,6 +2,8 @@ package controller;
 
 
 import general.JavaFilter;
+import general.JavaFilterText;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -73,9 +75,11 @@ import codeblocks.CommandRule;
 import codeblocks.SocketRule;
 import codegenerator.BlockValidator;
 import codegenerator.CodeGen;
+import codegenerator.DisplayCode;
 import codegenerator.ExternalOption;
 import codegenerator.PrintUtilities;
 import codegenerator.PromptVariableName;
+import codegenerator.StructureCode;
 import codegenerator.ValidationErrorDisplayer;
 import codegenerator.Variable;
 import codegenerator.VariableMaker;
@@ -95,9 +99,12 @@ public class WorkspaceController {
     
 	//JavaFilter class, which supports only text file to upload
     private static JavaFilter fJavaFilter;
+    private static JavaFilterText fJavaFilterText;
 	private static String fileSavePath = ""; 
 	private static boolean isFileSaved = false;
 	
+	private static int externalVariableCounter = 1;
+	private static String projectInitialXmlContent = "";
 	private static LanguageGenerator languageGenerator;
 	private static Hashtable syntaxMap;
 	
@@ -107,6 +114,7 @@ public class WorkspaceController {
 	public static JMenuItem menuItemSave;
 	public static JMenuItem menuItemSaveAs;
 	public static JMenuItem menuItemPrint;
+	public static JMenuItem menuItemExternal;
 	public static JMenuItem menuItemExit;
 	
 	public static JMenu menuCodeGeneration;
@@ -130,8 +138,9 @@ public class WorkspaceController {
 	public static JButton saveBbutton;
 	public static JButton printBbutton;
 	public static JButton validateBbutton;
-	public static JButton generateCCodeBbutton;
-	public static JButton generateJavaCodeBbutton;
+	public static JButton generateCCodeButton;
+	public static JButton generateJavaCodeButton;
+	public static JButton viewCodeButton;
 	public static JButton undoButton;
 	public static JButton redoButton;
 	public static JButton cutButton;
@@ -565,14 +574,9 @@ public class WorkspaceController {
      */
     private static void createAndShowGUI(final WorkspaceController wc) {
     	fJavaFilter = new JavaFilter();
+    	fJavaFilterText = new JavaFilterText();
     	System.out.println("Creating GUI...");
-        syntaxMap = languageGenerator.getSyntaxMapLanguage();
-        String testString = "File";
-		if (syntaxMap.containsKey(testString)) {
-			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(testString);
-			testString = titleEntry.getLabel();
-		}
-		System.out.println("testString"+testString);
+        syntaxMap = languageGenerator.getSyntaxMapLanguage();       
         //Create and set up the window.
         JFrame frame = new JFrame("OpenBlocks Demo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -591,7 +595,7 @@ public class WorkspaceController {
 		}
 		menuFile = new JMenu(fileString);
 		menuBar.add(menuFile);
-		
+		projectInitialXmlContent = workspace.getSaveString();
 		String newString = "New";
 		if (syntaxMap.containsKey(newString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(newString);
@@ -603,14 +607,21 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				//JOptionPane.showMessageDialog(null, "New Clicked.");
-				//wc.setLangDefFilePath("support/copy_lang_def.xml");
-				//wc.resetWorkspace();
-				//wc.loadProjectFromPath("support/copy_lang_def.xml");
-				//wc.setLangDefFile(new File("support/lang_def.xml"));
-				//wc.loadProject(wc.getSaveString());
+				if(!projectInitialXmlContent.equals(workspace.getSaveString()))
+				{
+					int reply = JOptionPane.showConfirmDialog(null, "Do you want to save your current work?", "Save?",  JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.YES_OPTION)
+					{
+					   wc.savePressed(wc);
+					}
+					else
+					{
+						//initialize block panel here
+					}
+				}
+				workspace.clearCodeInEditor();
 				
-				String saveString = workspace.getSaveString();
+				//String saveString = workspace.getSaveString();
 				//workspace.LoadProjectWithVariable();
 			}
 		});
@@ -629,6 +640,15 @@ public class WorkspaceController {
 				//VariableMaker.addVariable(langDefRoot.getOwnerDocument(), "string_var", "string");
 				//wc.loadProject(wc.getSaveString());
 				//JOptionPane.showMessageDialog(null, "Open Clicked.");			
+				if(!projectInitialXmlContent.equals(workspace.getSaveString()))
+				{
+					int reply = JOptionPane.showConfirmDialog(null, "Do you want to save your current work?", "Save?",  JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.YES_OPTION)
+					{
+					   wc.savePressed(wc);
+					}
+				}
+				workspace.clearCodeInEditor();
 				wc.openPressed();
 			}
 		});
@@ -671,12 +691,30 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Print Clicked.");		
+				JOptionPane.showMessageDialog(null, "Print Clicked.");
+			}
+		});
+		String uploadExternalString = "External";
+		if (syntaxMap.containsKey(printString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(printString);
+			printString = titleEntry.getLabel();
+		}
+		menuItemExternal = new JMenuItem(uploadExternalString);
+		menuFile.add(menuItemExternal);
+		menuItemExternal.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				String externalParameterList = "";
+				externalParameterList = wc.uploadExternalFilePressed();
 				wc.langDefDirty = true;
-        		ExternalOption.addCustombyUser(langDefRoot.getOwnerDocument(), "nazmul", "string");
+        		ExternalOption.addCustombyUser(langDefRoot.getOwnerDocument(), "externalvariable"+externalVariableCounter,externalParameterList, "string");
         		wc.loadProject(wc.getSaveString());
         		PrintUtilities.printComponent(workspace.getPageNamed("Blocks").getJComponent());
         		
+        		ExternalOption.addCustombyUser(langDefRoot.getOwnerDocument(), "externalvar"+externalVariableCounter,externalParameterList, "string");
+        		wc.loadProject(wc.getSaveString());        		
+        		externalVariableCounter++;
 			}
 		});
 		String exitString = "Exit";
@@ -690,7 +728,15 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Exit Clicked.");				
+				if(!projectInitialXmlContent.equals(workspace.getSaveString()))
+				{
+					int reply = JOptionPane.showConfirmDialog(null, "Do you want to save your current work?", "Save?",  JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.YES_OPTION)
+					{
+					   wc.savePressed(wc);
+					}
+				}
+				System.exit(0);
 			}
 		});
 		String codeGenerationString = "Code Generation";
@@ -712,7 +758,14 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Validate Clicked.");				
+				List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
+            	if(errors.size() > 0){
+            		ValidationErrorDisplayer displayer = new ValidationErrorDisplayer();
+                	displayer.displayError(errors);
+                	displayer.setVisible(true);
+            	}else{
+            		JOptionPane.showMessageDialog(null, "No error found");
+            	}			
 			}
 		});
 		
@@ -722,7 +775,8 @@ public class WorkspaceController {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(generateCCodeString);
 			generateCCodeString = titleEntry.getLabel();
 		}
-		checkBoxMenuItemGenerateCCode = new JCheckBoxMenuItem(generateCCodeString);
+		checkBoxMenuItemGenerateCCode = new JCheckBoxMenuItem(generateCCodeString,true);
+		workspace.setSelectedLanguage("c");
 		String generateJavaCodeString = "Generate Java Code";
 		if (syntaxMap.containsKey(generateJavaCodeString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(generateJavaCodeString);
@@ -736,10 +790,7 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				//JOptionPane.showMessageDialog(null, "Generate C Code Clicked.");	
 				workspace.setSelectedLanguage("c");
-            	//workspace.loadProjectWithVariable(wc.getSaveString());
-				workspace.setCodeInEditor();
 			}
 		});
 		
@@ -749,10 +800,7 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				//JOptionPane.showMessageDialog(null, "Generate C Code Clicked.");	
 				workspace.setSelectedLanguage("java");
-            	//workspace.loadProjectWithVariable(wc.getSaveString());
-				workspace.setCodeInEditor();
 			}
 		});
 		
@@ -790,7 +838,7 @@ public class WorkspaceController {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(englishString);
 			englishString = titleEntry.getLabel();
 		}
-		checkBoxMenuItemEnglish = new JCheckBoxMenuItem(englishString);
+		checkBoxMenuItemEnglish = new JCheckBoxMenuItem(englishString,true);		
 		
 		String spanishString = "Spanish";
 		if (syntaxMap.containsKey(spanishString)) {
@@ -872,7 +920,11 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Online Help Clicked.");	
+				try {
+		            Runtime.getRuntime().exec("\"C:\\Program Files\\Internet Explorer\\IEXPLORE.EXE\" " + "www.help.com");
+		        } 
+				catch (Exception ex) {
+		        }
 			}
 		});
 		
@@ -895,7 +947,7 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Snap Clicked.");				
+				JOptionPane.showMessageDialog(null, "Name:Snap\nVersion:1.0\nSnap Java");				
 			}
 		});
 		
@@ -1049,34 +1101,60 @@ public class WorkspaceController {
             }
         });
         toolbar.add(validateBbutton);        
-        generateCCodeBbutton = new JButton(generateCCodeString);
-        generateCCodeBbutton.addActionListener(new ActionListener() {
+        /*generateCCodeButton = new JButton(generateCCodeString);
+        generateCCodeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
-            	//JOptionPane.showMessageDialog(null, "Generate C Code button clicked toolbar.");
-            	workspace.setSelectedLanguage("c");
-            	//workspace.loadProjectWithVariable(wc.getSaveString());
-				workspace.setCodeInEditor();
+            	workspace.setSelectedLanguage("c");               
+                String code = workspace.getCode();            	
+            	DisplayCode displayCode = new DisplayCode();
+            	displayCode.setCode(code);
+            	displayCode.setVisible(true);
             	
+            	workspace.setCodeInEditor(); 
             }
         });
-        toolbar.add(generateCCodeBbutton);
-        generateJavaCodeBbutton = new JButton(generateJavaCodeString);
-        generateJavaCodeBbutton.addActionListener(new ActionListener() {
+        toolbar.add(generateCCodeButton);
+        generateJavaCodeButton = new JButton(generateJavaCodeString);
+        generateJavaCodeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
-            	workspace.setSelectedLanguage("java");
-            	//JOptionPane.showMessageDialog(null, "Generate Java Code Clicked.");	
-				//System.out.println(wc.getSaveString());
-				//workspace.loadProjectWithVariable(wc.getSaveString());
-				workspace.setCodeInEditor();
-                //CodeGen codeGen = new CodeGen();
-                //editor.setText(codeGen.getCode(workspace.getSaveString()));
-                
-                //CodeGen manageCode = new CodeGen();
-                //StructureCode sCode = new StructureCode();                
-                //editor.setText(sCode.indentMyCode(manageCode.getGenerateCode(wc.getSaveString())));
+            	workspace.setSelectedLanguage("java");               
+                String code = workspace.getCode();            	
+            	DisplayCode displayCode = new DisplayCode();
+            	displayCode.setCode(code);
+            	displayCode.setVisible(true);
+            	
+            	//workspace.setSelectedLanguage("java");
+            	workspace.setCodeInEditor();
             }
         });
-        toolbar.add(generateJavaCodeBbutton);
+        toolbar.add(generateJavaCodeButton);*/
+        
+        String viewCodeString = "View Code";
+		if (syntaxMap.containsKey(viewCodeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(viewCodeString);
+			viewCodeString = titleEntry.getLabel();
+		}
+		viewCodeButton = new JButton(viewCodeString);
+		viewCodeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+            	List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
+            	if(errors.size() > 0){
+            		ValidationErrorDisplayer displayer = new ValidationErrorDisplayer();
+                	displayer.displayError(errors);
+                	displayer.setVisible(true);
+                	
+                	workspace.clearCodeInEditor();
+            	}else{
+            		String code = workspace.getCode();            	
+                	DisplayCode displayCode = new DisplayCode();
+                	displayCode.setCode(code);
+                	displayCode.setVisible(true);
+                	
+                	workspace.setCodeInEditor();
+            	}
+            }
+        });
+        toolbar.add(viewCodeButton);
         
         JButton buttonAddVariable = new JButton("Add Variable");
         buttonAddVariable.addActionListener(new ActionListener() {
@@ -1296,13 +1374,20 @@ public class WorkspaceController {
 		}
 		menuItemSnap.setText(snapString);
 		
+		String viewCodeString = "View code";
+		if (syntaxMap.containsKey(viewCodeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(viewCodeString);
+			viewCodeString = titleEntry.getLabel();
+		}
+		
 		newButton.setText(newString);
 		openButton.setText(openString);
 		saveBbutton.setText(saveString);
 		printBbutton.setText(printString);
 		validateBbutton.setText(validateString);
-		generateCCodeBbutton.setText(generateCCodeString);
-		generateJavaCodeBbutton.setText(generateJavaCodeString);
+		//generateCCodeButton.setText(generateCCodeString);
+		//generateJavaCodeButton.setText(generateJavaCodeString);
+		viewCodeButton.setText(viewCodeString);
 		
 		String undoString = "Undo";
 		if (syntaxMap.containsKey(undoString)) {
@@ -1492,4 +1577,80 @@ public class WorkspaceController {
         }
         return true;
     }
+    
+    public String uploadExternalFilePressed(){
+		//String uploadedFileContent = "";
+		String parsedFileContent = "";
+		File openedFile = new File("external.txt");
+		JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Open Text File");
+
+        // Choose only files, not directories
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        // Start in current directory
+        fc.setCurrentDirectory(new File("."));
+
+        // Set filter for text file only.
+        fc.setFileFilter(fJavaFilterText);
+
+        // Now open chooser
+        int result = fc.showOpenDialog(fc);
+
+        //user selects a file
+        if (result == JFileChooser.APPROVE_OPTION) {
+        	openedFile = fc.getSelectedFile();
+            parsedFileContent = "\""+fc.getSelectedFile().getName().substring(0, fc.getSelectedFile().getName().length()-4)+"\"";
+            File aFile = new File(fc.getSelectedFile().getPath());
+            try {
+                BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(aFile)));
+                try {
+                    String line = null;
+                    String firstWord = "";
+                    String variableDeclarationLine = "";
+                    String commentString = "";
+                    String commentFirstWord = "";
+                    String[] tempString;
+                    while ((line = input.readLine()) != null) {
+                        System.out.println("each line:"+line);
+                        line = line.trim();
+                        if(line.length() >8)
+                        {
+                        	firstWord = line.substring(0, 8);
+                        	if(firstWord.equals("external"))
+                            {
+                            	tempString = line.split(";");
+                            	if(tempString.length > 1)
+                            	{
+                            		commentString = tempString[1].trim();
+                            		if(commentString.length() > 8)
+                            		{
+                            			commentFirstWord = commentString.substring(0,8);
+                            			if(commentFirstWord.equals("external"))
+                            			{
+                            				//two variables in one line..so error.
+                            				return "Error";
+                            			}
+                            		}
+                            		
+                            	}
+                            	//check duplicate external variable here
+                            	variableDeclarationLine = tempString[0];
+                            	tempString = variableDeclarationLine.split("=");
+                            	parsedFileContent = parsedFileContent+","+tempString[1].trim();
+                            	System.out.println("variable vlaue:"+tempString[1]);
+                            }
+                        }
+                        
+                    }
+                } finally {
+                    input.close();
+                }
+            } catch (IOException ex) {
+                System.out.println("Error while loading file.");
+            }          
+        }
+        return parsedFileContent;
+
+	}
 }
