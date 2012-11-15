@@ -74,6 +74,7 @@ import codeblocks.SocketRule;
 import codegenerator.BlockValidator;
 import codegenerator.CodeGen;
 import codegenerator.ExternalOption;
+import codegenerator.PrintUtilities;
 import codegenerator.PromptVariableName;
 import codegenerator.ValidationErrorDisplayer;
 import codegenerator.Variable;
@@ -674,7 +675,7 @@ public class WorkspaceController {
 				wc.langDefDirty = true;
         		ExternalOption.addCustombyUser(langDefRoot.getOwnerDocument(), "nazmul", "string");
         		wc.loadProject(wc.getSaveString());
-        		
+        		PrintUtilities.printComponent(workspace.getPageNamed("Blocks").getJComponent());
         		
 			}
 		});
@@ -1207,6 +1208,7 @@ public class WorkspaceController {
 		if (syntaxMap.containsKey(printString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(printString);
 			printString = titleEntry.getLabel();
+			PrintUtilities.printComponent(workspace.getPageNamed("Blocks").getJComponent());
 		}
 		menuItemPrint.setText(printString);
 		
