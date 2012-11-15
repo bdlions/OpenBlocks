@@ -692,6 +692,7 @@ public class WorkspaceController {
 			public void actionPerformed(ActionEvent e) 
 			{
 				JOptionPane.showMessageDialog(null, "Print Clicked.");
+				PrintUtilities.printComponent(workspace.getPageNamed("Blocks").getJComponent());
 			}
 		});
 		String uploadExternalString = "External";
@@ -1008,6 +1009,7 @@ public class WorkspaceController {
         printBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
             	JOptionPane.showMessageDialog(null, "Print button clicked toolbar.");
+            	PrintUtilities.printComponent(workspace.getPageNamed("Blocks").getJComponent());
             }
         });
         toolbar.add(printBbutton);
