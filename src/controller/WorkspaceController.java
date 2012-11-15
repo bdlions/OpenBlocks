@@ -61,6 +61,7 @@ import codeblocks.CommandRule;
 import codeblocks.SocketRule;
 import codegenerator.BlockValidator;
 import codegenerator.CodeGen;
+import codegenerator.PrintUtilities;
 import codegenerator.PromptVariableName;
 import codegenerator.ValidationErrorDisplayer;
 import codegenerator.Variable;
@@ -649,7 +650,9 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Print Clicked.");				
+				JOptionPane.showMessageDialog(null, "Print Clicked.");
+				PrintUtilities.printComponent(workspace.getPageNamed("Blocks").getJComponent());
+				
 			}
 		});
 		String exitString = "Exit";
