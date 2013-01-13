@@ -28,6 +28,9 @@ public class BlockConnector implements ISupportMemento {
     private boolean isExpandable = false;
     private boolean isLabelEditable = false;
     private String expandGroup = "";
+    private double low = 0.0;
+    private double high = 0.0;
+    private boolean hasRange = false;
     
     //Specifies the PositionType of connector:
     //Single is the default connector that appears on only one side (left/right) of a block.
@@ -49,6 +52,26 @@ public class BlockConnector implements ISupportMemento {
     public BlockConnector(String kind, PositionType positionType, String label, boolean isLabelEditable, boolean isExpandable, String expandGroup, Long connBlockID) {
         this(kind, positionType, label, isLabelEditable, isExpandable, connBlockID);
         this.expandGroup = expandGroup == null ? "" : expandGroup;
+    }
+    
+    /**
+     * Constructs a new <code>BlockConnector</code>
+     * @param kind the kind of this socket
+     * @param positionType the PositionType of connector
+     * @param label the String label of this socket
+	 * @param isLabelEditable is true iff this BlockConnector can have its labels edited.
+     * @param isExpandable whether this socket can expand into another connector when a block is connected
+     * @param expandGroup the expand socket group of this connector
+     * @param connBlockID the ID of the block connected to this 
+     * @param low is the low range of the block connected to this 
+     * @param high is the high range of the block connected to this 
+     */
+    public BlockConnector(String kind, PositionType positionType, String label, boolean isLabelEditable, boolean isExpandable, String expandGroup, Long connBlockID, double low, double high) {
+        this(kind, positionType, label, isLabelEditable, isExpandable, connBlockID);
+        this.expandGroup = expandGroup == null ? "" : expandGroup;
+        this.low = low;
+        this.high = high;
+        this.hasRange = true;
     }
     
     /**
@@ -102,6 +125,9 @@ public class BlockConnector implements ISupportMemento {
         this.arg = con.arg;
         this.isLabelEditable = con.isLabelEditable;
         this.expandGroup = con.expandGroup;
+        this.hasRange = con.hasRange;
+        this.low = con.low;
+        this.high = con.high;
     }
     
     /**
@@ -150,6 +176,29 @@ public class BlockConnector implements ISupportMemento {
      */
     public boolean hasBlock(){
         return !connBlockID.equals(Block.NULL);
+    }
+    /**
+     * Returns true iff a block is attached to this socket; false otherwise
+     * @return true iff a block is attached to this socket; false otherwise
+     */
+    public boolean hasARange(){
+        return hasRange;
+    }
+    
+    /**
+     * return the low range
+     * */
+    public double getLowRange()
+    {
+    	return low;
+    }
+    
+    /**
+     * return the high range
+     * */
+    public double getHighRange()
+    {
+    	return high;
     }
     
     /**
@@ -253,6 +302,8 @@ public class BlockConnector implements ISupportMemento {
         out.append(", blockID: ");
         out.append(connBlockID);
         out.append(" with pos type: ");
+        out.append("Highest Range: "+getHighRange());
+        out.append("Lowest Range: "+getLowRange());
         out.append(getPositionType());
         return out.toString();
     }

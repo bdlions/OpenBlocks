@@ -527,6 +527,9 @@ public class BlockGenus {
                 String expandGroup = "";
                 String defargname = null;
                 String defarglabel = null;
+                String hasRange = "no";
+                double low = 0.0;
+                double high = 0.0;
     
                 if (connector.getAttributes().getLength()>0){             
                     nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("connector-kind").toString());
@@ -544,6 +547,19 @@ public class BlockGenus {
                     nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("label-editable").toString());
                     if (nameMatcher.find()) //will be true
                     	isLabelEditable = nameMatcher.group(1).equals("yes") ? true: false;
+                    nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("has-range").toString());
+                    if (nameMatcher.find()) //will be true
+                    	hasRange = nameMatcher.group(1);
+                    if(hasRange.equals("yes"))
+                    {
+	                    nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("low").toString());
+	                    if (nameMatcher.find()) //will be true
+	                    	low = Double.parseDouble(nameMatcher.group(1));
+	                    nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("high").toString());
+	                    if (nameMatcher.find()) //will be true
+	                    	high = Double.parseDouble(nameMatcher.group(1));
+                    }
+                    	
                     //load optional items
                     opt_item = connector.getAttributes().getNamedItem("label");
                     if(opt_item != null){
@@ -586,13 +602,26 @@ public class BlockGenus {
                 }
                 
                 BlockConnector socket;
-                //set the position type for this new connector, by default its set to single
-                if(positionType.equals("mirror")) 
-                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.MIRROR, label, isLabelEditable, isExpandable, expandGroup, Block.NULL);
-                else if(positionType.equals("bottom"))
-                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.BOTTOM, label, isLabelEditable, isExpandable, expandGroup, Block.NULL);
+                if(hasRange.equals("yes"))
+                {
+	                //set the position type for this new connector, by default its set to single
+	                if(positionType.equals("mirror")) 
+	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.MIRROR, label, isLabelEditable, isExpandable, expandGroup, Block.NULL, low, high);
+	                else if(positionType.equals("bottom"))
+	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.BOTTOM, label, isLabelEditable, isExpandable, expandGroup, Block.NULL, low, high);
+	                else
+	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.SINGLE, label, isLabelEditable, isExpandable, expandGroup, Block.NULL, low, high);
+                }
                 else
-                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.SINGLE, label, isLabelEditable, isExpandable, expandGroup, Block.NULL);
+                {
+                	//set the position type for this new connector, by default its set to single
+	                if(positionType.equals("mirror")) 
+	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.MIRROR, label, isLabelEditable, isExpandable, expandGroup, Block.NULL);
+	                else if(positionType.equals("bottom"))
+	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.BOTTOM, label, isLabelEditable, isExpandable, expandGroup, Block.NULL);
+	                else
+	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.SINGLE, label, isLabelEditable, isExpandable, expandGroup, Block.NULL);
+                }
                 
                 //add def args if any
                 if(defargname != null){

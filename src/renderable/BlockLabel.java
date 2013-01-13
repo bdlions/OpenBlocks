@@ -12,6 +12,7 @@ import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import workspace.Workspace;
@@ -19,6 +20,8 @@ import workspace.WorkspaceEvent;
 import codeblocks.Block;
 import codeblocks.BlockConnector;
 import codeblocks.BlockGenus;
+import codeblocks.BlockLink;
+import codeblocks.BlockLinkChecker;
 import codeblocks.BlockStub;
 import codeblockutil.LabelWidget;
 
@@ -192,6 +195,7 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 			if (rb != null){
 				Workspace.getInstance().notifyListeners(new WorkspaceEvent(rb.getParentWidget(), blockID, WorkspaceEvent.BLOCK_RENAMED));
 			}
+			System.out.println("Changed Text: "+text);
 		}
 	}
 	protected void genusChanged(String genus){
@@ -209,6 +213,11 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 		}
 	}
 	protected boolean textValid(String text){
+		if(!BlockUtilities.isInsideRange(blockID, text))
+		{
+			JOptionPane.showMessageDialog(null, "Please enter valid input within the range.");
+			return false;
+		}
 		return !text.equals("") &&
 		BlockUtilities.isLabelValid(blockID, text);
 	}
@@ -284,7 +293,9 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 				}
 			}
 		}
+		
 	}
+	
 	public void keyReleased(KeyEvent e){}
 	public void keyTyped(KeyEvent e){}
 }

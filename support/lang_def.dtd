@@ -61,7 +61,10 @@
 <!-- for connector-type use the shape-type values specified in block connectors-->
 <!ATTLIST BlockConnector connector-type CDATA #REQUIRED>  
 <!ATTLIST BlockConnector position-type (single|mirror|bottom) "single"> 
-<!ATTLIST BlockConnector is-expandable (yes|no) "no">  
+<!ATTLIST BlockConnector is-expandable (yes|no) "no"> 
+<!ATTLIST BlockConnector has-range (yes|no) "no">
+<!ATTLIST BlockConnector low CDATA #IMPLIED>
+<!ATTLIST BlockConnector high CDATA #IMPLIED>
 
 <!ELEMENT DefaultArg EMPTY>
 <!ATTLIST DefaultArg genus-name CDATA #REQUIRED> 

@@ -59,6 +59,40 @@ public class BlockUtilities {
 		return true;
 	}
 
+	public static boolean isInsideRange(long blockID, String text)
+	{
+		/**
+		 * If a block has a range then check the input value
+		 * is inside the range
+		 * */
+		Block block = Block.getBlock(blockID);
+		/**
+		 * If the block has a plug then we will continue searching
+		 * if it has a plug then it has a parent
+		 * */
+		if(BlockLinkChecker.getPlugEquivalent(block) != null)
+		{
+			long plugId = BlockLinkChecker.getPlugEquivalent(block).getBlockID();
+			Block parentBlock = Block.getBlock(plugId);
+			if(parentBlock != null)
+			{
+				for (BlockConnector connector : parentBlock.getSockets()) {
+					if(connector.getBlockID() == block.getBlockID())
+					{
+						if(connector.hasARange())
+						{
+							//System.out.println("Current Text: "+ text);
+							//System.out.println("Range : "+ connector.getHighRange());
+							double currentNumber = Double.parseDouble(text);
+							if(connector.getLowRange() <= currentNumber && connector.getHighRange() >= currentNumber)
+								return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
 	public static void deleteBlock(RenderableBlock block){
 		block.setLocation(0,0);
 
