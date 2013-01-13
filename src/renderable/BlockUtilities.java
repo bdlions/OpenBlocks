@@ -86,12 +86,18 @@ public class BlockUtilities {
 							double currentNumber = Double.parseDouble(text);
 							if(connector.getLowRange() <= currentNumber && connector.getHighRange() >= currentNumber)
 								return true;
+							else
+								return false;
+						}
+						else
+						{
+							return true;
 						}
 					}
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 	public static void deleteBlock(RenderableBlock block){
 		block.setLocation(0,0);
