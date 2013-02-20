@@ -105,7 +105,14 @@ public class DisplayCode extends JFrame {
         int result = fc.showSaveDialog(fc);
 
         if (result == JFileChooser.APPROVE_OPTION) {
-            file = fc.getSelectedFile();
+            if(!fc.getSelectedFile().getName().endsWith(".txt")) 
+            {
+            	file = new File(fc.getSelectedFile()+".txt");
+            }
+            else
+            {
+            	file = fc.getSelectedFile();
+            }
             if (file.exists()) {
                 int response = JOptionPane.showConfirmDialog(null,
                         "Overwrite existing file?", "Confirm Overwrite",

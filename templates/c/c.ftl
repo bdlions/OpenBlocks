@@ -2,40 +2,41 @@
  	import function file 
  	-->
  <#import "function.ftl" as functions> 
-
-<#-- 
-	variable declaration code generation 
-	
-	--> 
-<#list codeGen.getVariableDeclBlocks() as variable>
- 	${variable.getType()} ${variable.getName()} = <#list variable.getValue() as expressionData><#if expressionData.getId()== 0>${expressionData.getData()}<#elseif variable.getType()?matches('string') >"${codeGen.getBlock(expressionData.getId()).getLabel()}"<#else>${codeGen.getBlock(expressionData.getId()).getLabel()}</#if></#list>;
- </#list>
-<#-- 
-	main function declaration code generation 
-	--> 
-void main(){
-<#list codeGen.getDifferentCommand() as command>
-	<#assign commandBlock = command />
-	<@commandMacro commandBlock/>
-</#list>
-}
-<#-- 
-	all function declaration code generation 
-	
-	--> 
-<#list codeGen.getAllFunction() as block>
-	<#assign genusName = block.getGenusName() />
-	<@functions.functionController genusName /> 
-</#list>
-
+ <#-- 
+ 	Java Style class declaration 
+ 	--> 
+ 	<#-- 
+ 		variable declaration code generation 
+ 		
+ 		--> 
+	<#list codeGen.getVariableDeclBlocks() as variable>
+	 	${functions.getalternatename(variable.getType())} ${functions.getalternatename(variable.getName())} = <#list variable.getValue() as expressionData><#if expressionData.getId()== 0>${functions.getalternatename(expressionData.getData())}<#elseif variable.getType()?matches('string') >"${functions.getalternatename(codeGen.getBlock(expressionData.getId()).getLabel())}"<#else>${functions.getalternatename(codeGen.getBlock(expressionData.getId()).getLabel())}</#if></#list>;
+	 </#list>
+	 
+	<#-- 
+ 		main function declaration code generation 
+ 		--> 
+	void main(){
+	<#list codeGen.getDifferentCommand() as command>
+		<#assign commandBlock = command />
+		<@commandMacro commandBlock/>
+	</#list>
+	}
+	<#-- 
+ 		all function declaration code generation 
+ 		
+ 		--> 
+	<#list codeGen.getAllFunction() as block>
+		<#assign genusName = block.getGenusName() />
+		<@functions.functionController genusName /> 
+	</#list>
 	<#-- 
  		complete sequential code generation
  		--> 
 
-
-//All variables
+//all variabes blocks
 <#list codeGen.getVariableDeclBlocks() as variable>
- 	${variable.getType()} ${variable.getName()} = <#list variable.getValue() as expressionData><#if expressionData.getId() = 0>${expressionData.getData()}<#else>${codeGen.getBlock(expressionData.getId()).getLabel()}</#if></#list>;
+	private ${functions.getalternatename(variable.getType())} ${functions.getalternatename(variable.getName())} = <#list variable.getValue() as expressionData><#if expressionData.getId()== 0>${functions.getalternatename(expressionData.getData())}<#elseif variable.getType()?matches('string') >"${functions.getalternatename(codeGen.getBlock(expressionData.getId()).getLabel())}"<#else>${functions.getalternatename(codeGen.getBlock(expressionData.getId()).getLabel())}</#if></#list>;
 </#list>
 
 
@@ -68,7 +69,7 @@ void main(){
 	<#if block.getGenusName() != "if" && block.getGenusName() != "ifelse">
 		<#assign blockGenus = codeGen.getGenusWithName(block.getGenusName()) />
 		<#if blockGenus.isFunctionBlock() >
-			<#list codeGen.getFullFunction(block) as functionBlock><#if functionBlock.getId() = 0> ${functionBlock.getData()}<#else> ${codeGen.getBlock(functionBlock.getId()).getLabel()}</#if></#list>
+			<#list codeGen.getFullFunction(block) as functionBlock><#if functionBlock.getId() = 0> ${functions.getalternatename(functionBlock.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(functionBlock.getId()).getLabel())}</#if></#list>
 		</#if>
 	</#if> 
 </#list>
@@ -81,13 +82,13 @@ void main(){
 
 <#macro commandMacro command>
 	<#if command.getLabel() = "if">
- 		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${conditionBlocks.getData()}<#else> ${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
+ 		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${functions.getalternatename(conditionBlocks.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(conditionBlocks.getId()).getLabel())}</#if></#list>){
 		<#list codeGen.getThenStatements(command) as commandStatement>
  			<@commandMacro command=commandStatement/>
 		</#list> 
 		}
-		<#elseif command.getLabel() = "ifelse">
-		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${conditionBlocks.getData()}<#else> ${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
+	<#elseif command.getLabel() = "ifelse">
+		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${functions.getalternatename(conditionBlocks.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(conditionBlocks.getId()).getLabel())}</#if></#list>){
 			<#list codeGen.getThenStatements(command) as commandStatement>
 	 			<@commandMacro command=commandStatement/>
 			</#list> 
@@ -96,8 +97,8 @@ void main(){
 	 			<@commandMacro command=commandStatement/>
 			</#list> 
 		}
- 		<#else>
- 		<#list codeGen.getCommandExpression(command) as commandStatement>${commandStatement.getData()}</#list>;
+	<#else>
+ 		<#list codeGen.getCommandExpression(command) as commandStatement><#if commandStatement.getId() = 0> ${functions.getalternatename(commandStatement.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(commandStatement.getId()).getLabel())}</#if></#list>;
  	</#if>
 	<#if command.getAfterBlockId() != 0>
 		<#assign nextBlock = codeGen.getBlock(command.getAfterBlockId())/>
@@ -107,13 +108,13 @@ void main(){
 
 <#macro singleIfElse command>
 	<#if command.getLabel() = "if">
- 		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${conditionBlocks.getData()}<#else> ${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
+ 		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${functions.getalternatename(conditionBlocks.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(conditionBlocks.getId()).getLabel())}</#if></#list>){
 		<#list codeGen.getThenStatements(command) as commandStatement>
  			<@commandMacro command=commandStatement/>
 		</#list> 
 		}
 		<#elseif command.getLabel() = "ifelse">
-		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${conditionBlocks.getData()}<#else> ${codeGen.getBlock(conditionBlocks.getId()).getLabel()}</#if></#list>){
+		if( <#list codeGen.getIfCondition(command) as conditionBlocks><#if conditionBlocks.getId() = 0> ${functions.getalternatename(conditionBlocks.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(conditionBlocks.getId()).getLabel())}</#if></#list>){
 			<#list codeGen.getThenStatements(command) as commandStatement>
 	 			<@commandMacro command=commandStatement/>
 			</#list> 
@@ -123,7 +124,7 @@ void main(){
 			</#list> 
 		}
  		<#else>
- 		<#list codeGen.getCommandExpression(command) as commandStatement> ${commandStatement.getData()} </#list>;
+ 			<#list codeGen.getCommandExpression(command) as commandStatement><#if commandStatement.getId() = 0> ${functions.getalternatename(commandStatement.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(commandStatement.getId()).getLabel())}</#if></#list>;
  		<#if command.getAfterBlockId() != 0>
 			<#assign nextBlock = codeGen.getBlock(command.getAfterBlockId())/>
 			<@commandMacro command=nextBlock/>

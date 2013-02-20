@@ -2,6 +2,9 @@
 <myform1 title="Form1">
 	<languages>
 		<language name="English">
+			<entry name="OpenBlocksDemo">
+				<label>OpenBlocks Demo</label>
+			</entry>
 			<entry name="File">
 				<label>File</label>
 			</entry>
@@ -80,8 +83,20 @@
 			<entry name="Delete">
 				<label>Delete</label>
 			</entry>
+			<entry name="SaveConfirmation">
+				<label>Do you want to save your current work?</label>
+			</entry>
+			<entry name="Yes">
+				<label>Yes</label>
+			</entry>
+			<entry name="No">
+				<label>No</label>
+			</entry>
 		</language>
 		<language name="Spanish">
+			<entry name="OpenBlocksDemo">
+				<label>OpenBlocks Demo</label>
+			</entry>
 			<entry name="File">
 				<label>Archivo</label>
 			</entry>
@@ -160,8 +175,20 @@
 			<entry name="Delete">
 				<label>Borrar</label>
 			</entry>
+			<entry name="SaveConfirmation">
+				<label>Do you want to save your current work?</label>
+			</entry>
+			<entry name="Yes">
+				<label>Yes</label>
+			</entry>
+			<entry name="No">
+				<label>No</label>
+			</entry>
 		</language>
 		<language name="Francis">
+			<entry name="OpenBlocksDemo">
+				<label>OpenBlocks Demo</label>
+			</entry>
 			<entry name="File">
 				<label>Dosier</label>
 			</entry>
@@ -239,6 +266,15 @@
 			</entry>
 			<entry name="Delete">
 				<label>Eliminne</label>
+			</entry>
+			<entry name="SaveConfirmation">
+				<label>Do you want to save your current work?</label>
+			</entry>
+			<entry name="Yes">
+				<label>Yes</label>
+			</entry>
+			<entry name="No">
+				<label>No</label>
 			</entry>
 		</language>
 	</languages>
