@@ -7,11 +7,11 @@ import java.io.File;
 public class JavaFilter extends javax.swing.filechooser.FileFilter
 {
   public boolean accept (File f) {
-    return f.getName ().toLowerCase ().endsWith (".xml")
+    return f.getName ().toLowerCase ().endsWith (".pz")
           || f.isDirectory ();
   }
 
   public String getDescription () {
-    return "XML Files (*.xml)";
+    return "PZ Files (*.pz)";
   }
 }

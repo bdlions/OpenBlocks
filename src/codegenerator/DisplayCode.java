@@ -4,6 +4,9 @@ import general.JavaFilterText;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
@@ -13,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -20,6 +24,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
@@ -27,14 +32,19 @@ import javax.swing.JScrollPane;
 import controller.WorkspaceController;
 
 import language.LanguageEntry;
+import javax.swing.JButton;
+import java.awt.Dialog.ModalityType;
+import java.awt.FlowLayout;
 
-public class DisplayCode extends JFrame {
+public class DisplayCode extends JDialog {
 
 	private JPanel contentPane;
 	JTextPane textPane;
-	public static JMenu menuSave;
-	public static JMenuItem menuItemSaveCode;
 	private static JavaFilterText javaFilterText;
+	private JPanel buttonPanel;
+	private JButton btnSaveAs;
+	private JButton btnCopyToClipboard;
+	private JButton btnClose;
 	/**
 	 * Launch the application.
 	 */
@@ -55,12 +65,10 @@ public class DisplayCode extends JFrame {
 	 * Create the frame.
 	 */
 	public DisplayCode() {
+		setModal(true);
 		setTitle("Displaying Code.");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -70,25 +78,45 @@ public class DisplayCode extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
+		buttonPanel = new JPanel();
+		contentPane.add(buttonPanel, BorderLayout.SOUTH);
+		
+		btnSaveAs = new JButton("Save As");
+		btnSaveAs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				savePressed();
+			}
+		});
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		buttonPanel.add(btnSaveAs);
+		
+		btnCopyToClipboard = new JButton("Copy to Clipboard");
+		btnCopyToClipboard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			    StringSelection selection = new StringSelection(textPane.getText());
+			    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			    clipboard.setContents(selection, selection);
+			    JOptionPane.showMessageDialog(null, "Successfully saved content into the clipboard.");
+			}
+		});
+		buttonPanel.add(btnCopyToClipboard);
+		
+		btnClose = new JButton("Close");
+		btnClose.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DisplayCode.this.dispose();
+			}
+		});
+		buttonPanel.add(btnClose);
+		
 		textPane = new JTextPane();
 		scrollPane.setViewportView(textPane);
 		
 		javaFilterText = new JavaFilterText();
 		
-		String saveString = "Save";		
-		menuSave = new JMenu(saveString);
-		menuBar.add(menuSave);
+		String saveString = "Save";
 		
-		String saveCodeString = "Save Code";		
-		menuItemSaveCode = new JMenuItem(saveCodeString);
-		menuSave.add(menuItemSaveCode);
-		menuItemSaveCode.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-				savePressed();
-			}
-		});
+		String saveCodeString = "Save Code";
 	}
 	
 	public void savePressed()

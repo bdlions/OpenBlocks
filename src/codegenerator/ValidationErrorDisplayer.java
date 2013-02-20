@@ -9,11 +9,16 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class ValidationErrorDisplayer extends JFrame {
 
 	private JPanel contentPane;
 	JTextPane textPane;
+	private JPanel panel;
+	private JButton btnClose;
 	
 	/**
 	 * Launch the application.
@@ -48,6 +53,17 @@ public class ValidationErrorDisplayer extends JFrame {
 		
 		textPane = new JTextPane();
 		scrollPane.setViewportView(textPane);
+		
+		panel = new JPanel();
+		contentPane.add(panel, BorderLayout.SOUTH);
+		
+		btnClose = new JButton("Ok");
+		btnClose.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ValidationErrorDisplayer.this.dispose();
+			}
+		});
+		panel.add(btnClose);
 	}
 	
 	public void displayError(List<String> errors)

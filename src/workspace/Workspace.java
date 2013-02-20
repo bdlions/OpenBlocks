@@ -1107,7 +1107,7 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
         editor.setBackground(editorPage.getJComponent().getBackground());
         editor.setForeground(Color.green);
         editor.setFont(new Font("monospaced", Font.BOLD, 15));
-        
+        editor.setEditable(false);
         int width = (int)editorPage.getJComponent().getBounds().getWidth();
         int height = (int)editorPage.getJComponent().getBounds().getHeight();
         Rectangle updatedDimensionRect = new Rectangle(20,0,width,height);
