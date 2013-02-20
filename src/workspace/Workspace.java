@@ -1104,6 +1104,8 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
     {
         Page editorPage = ws.getPageNamed("Code");
         editor = new JTextPane();
+        //user will not be able to type in code editor panel
+        editor.setEditable(false);
         editor.setBackground(editorPage.getJComponent().getBackground());
         editor.setForeground(Color.green);
         editor.setFont(new Font("monospaced", Font.BOLD, 15));
