@@ -996,38 +996,6 @@ public class WorkspaceController {
 		});
 		
 		
-		String uploadExternalString = "External";
-		if (syntaxMap.containsKey(uploadExternalString)) {
-			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(uploadExternalString);
-			uploadExternalString = titleEntry.getLabel();
-		}
-		menuExternal = new JMenu(uploadExternalString);
-		menuBar.add(menuExternal);
-		
-		if (syntaxMap.containsKey(printString)) {
-			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(printString);
-			printString = titleEntry.getLabel();
-		}
-		menuItemExternal = new JMenuItem(uploadExternalString);
-		menuExternal.add(menuItemExternal);
-		menuItemExternal.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-				String externalParameterList = "";
-				externalParameterList = wc.uploadExternalFilePressed();
-				wc.langDefDirty = true;
-        		ExternalOption.addCustombyUser(langDefRoot.getOwnerDocument(), "externalvariable"+externalVariableCounter,externalParameterList, "string");
-        		wc.loadProject(wc.getSaveString());
-        		
-        		ExternalOption.addCustombyUser(langDefRoot.getOwnerDocument(), "externalvar"+externalVariableCounter,externalParameterList, "string");
-        		wc.loadProject(wc.getSaveString());        		
-        		externalVariableCounter++;
-			}
-		});
-		
-		
-		
 		String aboutString = "About";
 		if (syntaxMap.containsKey(aboutString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(aboutString);
