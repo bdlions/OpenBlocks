@@ -617,16 +617,14 @@ public class WorkspaceController {
             		        null, 
             		        new String[]{yesString, noString},
             		        "default");
-					if (reply == JOptionPane.YES_OPTION)
+					//before initializing the window, we are saving current project
+            		if (reply == JOptionPane.YES_OPTION)
 					{
-					   wc.savePressed(wc);
-					}
-					else
-					{
-						
-						workspace.clearCodeInEditor();
-						wc.loadProject(projectInitialXmlContent);
-					}
+					   wc.saveAsPressed(wc);
+					}	
+					workspace.clearCodeInEditor();
+					wc.loadProject(projectInitialXmlContent);
+					
 					//initializing frame title
 					String frameTitle = "OpenBlocksDemo";
 		    		if (syntaxMap.containsKey(frameTitle)) {
@@ -1614,9 +1612,9 @@ public class WorkspaceController {
 	
 	public void openPressed(){
 		String uploadedFileContent = "";
-		File openedFile = new File("sample.xml");
+		File openedFile = new File("sample.pz");
 		JFileChooser fc = new JFileChooser();
-        fc.setDialogTitle("Open XML File");
+        fc.setDialogTitle("Open pz File");
 
         // Choose only files, not directories
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -1638,10 +1636,17 @@ public class WorkspaceController {
             uploadedFileContent = readFile(fc.getSelectedFile().getPath());
 
             if (uploadedFileContent != null) {
-                loadProject(uploadedFileContent);
+            	//updating frame title including file name
+                String frameTitle = "OpenBlocksDemo";
+        		if (syntaxMap.containsKey(frameTitle)) {
+        			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(frameTitle);
+        			frameTitle = titleEntry.getLabel();
+        		}
+        		frame.setTitle(frameTitle+" "+openedFile.getName());
+        		
+            	loadProject(uploadedFileContent);
             }            
         }
-
 	}
 	/*
 	 * This method takes action when Save is selected from menu
@@ -1690,9 +1695,9 @@ public class WorkspaceController {
         if (result == JFileChooser.APPROVE_OPTION) 
         {
             //adding xml extension after file name if there is no file name extension
-        	if(!fc.getSelectedFile().getName().endsWith(".xml")) 
+        	if(!fc.getSelectedFile().getName().endsWith(".pz")) 
             {
-            	file = new File(fc.getSelectedFile()+".xml");
+            	file = new File(fc.getSelectedFile()+".pz");
             }
             else
             {
