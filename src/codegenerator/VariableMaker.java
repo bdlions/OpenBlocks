@@ -218,6 +218,10 @@ public class VariableMaker {
 				blockGenusDeclMember.appendChild(doc.createTextNode(name+"_decl"));
 				blockDrawer.appendChild(blockGenusDeclMember);
 				
+				Element blockGenusMemberGet = doc.createElement("BlockGenusMember");				
+				blockGenusMemberGet.appendChild(doc.createTextNode(name));
+				blockDrawer.appendChild(blockGenusMemberGet);
+				
 			}
 			else if(blockDrawer.getAttribute("name").equals("Logic"))
 			{

@@ -78,6 +78,22 @@ public class BlockValidator {
 					if(ifConnector == null){
 						continue;
 					}
+					if(ifConnector.getLabel().equals("then")){
+						if(ifConnector.getConnectBlockId() <= 0){
+							errors.add(block.getGenusName()+" block is missing it's then block");
+						} else{
+							//conditionData.add(getExpressionData(ifConnector.getConnectBlockId(), Integer.toString(ifConnector.getConnectBlockId())));
+							//while (isCompleteProcessFunction(conditionData));
+						}
+					}
+					if(ifConnector.getLabel().equals("else")){
+						if(ifConnector.getConnectBlockId() <= 0){
+							errors.add(block.getGenusName()+" block is missing it's else block");
+						} else{
+							//conditionData.add(getExpressionData(ifConnector.getConnectBlockId(), Integer.toString(ifConnector.getConnectBlockId())));
+							//while (isCompleteProcessFunction(conditionData));
+						}
+					}
 					if(ifConnector.getLabel().equals("condition")){
 						if(ifConnector.getConnectBlockId() <= 0){
 							errors.add(block.getGenusName()+" block is missing it's condition block");
@@ -97,7 +113,7 @@ public class BlockValidator {
 				/**
 				 * No parameters in command block
 				 * */
-				errors.add(block.getGenusName() + "  block has a null socket");
+				//errors.add(block.getGenusName() + "  block has a null socket");
 			}else{
 				int missing_param_count = 0;
 				for (BlockConnector blockConnector : block.getSockets().getBlockConnectors()) {
