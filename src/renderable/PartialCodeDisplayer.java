@@ -324,10 +324,14 @@ public class PartialCodeDisplayer extends JPanel {
     	
     	scrollPane.setBounds(m,m, w-2*m, h-2*m);
     	scrollPane.setThumbWidth(textArea.isEditable() ? 2*m : 0);
-    	this.setBounds(this.getX(), this.getY(), w, h);
+    	contentPane.setBounds(this.getX(), this.getY(), w, h);
+    	textArea.setSize(w- 10, h);
+    	this.setBounds(this.getX(), this.getY(), w , h);
+    	
+    	//this.setBounds(50, 50, w, h);
     	this.revalidate();
     	this.repaint();
-    	
+    	System.out.println(textArea.getWidth());
     	//if (arrow != null) arrow.updateArrow();
     }
     
