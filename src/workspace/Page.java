@@ -590,7 +590,7 @@ public class Page  implements WorkspaceWidget, SearchableContainer, ISupportMeme
 				
 				//System.out.println(block.getBlock().getGenusName());
 				String genusName = block.getBlock().getGenusName();
-				if(genusName.equals("var-execute") || genusName.equals("var-userexternal"))
+				if(genusName.equals("var-execute") || genusName.equals("var-userexternal") || genusName.contains("_decl"))
 				{
 					StringBuffer saveString = new StringBuffer();
 			        saveString.append("<?xml version=\"1.0\"?>");

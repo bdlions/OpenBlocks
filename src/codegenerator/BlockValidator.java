@@ -34,7 +34,10 @@ public class BlockValidator {
 	{
 		BlockGenus blockGenus = BlockGenus.getGenusWithName(block.getGenusName());
 		Number number = block.getId();
-		
+		if(blockGenus.isDataBlock() && block.getPlug().getBlockConnectors().getConnectBlockId() <= 0)
+		{ 
+			errors.add("You can't add '"+block.getLabel()+"' as single data block ");
+		}
 		if(blockGenus.isDeclaration()){
 			List<BlockConnector> blockConnectors = block.getSockets().getBlockConnectors();
 			if (blockConnectors.size() > 1) {

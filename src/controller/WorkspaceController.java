@@ -733,26 +733,6 @@ public class WorkspaceController {
 			}
 		});
 
-		String uploadExternalString = "External";
-		if (syntaxMap.containsKey(printString)) {
-			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(printString);
-			printString = titleEntry.getLabel();
-		}
-		menuItemExternal = new JMenuItem(uploadExternalString);
-		menuFile.add(menuItemExternal);
-		menuItemExternal.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-				//String externalParameterList = "";
-				wc.uploadExternalFilePressed(wc);
-				//wc.langDefDirty = true;
-        		
-        		//ExternalOption.addCustombyUser(langDefRoot.getOwnerDocument(), "externalvar"+externalVariableCounter,externalParameterList, "string");
-        		//wc.loadProject(wc.getSaveString());        		
-        		//externalVariableCounter++;
-			}
-		});
 		String exitString = "Exit";
 		if (syntaxMap.containsKey(exitString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(exitString);
@@ -853,8 +833,19 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				workspace.setSelectedLanguage("c");
-				workspace.setCodeInEditor();
+				List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
+            	if(errors.size() > 0){
+            		ValidationErrorDisplayer displayer = new ValidationErrorDisplayer();
+                	displayer.displayError(errors);
+                	displayer.setVisible(true);
+                	
+                	workspace.clearCodeInEditor();
+            	}
+            	else
+            	{
+            		workspace.setSelectedLanguage("c");
+    				workspace.setCodeInEditor();            		
+            	}
 			}
 		});
 		
@@ -864,8 +855,20 @@ public class WorkspaceController {
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				workspace.setSelectedLanguage("java");
-				workspace.setCodeInEditor();
+				
+				List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
+            	if(errors.size() > 0){
+            		ValidationErrorDisplayer displayer = new ValidationErrorDisplayer();
+                	displayer.displayError(errors);
+                	displayer.setVisible(true);
+                	
+                	workspace.clearCodeInEditor();
+            	}
+            	else
+            	{
+            		workspace.setSelectedLanguage("java");
+    				workspace.setCodeInEditor();        		
+            	}				
 			}
 		});
 		
@@ -965,6 +968,29 @@ public class WorkspaceController {
 		
 		languageButtonGroup.add(checkBoxMenuItemFrancis);
 		menuConfiguration.add(checkBoxMenuItemFrancis);
+		
+		String externalMenuString = "External";
+		if (syntaxMap.containsKey(externalMenuString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(externalMenuString);
+			externalMenuString = titleEntry.getLabel();
+		}
+		menuExternal= new JMenu(externalMenuString);
+		menuBar.add(menuExternal);
+		
+		String uploadExternalString = "External";
+		if (syntaxMap.containsKey(printString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(printString);
+			printString = titleEntry.getLabel();
+		}
+		menuItemExternal = new JMenuItem(uploadExternalString);
+		menuExternal.add(menuItemExternal);
+		menuItemExternal.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				wc.uploadExternalFilePressed(wc);
+			}
+		});
 		
 		String helpString = "Help";
 		if (syntaxMap.containsKey(helpString)) {
