@@ -218,11 +218,6 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 			JOptionPane.showMessageDialog(null, "Please enter valid input within the range.");
 			return false;
 		}
-		if(!BlockUtilities.isInsideLength(blockID, text))
-		{
-			JOptionPane.showMessageDialog(null, "Please enter valid input within the length.");
-			return false;
-		}
 		return !text.equals("") &&
 		BlockUtilities.isLabelValid(blockID, text);
 	}

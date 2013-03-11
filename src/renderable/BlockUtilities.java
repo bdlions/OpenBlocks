@@ -99,48 +99,6 @@ public class BlockUtilities {
 		}
 		return true;
 	}
-	
-	public static boolean isInsideLength(long blockID, String text)
-	{
-		/**
-		 * If a block has a range then check the input value
-		 * is inside the range
-		 * */
-		Block block = Block.getBlock(blockID);
-		/**
-		 * If the block has a plug then we will continue searching
-		 * if it has a plug then it has a parent
-		 * */
-		if(BlockLinkChecker.getPlugEquivalent(block) != null)
-		{
-			long plugId = BlockLinkChecker.getPlugEquivalent(block).getBlockID();
-			Block parentBlock = Block.getBlock(plugId);
-			if(parentBlock != null)
-			{
-				for (BlockConnector connector : parentBlock.getSockets()) {
-					if(connector.getBlockID() == block.getBlockID())
-					{
-						if(connector.hasLength())
-						{
-							//System.out.println("Current Text: "+ text);
-							//System.out.println("Range : "+ connector.getHighRange());
-							int textLength = text.length();
-							if(connector.getMinLength() <= textLength && connector.getMaxLength() >= textLength)
-								return true;
-							else
-								return false;
-						}
-						else
-						{
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return true;
-	}
-	
 	public static void deleteBlock(RenderableBlock block){
 		block.setLocation(0,0);
 

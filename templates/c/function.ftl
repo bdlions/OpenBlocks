@@ -41,7 +41,7 @@
 
 <#macro mail>
 	mail (String txt) {
-	  mail("a@d.com",txt);
+	  mail(a@d.com,txt);
 	}
 </#macro>
 

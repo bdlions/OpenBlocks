@@ -65,9 +65,6 @@
 <!ATTLIST BlockConnector has-range (yes|no) "no">
 <!ATTLIST BlockConnector low CDATA #IMPLIED>
 <!ATTLIST BlockConnector high CDATA #IMPLIED>
-<!ATTLIST BlockConnector has-length (yes|no) "no">
-<!ATTLIST BlockConnector min-length CDATA #IMPLIED>
-<!ATTLIST BlockConnector max-length CDATA #IMPLIED>
 
 <!ELEMENT DefaultArg EMPTY>
 <!ATTLIST DefaultArg genus-name CDATA #REQUIRED> 

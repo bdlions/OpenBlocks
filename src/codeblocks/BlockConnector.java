@@ -31,9 +31,6 @@ public class BlockConnector implements ISupportMemento {
     private double low = 0.0;
     private double high = 0.0;
     private boolean hasRange = false;
-    private boolean hasLength = false;
-    private int minLength = 0;
-    private int maxLength = 0;
     
     //Specifies the PositionType of connector:
     //Single is the default connector that appears on only one side (left/right) of a block.
@@ -75,26 +72,6 @@ public class BlockConnector implements ISupportMemento {
         this.low = low;
         this.high = high;
         this.hasRange = true;
-    }
-    
-    /**
-     * Constructs a new <code>BlockConnector</code>
-     * @param kind the kind of this socket
-     * @param positionType the PositionType of connector
-     * @param label the String label of this socket
-	 * @param isLabelEditable is true iff this BlockConnector can have its labels edited.
-     * @param isExpandable whether this socket can expand into another connector when a block is connected
-     * @param expandGroup the expand socket group of this connector
-     * @param connBlockID the ID of the block connected to this 
-     * @param minLength is the minimum length of the block label
-     * @param maxLength is the maximum length of the block label
-     */
-    public BlockConnector(String kind, PositionType positionType, String label, boolean isLabelEditable, boolean isExpandable, String expandGroup, Long connBlockID, int minLength, int maxLength) {
-        this(kind, positionType, label, isLabelEditable, isExpandable, connBlockID);
-        this.expandGroup = expandGroup == null ? "" : expandGroup;
-        this.minLength = minLength;
-        this.maxLength = maxLength;
-        this.hasLength = true;
     }
     
     /**
@@ -151,9 +128,6 @@ public class BlockConnector implements ISupportMemento {
         this.hasRange = con.hasRange;
         this.low = con.low;
         this.high = con.high;
-        this.hasLength = con.hasLength;
-        this.minLength = con.minLength;
-        this.maxLength = con.maxLength;
     }
     
     /**
@@ -212,14 +186,6 @@ public class BlockConnector implements ISupportMemento {
     }
     
     /**
-     * Returns true iff a block lebel has length; false otherwise
-     * @return true iff a block lebel has length; false otherwise
-     */
-    public boolean hasLength(){
-        return hasLength;
-    }
-    
-    /**
      * return the low range
      * */
     public double getLowRange()
@@ -228,27 +194,11 @@ public class BlockConnector implements ISupportMemento {
     }
     
     /**
-     * return the minimum length
-     * */
-    public int getMinLength()
-    {
-    	return minLength;
-    }
-    
-    /**
      * return the high range
      * */
     public double getHighRange()
     {
     	return high;
-    }
-    
-    /**
-     * return the max length
-     * */
-    public int getMaxLength()
-    {
-    	return maxLength;
     }
     
     /**

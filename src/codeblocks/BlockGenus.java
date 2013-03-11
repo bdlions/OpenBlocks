@@ -528,11 +528,8 @@ public class BlockGenus {
                 String defargname = null;
                 String defarglabel = null;
                 String hasRange = "no";
-                String hasLength = "no";
                 double low = 0.0;
                 double high = 0.0;
-                int minLength = 0;
-                int maxLength = 0;
     
                 if (connector.getAttributes().getLength()>0){             
                     nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("connector-kind").toString());
@@ -552,7 +549,7 @@ public class BlockGenus {
                     	isLabelEditable = nameMatcher.group(1).equals("yes") ? true: false;
                     nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("has-range").toString());
                     if (nameMatcher.find()) //will be true
-                    	hasRange = nameMatcher.group(1);                    
+                    	hasRange = nameMatcher.group(1);
                     if(hasRange.equals("yes"))
                     {
 	                    nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("low").toString());
@@ -562,20 +559,6 @@ public class BlockGenus {
 	                    if (nameMatcher.find()) //will be true
 	                    	high = Double.parseDouble(nameMatcher.group(1));
                     }
-                    
-                    nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("has-length").toString());
-                    if (nameMatcher.find()) //will be true
-                    	hasLength = nameMatcher.group(1);
-                    if(hasLength.equals("yes"))
-                    {
-	                    nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("min-length").toString());
-	                    if (nameMatcher.find()) //will be true
-	                    	minLength = Integer.parseInt(nameMatcher.group(1));
-	                    nameMatcher=attrExtractor.matcher(connector.getAttributes().getNamedItem("max-length").toString());
-	                    if (nameMatcher.find()) //will be true
-	                    	maxLength = Integer.parseInt(nameMatcher.group(1));
-                    }
-                    
                     	
                     //load optional items
                     opt_item = connector.getAttributes().getNamedItem("label");
@@ -628,16 +611,6 @@ public class BlockGenus {
 	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.BOTTOM, label, isLabelEditable, isExpandable, expandGroup, Block.NULL, low, high);
 	                else
 	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.SINGLE, label, isLabelEditable, isExpandable, expandGroup, Block.NULL, low, high);
-                }
-                else if(hasLength.equals("yes"))
-                {
-	                //set the position type for this new connector, by default its set to single
-	                if(positionType.equals("mirror")) 
-	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.MIRROR, label, isLabelEditable, isExpandable, expandGroup, Block.NULL, minLength, maxLength);
-	                else if(positionType.equals("bottom"))
-	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.BOTTOM, label, isLabelEditable, isExpandable, expandGroup, Block.NULL, minLength, maxLength);
-	                else
-	                    socket = new BlockConnector(connectorType, BlockConnector.PositionType.SINGLE, label, isLabelEditable, isExpandable, expandGroup, Block.NULL, minLength, maxLength);
                 }
                 else
                 {
