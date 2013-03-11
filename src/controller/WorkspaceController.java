@@ -30,6 +30,7 @@ import codeblocks.BlockConnectorShape;
 import codeblocks.BlockGenus;
 import codeblocks.BlockLinkChecker;
 import codeblocks.CommandRule;
+import codeblocks.PolyRule;
 import codeblocks.SocketRule;
 
 /**
@@ -194,6 +195,7 @@ public class WorkspaceController {
         //load rules
         BlockLinkChecker.addRule(new CommandRule());
         BlockLinkChecker.addRule(new SocketRule());
+        BlockLinkChecker.addRule(new PolyRule());
         
         //set the dirty flag for the language definition file 
         //to false now that the lang file has been loaded

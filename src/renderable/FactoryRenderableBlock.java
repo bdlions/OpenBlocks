@@ -1,15 +1,13 @@
 package renderable;
 
-import java.awt.Container;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 import javax.swing.SwingUtilities;
 
+import workspace.WorkspaceWidget;
 import codeblocks.Block;
 import codeblocks.JComponentDragHandler;
-
-
-import workspace.WorkspaceWidget;
 
 /**
  * FactoryRenderableBlock extends RenderableBlock and is used within FactoryBlockDrawers.
@@ -26,8 +24,7 @@ public class FactoryRenderableBlock extends RenderableBlock {
 	private static final long serialVersionUID = 1L;
 	
     //the RenderableBlock to produce
-    private RenderableBlock createdRB = null;
-    private boolean createdRB_dragged = false;
+    protected RenderableBlock createdRB = null;
     
     //we have this instance of the dragHandler so that we can use it mouse entered
     //mouseexited methods to change the cursor appropriately, so that we can make it 
@@ -56,6 +53,10 @@ public class FactoryRenderableBlock extends RenderableBlock {
     ///////////////////
     //MOUSE EVENTS (Overriding mouse events in super)
     ///////////////////
+
+    protected Point getInitialLocation() {
+        return new Point(getX(), getY());
+    }
     
     public void mousePressed(MouseEvent e) {
     	this.requestFocus();
@@ -67,7 +68,7 @@ public class FactoryRenderableBlock extends RenderableBlock {
         //createdRB not really "added" to widget (not necessary to since it will be removed)
         createdRB.setParentWidget(this.getParentWidget());
         //set the location of new rb from this 
-        createdRB.setLocation(this.getX(), this.getY());
+        createdRB.setLocation(getInitialLocation());
         //send the event to the mousedragged() of new block
         MouseEvent newE = SwingUtilities.convertMouseEvent(this, e, createdRB); 
         createdRB.mousePressed(newE);
@@ -75,27 +76,20 @@ public class FactoryRenderableBlock extends RenderableBlock {
     }
 
     public void mouseDragged(MouseEvent e) {
-        if(createdRB != null){
+        if (createdRB != null){
             //translate this e to a MouseEvent for createdRB
             MouseEvent newE = SwingUtilities.convertMouseEvent(this, e, createdRB);
             createdRB.mouseDragged(newE);
-            createdRB_dragged = true;
         }
     }
 
     public void mouseReleased(MouseEvent e) {
-        if(createdRB != null){
-            if(!createdRB_dragged){
-                Container parent = createdRB.getParent();
-                parent.remove(createdRB);
-                parent.validate();
-                parent.repaint();
-            }else{
-                //translate this e to a MouseEvent for createdRB
-                MouseEvent newE = SwingUtilities.convertMouseEvent(this, e, createdRB);
-                createdRB.mouseReleased(newE);
-            }
-            createdRB_dragged = false;
+        if (createdRB != null){
+            //translate this e to a MouseEvent for createdRB
+            MouseEvent newE = SwingUtilities.convertMouseEvent(this, e, createdRB);
+            createdRB.mouseReleased(newE);
+            System.out.println("released2 location: "+createdRB.getLocation());
+            createdRB = null;
         }
     }
     

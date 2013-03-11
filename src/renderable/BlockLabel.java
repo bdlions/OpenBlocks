@@ -204,59 +204,57 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 	}
 
 	public void mouseClicked(MouseEvent e) {
-		if ( !((e.getClickCount() == 1) && widget.isEditable())) {	
-			RenderableBlock.getRenderableBlock(blockID).processMouseEvent(SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
-		}
+		if (((e.getClickCount() != 1) || !widget.isEditable()) && widget.getParent() instanceof RenderableBlock)
+			((RenderableBlock) widget.getParent()).processMouseEvent(SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
 	}
 	public void mousePressed(MouseEvent e) {
-		if(widget.getParent() != null && widget.getParent() instanceof MouseListener){
-			RenderableBlock.getRenderableBlock(blockID).processMouseEvent( SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
-		}
+		if (widget.getParent() instanceof RenderableBlock)
+			((RenderableBlock) widget.getParent()).processMouseEvent( SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
 	}
 	public void mouseReleased(MouseEvent e) {
-		if(widget.getParent() != null && widget.getParent() instanceof MouseListener){
-			RenderableBlock.getRenderableBlock(blockID).processMouseEvent( SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
-		}
+		if (widget.getParent() instanceof RenderableBlock)
+			((RenderableBlock) widget.getParent()).processMouseEvent( SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
 	}
 	public void mouseEntered(MouseEvent e) {
-		if(widget.getParent() != null && widget.getParent() instanceof MouseListener){
-			RenderableBlock.getRenderableBlock(blockID).processMouseEvent( SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
-		}
+		if (widget.getParent() instanceof RenderableBlock)
+			((RenderableBlock) widget.getParent()).processMouseEvent( SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
 	}
 	public void mouseExited(MouseEvent e) {
-		if(widget.getParent() != null && widget.getParent() instanceof MouseListener){
-			RenderableBlock.getRenderableBlock(blockID).processMouseEvent( SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
-		}
+		if (widget.getParent() instanceof RenderableBlock)
+			((RenderableBlock) widget.getParent()).processMouseEvent( SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
 	}	
 	public void mouseDragged(MouseEvent e) {
-		if(widget.getParent() != null && widget.getParent() instanceof MouseMotionListener){
-			((MouseMotionListener)widget.getParent()).mouseDragged( SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
-		}
+		if (widget.getParent() instanceof RenderableBlock)
+			((RenderableBlock) widget.getParent()).mouseDragged( SwingUtilities.convertMouseEvent(widget, e, widget.getParent()));
 	}
 	public void mouseMoved(MouseEvent e) {}
 	public void keyPressed(KeyEvent e){
-		switch(e.getKeyCode()){
-		case KeyEvent.VK_ESCAPE:
-			RenderableBlock.getRenderableBlock(blockID).requestFocus();
-			return;
-		case KeyEvent.VK_ENTER:
-			RenderableBlock.getRenderableBlock(blockID).requestFocus();
-			return;
-		case KeyEvent.VK_TAB:
-			RenderableBlock.getRenderableBlock(blockID).processKeyPressed(e);
-			return;
-		}
-		if(Block.getBlock(this.blockID).getGenusName().equals("number")){
-			if(e.getKeyChar() == '-' && widget.canProcessNegativeSign()){
-				return;
-			}
-			for(char c : validOperators){
-				if(e.getKeyChar() == c){
-					RenderableBlock.getRenderableBlock(blockID).processKeyPressed(e);
-					return;
-				}
-			}
-		}
+	    if (widget.getParent() instanceof RenderableBlock) {
+	        RenderableBlock parent = (RenderableBlock) widget.getParent();
+	        
+	        switch(e.getKeyCode()){
+	        case KeyEvent.VK_ESCAPE:
+	            parent.requestFocus();
+	            return;
+	        case KeyEvent.VK_ENTER:
+	            parent.requestFocus();
+	            return;
+	        case KeyEvent.VK_TAB:
+	            parent.processKeyPressed(e);
+	            return;
+	        }
+	        if(Block.getBlock(this.blockID).getGenusName().equals("number")){
+	            if(e.getKeyChar() == '-' && widget.canProcessNegativeSign()){
+	                return;
+	            }
+	            for(char c : validOperators){
+	                if(e.getKeyChar() == c){
+	                    parent.processKeyPressed(e);
+	                    return;
+	                }
+	            }
+	        }
+	    }
 	}
 	public void keyReleased(KeyEvent e){}
 	public void keyTyped(KeyEvent e){}

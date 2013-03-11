@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +41,7 @@ public class BlockGenus {
     
     // mapping of genus names to BlockGenus objects
     // only BlockGenus may add to this map
-    private static Map<String, BlockGenus> nameToGenus = new HashMap<String, BlockGenus>();
+    private static Map<String, BlockGenus> nameToGenus = new TreeMap<String, BlockGenus>();
 
     private String genusName;
     private Color color;
@@ -146,6 +147,15 @@ public class BlockGenus {
      */
     public static BlockGenus getGenusWithName(String name){
         return BlockGenus.nameToGenus.get(name);
+    }
+    
+    /**
+     * Returns the names of {@code BlockGenus}'es currently loaded.
+     * 
+     * @return the names of all known {@code BlockGenus}'es
+     */
+    public static List<String> getGenusNames() {
+        return new ArrayList<String>(nameToGenus.keySet());
     }
     
     /**
