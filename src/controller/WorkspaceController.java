@@ -48,9 +48,12 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import renderable.RenderableBlock;
 
+
 import workspace.*;
 import codeblocks.*;
 import codegenerator.*;
+
+
 
 /**
  * 
@@ -267,6 +270,7 @@ public class WorkspaceController {
         //load rules
         BlockLinkChecker.addRule(new CommandRule());
         BlockLinkChecker.addRule(new SocketRule());
+        BlockLinkChecker.addRule(new PolyRule());
         
         //set the dirty flag for the language definition file 
         //to false now that the lang file has been loaded
