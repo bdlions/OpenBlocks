@@ -59,8 +59,9 @@ public class BlockUtilities {
 		return true;
 	}
 
-	public static boolean isInsideRange(long blockID, String text)
+	public static String isInsideRange(long blockID, String text)
 	{
+		String isInsideRangeMessage = "";
 		/**
 		 * If a block has a range then check the input value
 		 * is inside the range
@@ -85,20 +86,69 @@ public class BlockUtilities {
 							//System.out.println("Range : "+ connector.getHighRange());
 							double currentNumber = Double.parseDouble(text);
 							if(connector.getLowRange() <= currentNumber && connector.getHighRange() >= currentNumber)
-								return true;
+								return isInsideRangeMessage;
 							else
-								return false;
+							{	
+								isInsideRangeMessage = "["+connector.getLowRange()+"-"+connector.getHighRange()+"]";
+								return isInsideRangeMessage;
+							}
 						}
 						else
 						{
-							return true;
+							return isInsideRangeMessage;
 						}
 					}
 				}
 			}
 		}
-		return true;
+		return isInsideRangeMessage;
 	}
+	
+	public static String isInsideLength(long blockID, String text)
+	{
+		String isInsideLengthMessage = "";
+		/**
+		 * If a block has a range then check the input value
+		 * is inside the range
+		 * */
+		Block block = Block.getBlock(blockID);
+		/**
+		 * If the block has a plug then we will continue searching
+		 * if it has a plug then it has a parent
+		 * */
+		if(BlockLinkChecker.getPlugEquivalent(block) != null)
+		{
+			long plugId = BlockLinkChecker.getPlugEquivalent(block).getBlockID();
+			Block parentBlock = Block.getBlock(plugId);
+			if(parentBlock != null)
+			{
+				for (BlockConnector connector : parentBlock.getSockets()) {
+					if(connector.getBlockID() == block.getBlockID())
+					{
+						if(connector.hasLength())
+						{
+							//System.out.println("Current Text: "+ text);
+							//System.out.println("Range : "+ connector.getHighRange());
+							int textLength = text.length();
+							if(connector.getMinLength() <= textLength && connector.getMaxLength() >= textLength)
+								return isInsideLengthMessage;
+							else
+							{
+								isInsideLengthMessage = "["+connector.getMinLength()+"-"+connector.getMaxLength()+"]";
+								return isInsideLengthMessage;
+							}
+						}
+						else
+						{
+							return isInsideLengthMessage;
+						}
+					}
+				}
+			}
+		}
+		return isInsideLengthMessage;
+	}
+	
 	public static void deleteBlock(RenderableBlock block){
 		block.setLocation(0,0);
 

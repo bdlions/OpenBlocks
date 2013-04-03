@@ -17,26 +17,29 @@
 			<entry name="Save">
 				<label>Save</label>
 			</entry>
-			<entry name="Save As">
+			<entry name="SaveAs">
 				<label>Save As</label>
 			</entry>	
+			<entry name="Close">
+				<label>Close</label>
+			</entry>
 			<entry name="Print">
 				<label>Print</label>
 			</entry>	
 			<entry name="Exit">
 				<label>Exit</label>
 			</entry>	
-			<entry name="Code Generation">
-				<label>Code Generation</label>
+			<entry name="Code generated on the fly">
+				<label>Code generated on the fly</label>
 			</entry>
 			<entry name="Validate">
 				<label>Validate</label>
 			</entry>
 			<entry name="Generate C Code">
-				<label>View C Code</label>
+				<label>Generate C Code</label>
 			</entry>	
 			<entry name="Generate Java Code">
-				<label>View Java Code</label>
+				<label>Generate Java Code</label>
 			</entry>
 			<entry name="View Code">
 				<label>View Code</label>
@@ -52,6 +55,9 @@
 			</entry>			
 			<entry name="Francis">
 				<label>Francis</label>
+			</entry>
+			<entry name="External">
+				<label>External</label>
 			</entry>
 			<entry name="Help">
 				<label>Help</label>
@@ -83,6 +89,60 @@
 			<entry name="Delete">
 				<label>Delete</label>
 			</entry>
+			<entry name="Validate">
+				<label>Validate</label>
+			</entry>
+			<entry name="Add Variable">
+				<label>Add Variable</label>
+			</entry>
+			<entry name="AddVariableTitle">
+				<label>New Variable</label>
+			</entry>
+			<entry name="VariableNameLabel">
+				<label>Name</label>
+			</entry>
+			<entry name="VariableTypeLabel">
+				<label>Type</label>
+			</entry>
+			<entry name="Ok">
+				<label>Ok</label>
+			</entry>
+			<entry name="Cancel">
+				<label>Cancel</label>
+			</entry>
+			<entry name="AddVariableErrorMessage">
+				<label>This name is invalid. please add a vaild variable name.</label>
+			</entry>
+			<entry name="AddVariableErrorMessageTitle">
+				<label>Error</label>
+			</entry>
+			<entry name="VariableExistsMessage">
+				<label>Variable exists with the same name.</label>
+			</entry>
+			<entry name="VariableExistsMessage">
+				<label>Variable exists with the same name.</label>
+			</entry>
+			<entry name="VariableExistsMessageTitle">
+				<label>Error</label>
+			</entry>
+			<entry name="AddVariableSuccessMessage">
+				<label>Variable is added successfully.</label>
+			</entry>
+			<entry name="AddVariableSuccessMessageTitle">
+				<label>Success</label>
+			</entry>
+			<entry name="DisplayCodeWindowTitle">
+				<label>Displaying Code English</label>
+			</entry>
+			<entry name="CopyToClipBoard">
+				<label>Copy to Clipboard</label>
+			</entry>
+			<entry name="CopyToClipBoardSuccess">
+				<label>Code is saved into clipboard successfully.</label>
+			</entry>
+			<entry name="CopyToClipBoardSuccessTitle">
+				<label>Success</label>
+			</entry>
 			<entry name="SaveConfirmation">
 				<label>Do you want to save your current work?</label>
 			</entry>
@@ -109,8 +169,11 @@
 			<entry name="Save">
 				<label>Grabar</label>
 			</entry>
-			<entry name="Save As">
+			<entry name="SaveAs">
 				<label>Grabar como</label>
+			</entry>
+			<entry name="Close">
+				<label>Close</label>
 			</entry>	
 			<entry name="Print">
 				<label>Imprimir</label>
@@ -118,7 +181,7 @@
 			<entry name="Exit">
 				<label>Salir</label>
 			</entry>	
-			<entry name="Code Generation">
+			<entry name="Code generated on the fly">
 				<label>Generar Codigo</label>
 			</entry>
 			<entry name="Validate">
@@ -144,6 +207,9 @@
 			</entry>			
 			<entry name="Francis">
 				<label>Frances</label>
+			</entry>
+			<entry name="External">
+				<label>External</label>
 			</entry>
 			<entry name="Help">
 				<label>Ayuda</label>
@@ -175,6 +241,57 @@
 			<entry name="Delete">
 				<label>Borrar</label>
 			</entry>
+			<entry name="Validate">
+				<label>Validate</label>
+			</entry>
+			<entry name="Add Variable">
+				<label>Add Variable</label>
+			</entry>
+			<entry name="AddVariableTitle">
+				<label>New Variable Spanish</label>
+			</entry>
+			<entry name="VariableNameLabel">
+				<label>Name Spanish</label>
+			</entry>
+			<entry name="VariableTypeLabel">
+				<label>Type Spanish</label>
+			</entry>
+			<entry name="Ok">
+				<label>Ok Spanish</label>
+			</entry>
+			<entry name="Cancel">
+				<label>Cancel Spanish</label>
+			</entry>
+			<entry name="AddVariableErrorMessage">
+				<label>This name is invalid. please add a vaild variable name. Spanish</label>
+			</entry>
+			<entry name="AddVariableErrorMessageTitle">
+				<label>Error Spanish</label>
+			</entry>
+			<entry name="VariableExistsMessage">
+				<label>Variable exists with the same name.</label>
+			</entry>
+			<entry name="VariableExistsMessageTitle">
+				<label>Error</label>
+			</entry>
+			<entry name="AddVariableSuccessMessage">
+				<label>Variable is added successfully.</label>
+			</entry>
+			<entry name="AddVariableSuccessMessageTitle">
+				<label>Success</label>
+			</entry>
+			<entry name="DisplayCodeWindowTitle">
+				<label>Displaying Code Spanish</label>
+			</entry>
+			<entry name="CopyToClipBoard">
+				<label>Copy to Clipboard</label>
+			</entry>
+			<entry name="CopyToClipBoardSuccess">
+				<label>Code is saved into clipboard successfully.</label>
+			</entry>
+			<entry name="CopyToClipBoardSuccessTitle">
+				<label>Success</label>
+			</entry>
 			<entry name="SaveConfirmation">
 				<label>Do you want to save your current work?</label>
 			</entry>
@@ -201,8 +318,11 @@
 			<entry name="Save">
 				<label>Grabar</label>
 			</entry>
-			<entry name="Save As">
+			<entry name="SaveAs">
 				<label>Grabar como</label>
+			</entry>
+			<entry name="Close">
+				<label>Close</label>
 			</entry>	
 			<entry name="Print">
 				<label>Imprime</label>
@@ -210,7 +330,7 @@
 			<entry name="Exit">
 				<label>Ferme</label>
 			</entry>	
-			<entry name="Code Generation">
+			<entry name="Code generated on the fly">
 				<label>Gen Codigo</label>
 			</entry>
 			<entry name="Validate">
@@ -236,6 +356,9 @@
 			</entry>
 			<entry name="Spanish">
 				<label>Espanol</label>
+			</entry>
+			<entry name="External">
+				<label>External</label>
 			</entry>
 			<entry name="Help">
 				<label>Aidee</label>
@@ -266,6 +389,57 @@
 			</entry>
 			<entry name="Delete">
 				<label>Eliminne</label>
+			</entry>
+			<entry name="Validate">
+				<label>Validate</label>
+			</entry>
+			<entry name="Add Variable">
+				<label>Add Variable</label>
+			</entry>
+			<entry name="AddVariableTitle">
+				<label>New Variable Francis</label>
+			</entry>
+			<entry name="VariableNameLabel">
+				<label>Name Francis</label>
+			</entry>
+			<entry name="VariableTypeLabel">
+				<label>Type Francis</label>
+			</entry>
+			<entry name="Ok">
+				<label>Ok Francis</label>
+			</entry>
+			<entry name="Cancel">
+				<label>Cancel Francis</label>
+			</entry>
+			<entry name="AddVariableErrorMessage">
+				<label>This name is invalid. please add a vaild variable name. Francis</label>
+			</entry>
+			<entry name="AddVariableErrorMessageTitle">
+				<label>Error Francis</label>
+			</entry>
+			<entry name="VariableExistsMessage">
+				<label>Variable exists with the same name.</label>
+			</entry>
+			<entry name="VariableExistsMessageTitle">
+				<label>Error</label>
+			</entry> 
+			<entry name="AddVariableSuccessMessage">
+				<label>Variable is added successfully.</label>
+			</entry>
+			<entry name="AddVariableSuccessMessageTitle">
+				<label>Success</label>
+			</entry>
+			<entry name="DisplayCodeWindowTitle">
+				<label>Displaying Code Francis</label>
+			</entry>
+			<entry name="CopyToClipBoard">
+				<label>Copy to Clipboard</label>
+			</entry>
+			<entry name="CopyToClipBoardSuccess">
+				<label>Code is saved into clipboard successfully.</label>
+			</entry>
+			<entry name="CopyToClipBoardSuccessTitle">
+				<label>Success</label>
 			</entry>
 			<entry name="SaveConfirmation">
 				<label>Do you want to save your current work?</label>

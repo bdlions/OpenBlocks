@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Hashtable;
 import java.util.List;
 
 import javax.swing.JDialog;
@@ -45,10 +46,13 @@ public class DisplayCode extends JDialog {
 	private JButton btnSaveAs;
 	private JButton btnCopyToClipboard;
 	private JButton btnClose;
+	
+	public static Hashtable syntaxMap;
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -59,14 +63,26 @@ public class DisplayCode extends JDialog {
 				}
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the frame.
 	 */
-	public DisplayCode() {
+	public DisplayCode(Hashtable syntaxMap) {
+		this.syntaxMap = syntaxMap;
 		setModal(true);
-		setTitle("Displaying Code.");
+		
+		String displayCodeWindowTitleString = "DisplayCodeWindowTitle";
+		if (syntaxMap.containsKey(displayCodeWindowTitleString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(displayCodeWindowTitleString);
+			displayCodeWindowTitleString = titleEntry.getLabel();
+		}
+		else
+		{
+			displayCodeWindowTitleString = "Displaying Code";
+		}
+		
+		setTitle(displayCodeWindowTitleString);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		
@@ -81,7 +97,16 @@ public class DisplayCode extends JDialog {
 		buttonPanel = new JPanel();
 		contentPane.add(buttonPanel, BorderLayout.SOUTH);
 		
-		btnSaveAs = new JButton("Save As");
+		String saveAsString = "SaveAs";
+		if (syntaxMap.containsKey(saveAsString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveAsString);
+			saveAsString = titleEntry.getLabel();
+		}
+		else
+		{
+			saveAsString = "Save As";
+		}
+		btnSaveAs = new JButton(saveAsString);
 		btnSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				savePressed();
@@ -90,18 +115,52 @@ public class DisplayCode extends JDialog {
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		buttonPanel.add(btnSaveAs);
 		
-		btnCopyToClipboard = new JButton("Copy to Clipboard");
+		String copyToClipBoardString = "CopyToClipBoard";
+		if (syntaxMap.containsKey(copyToClipBoardString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(copyToClipBoardString);
+			copyToClipBoardString = titleEntry.getLabel();
+		}
+		else
+		{
+			copyToClipBoardString = "Copy to Clipboard";
+		}
+		btnCopyToClipboard = new JButton(copyToClipBoardString);
 		btnCopyToClipboard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			    StringSelection selection = new StringSelection(textPane.getText());
 			    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			    clipboard.setContents(selection, selection);
-			    JOptionPane.showMessageDialog(null, "Successfully saved content into the clipboard.");
+			    
+			    String copyToClipBoardSuccessString = "CopyToClipBoardSuccess";
+        		if (DisplayCode.syntaxMap.containsKey(copyToClipBoardSuccessString)) {
+        			LanguageEntry titleEntry = (LanguageEntry) DisplayCode.syntaxMap.get(copyToClipBoardSuccessString);
+        			copyToClipBoardSuccessString = titleEntry.getLabel();
+        		}
+        		else
+        		{
+        			copyToClipBoardSuccessString = "Code is saved into clipboard successfully.";
+        		}
+        		String copyToClipBoardSuccessTitleString = "CopyToClipBoardSuccessTitle";
+        		if (DisplayCode.syntaxMap.containsKey(copyToClipBoardSuccessTitleString)) {
+        			LanguageEntry titleEntry = (LanguageEntry) DisplayCode.syntaxMap.get(copyToClipBoardSuccessTitleString);
+        			copyToClipBoardSuccessTitleString = titleEntry.getLabel();
+        		}
+        		else
+        		{
+        			copyToClipBoardSuccessTitleString = "Success";
+        		}
+			    
+			    JOptionPane.showMessageDialog(null, copyToClipBoardSuccessString, copyToClipBoardSuccessTitleString, JOptionPane.PLAIN_MESSAGE);
 			}
 		});
 		buttonPanel.add(btnCopyToClipboard);
 		
-		btnClose = new JButton("Close");
+		String closeString = "Close";
+		if (syntaxMap.containsKey(closeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(closeString);
+			closeString = titleEntry.getLabel();
+		}
+		btnClose = new JButton(closeString);
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DisplayCode.this.dispose();

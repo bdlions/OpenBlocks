@@ -58,7 +58,7 @@ public class Variable {
 	public static boolean isValidVariableName(String name)
 	{
 		
-		if(name == null) return false;
+		if(name == null || name.equals("")) return false;
 	    if(!Character.isJavaIdentifierStart(name.charAt(0))) return false;
 	    
 	    for (char c : name.toCharArray()) {

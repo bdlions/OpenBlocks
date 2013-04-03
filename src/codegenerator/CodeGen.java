@@ -442,7 +442,7 @@ public class CodeGen {
 						Number paramBlockId = paramBlock.getId();
 						if(getGenusWithName(paramBlock.getGenusName()).isFunctionBlock())
 							expression.addAll(getFullFunction(paramBlock));
-						else if(blockConnector.getType().equals("string") && !codeblocks.Block.getBlock(paramBlockId.longValue()).getLabelPrefix().equals("get "))
+						else if((blockConnector.getType().equals("string") || blockConnector.getType().equals("style") || blockConnector.getType().equals("tomorrow-now") || blockConnector.getType().equals("color")) && !codeblocks.Block.getBlock(paramBlockId.longValue()).getLabelPrefix().equals("get "))
 							expression.add(getExpressionData(paramBlock.getId(), "\""+paramBlock.getLabel()+"\""));
 						else
 							expression.add(getExpressionData(paramBlock.getId(), paramBlock.getLabel()));

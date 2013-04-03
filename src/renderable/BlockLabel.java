@@ -213,9 +213,16 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 		}
 	}
 	protected boolean textValid(String text){
-		if(!BlockUtilities.isInsideRange(blockID, text))
+		String isInsideRangeMessage = BlockUtilities.isInsideRange(blockID, text);
+		if(!isInsideRangeMessage.equals(""))
 		{
-			JOptionPane.showMessageDialog(null, "Please enter valid input within the range.");
+			JOptionPane.showMessageDialog(null, "Please enter valid input within the range "+isInsideRangeMessage);
+			return false;
+		}
+		String isInsideLengthMessage =  BlockUtilities.isInsideLength(blockID, text);
+		if(!isInsideLengthMessage.equals(""))
+		{
+			JOptionPane.showMessageDialog(null, "Please enter valid input within the length "+isInsideLengthMessage);
 			return false;
 		}
 		return !text.equals("") &&

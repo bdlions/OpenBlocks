@@ -15,6 +15,9 @@ import java.awt.GridBagConstraints;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Insets;
+import java.util.Hashtable;
+
+import language.LanguageEntry;
 
 
 public class PromptVariableName extends JDialog {
@@ -23,12 +26,14 @@ public class PromptVariableName extends JDialog {
 	private JTextField textField;
 	private JComboBox comboBox;
 	private String[] types = {"integer", "double", "string", "boolean"};
-
 	private int options = JOptionPane.CANCEL_OPTION;
+	
+	public static Hashtable syntaxMap;
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		try {
 			PromptVariableName dialog = new PromptVariableName();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -36,13 +41,20 @@ public class PromptVariableName extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	/**
 	 * Create the dialog.
 	 */
-	public PromptVariableName() {
-		setBounds(100, 100, 450, 213);
+	public PromptVariableName(Hashtable syntaxMap) {
+		this.syntaxMap = syntaxMap;
+		String addVariableTitleString = "AddVariableTitle";
+		if (syntaxMap.containsKey(addVariableTitleString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(addVariableTitleString);
+			addVariableTitleString = titleEntry.getLabel();
+		}
+		setTitle(addVariableTitleString);
+		setBounds(100, 100, 300, 170);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -52,7 +64,12 @@ public class PromptVariableName extends JDialog {
 
 		contentPanel.setLayout(gbl_contentPanel);
 		{
-			JLabel lblNewLabel = new JLabel("Name");
+			String nameString = "VariableNameLabel";
+			if (syntaxMap.containsKey(nameString)) {
+				LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(nameString);
+				nameString = titleEntry.getLabel();
+			}
+			JLabel lblNewLabel = new JLabel(nameString);
 			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 			gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
 			gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
@@ -79,7 +96,12 @@ public class PromptVariableName extends JDialog {
 			textField.setColumns(20);
 		}
 		{
-			JLabel lblNewLabel = new JLabel("Type");
+			String typeString = "VariableTypeLabel";
+			if (syntaxMap.containsKey(typeString)) {
+				LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(typeString);
+				typeString = titleEntry.getLabel();
+			}
+			JLabel lblNewLabel = new JLabel(typeString);
 			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 			gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
 			gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
@@ -111,11 +133,34 @@ public class PromptVariableName extends JDialog {
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);
 		{
-			JButton okButton = new JButton("OK");
+			String okString = "Ok";
+			if (syntaxMap.containsKey(okString)) {
+				LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(okString);
+				okString = titleEntry.getLabel();
+			}
+			JButton okButton = new JButton(okString);
 			okButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(!Variable.isValidVariableName(textField.getText())){
-						JOptionPane.showMessageDialog(null, "This name is invalid. please add a vaild variable name.");
+						String messageString = "AddVariableErrorMessage";
+						if (PromptVariableName.syntaxMap.containsKey(messageString)) {
+							LanguageEntry titleEntry = (LanguageEntry) PromptVariableName.syntaxMap.get(messageString);
+							messageString = titleEntry.getLabel();
+						}
+						else
+						{
+							messageString = "This name is invalid. please add a vaild variable name.";
+						}
+						String messageTitleString = "AddVariableErrorMessageTitle";
+						if (PromptVariableName.syntaxMap.containsKey(messageTitleString)) {
+							LanguageEntry titleEntry = (LanguageEntry) PromptVariableName.syntaxMap.get(messageTitleString);
+							messageTitleString = titleEntry.getLabel();
+						}
+						else
+						{
+							messageTitleString = "Error";
+						}
+						JOptionPane.showMessageDialog(null, messageString, messageTitleString, JOptionPane.PLAIN_MESSAGE);
 					}
 					else{
 						options = JOptionPane.OK_OPTION;
@@ -128,7 +173,12 @@ public class PromptVariableName extends JDialog {
 			getRootPane().setDefaultButton(okButton);
 		}
 		{
-			JButton cancelButton = new JButton("Cancel");
+			String cancelString = "Cancel";
+			if (syntaxMap.containsKey(cancelString)) {
+				LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(cancelString);
+				cancelString = titleEntry.getLabel();
+			}
+			JButton cancelButton = new JButton(cancelString);
 			cancelButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					options = JOptionPane.CANCEL_OPTION;
