@@ -61,6 +61,7 @@ import codeblocks.JComponentDragHandler;
 import codeblocks.rendering.BlockShapeUtil;
 import codeblockutil.CToolTip;
 import codeblockutil.GraphicsManager;
+import codegenerator.BlockValidator;
 import codegenerator.XMLToBlockGenerator;
 
 
@@ -1651,6 +1652,17 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 						widget = getRenderableBlock(link.getSocketBlockID()).getParentWidget();
 					}
 
+					RenderableBlock socketRB = RenderableBlock.getRenderableBlock(link.getSocketBlockID());
+					//Block currentMouseSelectedDroppedBlock = socketRB.blockShape.getBlock();
+					Block currentMouseSelectedBlock = blockShape.getBlock();
+					
+					if(link.getSocket().getDefArgumentGenusName().equals("USA") && currentMouseSelectedBlock.getGenusName().equals("string"))
+					{
+						JOptionPane.showMessageDialog(null, "You are not allowed to drop this component here.");
+						BlockUtilities.deleteBlock(this);
+						return;
+					}
+					
 					// drop the block and connect its link
 					stopDragging(this, widget);
 					link.connect();
@@ -1677,6 +1689,22 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 			popup.show(this, e.getX(), e.getY());
 		}
 		Workspace.getInstance().getMiniMap().repaint();
+		
+		StringBuffer saveString = new StringBuffer();
+        saveString.append("<?xml version=\"1.0\"?>");
+        saveString.append("\r\n");
+        saveString.append("<CODEBLOCKS>");
+        saveString.append(Workspace.getInstance().getSaveString());
+        saveString.append("</CODEBLOCKS>");		
+		List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(saveString.toString()));
+		if(errors.size() <= 0)
+		{
+			Workspace.getInstance().setCodeInEditor();
+		}
+		else
+		{
+			Workspace.getInstance().clearCodeInEditor();
+		}
 	}
 	public void mouseDragged(MouseEvent e) { 
 		if (SwingUtilities.isLeftMouseButton(e)){

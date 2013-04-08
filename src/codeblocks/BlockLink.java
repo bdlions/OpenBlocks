@@ -26,8 +26,8 @@ public class BlockLink {
 	private Long socketBlockID;
 	private Long lastPlugBlockID;
 	private BlockConnector plug;
-	private BlockConnector socket;
 
+	private BlockConnector socket;
 	//information regarding the last BlockLink instance
 	private static Long lastPlugID;
 	private static Long lastSocketID;

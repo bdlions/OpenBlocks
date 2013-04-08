@@ -80,9 +80,21 @@ public class BlockShape {
     protected boolean hasCurvedCorners;
     protected float blockCornerRadius;
     
-   
+    
 
-    /**
+    public Block getBlock() {
+		return block;
+	}
+
+
+
+	public void setBlock(Block block) {
+		this.block = block;
+	}
+
+
+
+	/**
      * BlockShape constructor
      * @param rb
      */

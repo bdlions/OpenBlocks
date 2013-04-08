@@ -35,6 +35,7 @@ public class BlockConnector implements ISupportMemento {
     private int minLength = 0;
     private int maxLength = 0;
     
+    
     //Specifies the PositionType of connector:
     //Single is the default connector that appears on only one side (left/right) of a block.
     //Mirror is creates a connectors with locations mirrored on both left and right side of a block.
@@ -625,5 +626,17 @@ public class BlockConnector implements ISupportMemento {
 			return instance;
 		}
 		return null;
+	}
+	
+    public String getDefArgumentGenusName()
+	{
+		if(this.arg == null)
+		{
+			return "";
+		}
+		else
+		{
+	    	return this.arg.genusName;
+		}
 	}
 }

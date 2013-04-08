@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -321,7 +322,8 @@ public class WorkspaceController {
         //need to just reset workspace (no need to reset language) unless
         //language was never loaded
         //reset only if workspace actually exists
-        if(workspaceLoaded)
+        BlockGenus.setNameToGenus(new HashMap<String, BlockGenus>());
+    	if(workspaceLoaded)
             resetWorkspace();
         
         if(langDefDirty)
@@ -786,7 +788,7 @@ public class WorkspaceController {
 		    		
 				}
 				wc.setLangDefFilePath(LANG_DEF_FILEPATH);
-                wc.loadFreshWorkspace();
+                wc.loadFreshWorkspace(); 
 			}
 		});
 		
@@ -1441,7 +1443,16 @@ public class WorkspaceController {
 	            		Page blockPage = workspace.getPageNamed("Blocks");
 	            		WorkspaceWidget ww = workspace.getWidgetAt(new Point(blockPage.getJComponent().getX(), blockPage.getJComponent().getY()));
 	            		blockPage.blockDropped(new RenderableBlock(ww, block.getBlockID()));
-	            		
+	            		workspace.cleanUpAllBlocks();
+	            		List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
+	                	if(errors.size() > 0)
+	                	{
+	                		workspace.clearCodeInEditor();
+	                	}
+	                	else
+	                	{
+	                		workspace.setCodeInEditor();	                    	
+	                	}
                 	}
             	}
             	

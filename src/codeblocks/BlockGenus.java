@@ -1088,4 +1088,14 @@ public class BlockGenus {
         }
     }
 
+	public static Map<String, BlockGenus> getNameToGenus() {
+		return nameToGenus;
+	}
+
+	public static void setNameToGenus(Map<String, BlockGenus> nameToGenus) {
+		BlockGenus.nameToGenus = nameToGenus;
+	}
+    
+    
+
 }

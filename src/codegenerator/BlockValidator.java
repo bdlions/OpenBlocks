@@ -13,15 +13,20 @@ public class BlockValidator {
 	private static HashMap<Integer, Block> blocksMap = new HashMap<Integer, Block>();
 	private static List<String> errors = new ArrayList<String>();
 	private static int missing_param_count = 0;
-	
+	private static List<String> variableNameList = new ArrayList<String>();
 	public static List<String> validateAll(List<Block> allBlocks)
 	{
+		variableNameList = new ArrayList<String>();
 		blocksMap = new HashMap<Integer, Block>();
 		errors = new ArrayList<String>();
 		
 		for (Block block : allBlocks) 
 		{
 			blocksMap.put(block.getId(), block);
+			if(block.getGenusName().contains("decl"))
+			{
+				variableNameList.add(BlockGenus.getGenusWithName(block.getGenusName()).getInitialLabel());
+			}
 		}
 		for (Block block : allBlocks) {
 			validate(block);
@@ -34,6 +39,15 @@ public class BlockValidator {
 	{
 		BlockGenus blockGenus = BlockGenus.getGenusWithName(block.getGenusName());
 		Number number = block.getId();
+		
+		if(BlockGenus.getGenusWithName(block.getGenusName()).getLabelPrefix().contains("set") || BlockGenus.getGenusWithName(block.getGenusName()).getLabelPrefix().contains("reset") || BlockGenus.getGenusWithName(block.getGenusName()).getLabelPrefix().contains("get") || BlockGenus.getGenusWithName(block.getGenusName()).getLabelSuffix().contains("+=") || BlockGenus.getGenusWithName(block.getGenusName()).getLabelSuffix().contains("-="))
+		{
+			if(!variableNameList.contains(BlockGenus.getGenusWithName(block.getGenusName()).getInitialLabel()))
+			{
+				errors.add("Please declare the variable named "+BlockGenus.getGenusWithName(block.getGenusName()).getInitialLabel());
+			}
+		}
+		
 		if(blockGenus.isDataBlock() && block.getPlug().getBlockConnectors().getConnectBlockId() <= 0)
 		{ 
 			errors.add("You can't add '"+block.getLabel()+"' as single data block ");

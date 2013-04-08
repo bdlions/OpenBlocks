@@ -248,25 +248,25 @@
 				<label>Add Variable</label>
 			</entry>
 			<entry name="AddVariableTitle">
-				<label>New Variable Spanish</label>
+				<label>New Variable</label>
 			</entry>
 			<entry name="VariableNameLabel">
-				<label>Name Spanish</label>
+				<label>Name</label>
 			</entry>
 			<entry name="VariableTypeLabel">
-				<label>Type Spanish</label>
+				<label>Type</label>
 			</entry>
 			<entry name="Ok">
-				<label>Ok Spanish</label>
+				<label>Ok</label>
 			</entry>
 			<entry name="Cancel">
-				<label>Cancel Spanish</label>
+				<label>Cancel</label>
 			</entry>
 			<entry name="AddVariableErrorMessage">
-				<label>This name is invalid. please add a vaild variable name. Spanish</label>
+				<label>This name is invalid. please add a vaild variable name.</label>
 			</entry>
 			<entry name="AddVariableErrorMessageTitle">
-				<label>Error Spanish</label>
+				<label>Error</label>
 			</entry>
 			<entry name="VariableExistsMessage">
 				<label>Variable exists with the same name.</label>
@@ -281,7 +281,7 @@
 				<label>Success</label>
 			</entry>
 			<entry name="DisplayCodeWindowTitle">
-				<label>Displaying Code Spanish</label>
+				<label>Displaying Code</label>
 			</entry>
 			<entry name="CopyToClipBoard">
 				<label>Copy to Clipboard</label>
@@ -397,25 +397,25 @@
 				<label>Add Variable</label>
 			</entry>
 			<entry name="AddVariableTitle">
-				<label>New Variable Francis</label>
+				<label>New Variable</label>
 			</entry>
 			<entry name="VariableNameLabel">
-				<label>Name Francis</label>
+				<label>Name</label>
 			</entry>
 			<entry name="VariableTypeLabel">
-				<label>Type Francis</label>
+				<label>Type</label>
 			</entry>
 			<entry name="Ok">
-				<label>Ok Francis</label>
+				<label>Ok</label>
 			</entry>
 			<entry name="Cancel">
-				<label>Cancel Francis</label>
+				<label>Cancel</label>
 			</entry>
 			<entry name="AddVariableErrorMessage">
-				<label>This name is invalid. please add a vaild variable name. Francis</label>
+				<label>This name is invalid. please add a vaild variable name.</label>
 			</entry>
 			<entry name="AddVariableErrorMessageTitle">
-				<label>Error Francis</label>
+				<label>Error</label>
 			</entry>
 			<entry name="VariableExistsMessage">
 				<label>Variable exists with the same name.</label>
@@ -430,7 +430,7 @@
 				<label>Success</label>
 			</entry>
 			<entry name="DisplayCodeWindowTitle">
-				<label>Displaying Code Francis</label>
+				<label>Displaying Code</label>
 			</entry>
 			<entry name="CopyToClipBoard">
 				<label>Copy to Clipboard</label>

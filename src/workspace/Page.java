@@ -35,6 +35,7 @@ import renderable.RenderableBlock;
 import codeblocks.Block;
 import codeblocks.BlockGenus;
 import codeblockutil.CToolTip;
+import codegenerator.BlockValidator;
 import codegenerator.XMLToBlockGenerator;
 
 
@@ -626,8 +627,7 @@ public class Page  implements WorkspaceWidget, SearchableContainer, ISupportMeme
 			if (rb != null && rb.getParentWidget() != null){
 				Workspace.getInstance().notifyListeners(new WorkspaceEvent(rb.getParentWidget(), block.getBlockID(), WorkspaceEvent.BLOCK_VARIABLE_ADDED));
 			}
-		}
-	
+		}	
 	}
 	
 	/** @ovverride WorkspaceWidget.blockDragged() */
