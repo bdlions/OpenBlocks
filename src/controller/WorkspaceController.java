@@ -58,7 +58,6 @@ import org.xml.sax.SAXException;
 
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 
-import parser.ParseVariable;
 import renderable.RenderableBlock;
 
 import workspace.*;
