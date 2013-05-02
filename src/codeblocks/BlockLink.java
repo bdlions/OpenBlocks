@@ -68,14 +68,27 @@ public class BlockLink {
 		lastPlugBlockID = Block.NULL;
 	}
 
-	static{
+	static {
 		//load the sound for connecting blocks, but only once
-		try{
-			clickSound = SoundManager.loadSound("/codeblocks/click.wav");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error initializing sounds.  Continuing...");
-		}
+	    loadClickSound();
+	}
+	
+    /**
+     * Loads the click sounds asynchronously because on Windows 7 system the
+     * initialization of the audio system may take very long time.
+     */
+	private static void loadClickSound() {
+	    new Thread() {
+	        @Override
+	        public void run() {
+	            try{
+	                clickSound = SoundManager.loadSound("/codeblocks/click.wav");
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	                System.out.println("Error initializing sounds.  Continuing...");
+	            }
+	        }
+	    }.start();
 	}
 
 	/**

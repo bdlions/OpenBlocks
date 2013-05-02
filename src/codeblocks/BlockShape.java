@@ -1,6 +1,7 @@
 package codeblocks;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Area;
 import java.awt.geom.GeneralPath;
@@ -419,7 +420,10 @@ public class BlockShape {
     					int spacerHeight = getSocketSpacerHeight(curSocket, BlockConnectorShape.DEFAULT_COMMAND_INPUT_HEIGHT);
     					//draw the command socket bar and such
     					Point2D p = BCS.addCommandSocket(gpRight, spacerHeight);
-    					rb.updateSocketPoint(curSocket, p);
+    					//update error point location
+    					Point2D r = new Point((int)p.getX(), (int)p.getY());
+    					r.setLocation(r.getX() - BlockConnectorShape.COMMAND_INPUT_BAR_WIDTH + 2, r.getY() + spacerHeight/2 + 2);
+    					rb.updateSocketPoint(curSocket, p, r);
     					
     				} else {
     					
