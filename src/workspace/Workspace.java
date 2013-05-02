@@ -74,7 +74,7 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
      * Single Workspace instance
      */
     private static Workspace ws = new Workspace();
-    private static JTextComponent editor;
+    private static JTextComponent editor  = new JTextPane();
     private static String selectedLanguage = "java"; 
 	public static void setSelectedLanguage(String selectedLanguage) {
 		Workspace.selectedLanguage = selectedLanguage;
@@ -1103,7 +1103,7 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
     public static void addCodeEditor()
     {
         Page editorPage = ws.getPageNamed("Code");
-        editor = new JTextPane();
+        
         //user will not be able to type in code editor panel
         editor.setEditable(false);
         editor.setBackground(editorPage.getJComponent().getBackground());

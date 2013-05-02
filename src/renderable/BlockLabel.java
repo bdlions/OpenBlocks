@@ -24,6 +24,8 @@ import codeblocks.BlockLink;
 import codeblocks.BlockLinkChecker;
 import codeblocks.BlockStub;
 import codeblockutil.LabelWidget;
+import codegenerator.BlockValidator;
+import codegenerator.XMLToBlockGenerator;
 
 /**
  * BlockLabel is a region on a block in which text is displayed and possibly edited.  The
@@ -205,6 +207,23 @@ public class BlockLabel implements MouseListener, MouseMotionListener, KeyListen
 			RenderableBlock rb = RenderableBlock.getRenderableBlock(blockID);
 			rb.repaintBlock();
 			Workspace.getInstance().notifyListeners(new WorkspaceEvent(rb.getParentWidget(), blockID, WorkspaceEvent.BLOCK_GENUS_CHANGED));
+			
+			//updating code panel
+            StringBuffer saveString = new StringBuffer();
+            saveString.append("<?xml version=\"1.0\"?>");
+            saveString.append("\r\n");
+            saveString.append("<CODEBLOCKS>");
+            saveString.append(Workspace.getInstance().getSaveString());
+            saveString.append("</CODEBLOCKS>");		
+    		List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(saveString.toString()));
+    		if(errors.size() <= 0)
+    		{
+    			Workspace.getInstance().setCodeInEditor();
+    		}
+    		else
+    		{
+    			Workspace.getInstance().clearCodeInEditor();
+    		}
 		}
 	}
 	protected void dimensionsChanged(Dimension value){

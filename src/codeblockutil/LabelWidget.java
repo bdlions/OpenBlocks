@@ -22,6 +22,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -35,6 +36,10 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import workspace.Workspace;
+import codegenerator.BlockValidator;
+import codegenerator.XMLToBlockGenerator;
 
 
 public abstract class LabelWidget extends JComponent{
@@ -143,6 +148,23 @@ public abstract class LabelWidget extends JComponent{
                 {
                     setText(textField.getText());
                     blockLabelUpdateComplete(getText());
+                    
+                    //updating code panel
+                    StringBuffer saveString = new StringBuffer();
+                    saveString.append("<?xml version=\"1.0\"?>");
+                    saveString.append("\r\n");
+                    saveString.append("<CODEBLOCKS>");
+                    saveString.append(Workspace.getInstance().getSaveString());
+                    saveString.append("</CODEBLOCKS>");		
+            		List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(saveString.toString()));
+            		if(errors.size() <= 0)
+            		{
+            			Workspace.getInstance().setCodeInEditor();
+            		}
+            		else
+            		{
+            			Workspace.getInstance().clearCodeInEditor();
+            		}
                 }
                 else
                     setText(labelBeforeEdit);

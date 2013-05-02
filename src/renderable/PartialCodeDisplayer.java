@@ -142,13 +142,32 @@ public class PartialCodeDisplayer extends JPanel {
 			}
 		});
     	
+    	JButton closeButtonBottom = new JButton("X");
+    	closeButtonBottom.setBackground(background);
+    	closeButtonBottom.setPreferredSize(new Dimension(50, 20));
+    	closeButtonBottom.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				delete();
+			}
+		});
+    	
     	JPanel closeButtonPanel = new JPanel(new BorderLayout());
     	closeButtonPanel.setBackground(background);
     	closeButtonPanel.add(closeButton, BorderLayout.EAST);
     	
+    	JPanel closeButtonPanelBottom = new JPanel(new BorderLayout());
+    	closeButtonPanelBottom.setBackground(background);
+    	closeButtonPanelBottom.add(closeButtonBottom, BorderLayout.EAST);
+    	
     	
     	closeButton.setSize(10, 10);
     	contentPane.add(closeButtonPanel, BorderLayout.NORTH);
+    	
+    	closeButtonBottom.setSize(10, 10);
+    	contentPane.add(closeButtonPanelBottom, BorderLayout.SOUTH);
     	//contentPane.add(comp)
     	
     	//set up editingPanel, labelPanel and their listeners

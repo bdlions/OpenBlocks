@@ -12,7 +12,9 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 
 import javax.swing.*;
@@ -41,12 +43,22 @@ import javax.swing.text.StyledDocument;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import language.*;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+
+import parser.ParseVariable;
 import renderable.RenderableBlock;
 
 import workspace.*;
@@ -76,6 +88,8 @@ public class WorkspaceController {
 	private static LanguageGenerator languageGenerator;
 	private static Hashtable syntaxMap;
 	
+	public static SearchBar searchBar;
+	
 	public static JMenu menuFile;
 	public static JMenuItem menuItemNew;
 	public static JMenuItem menuItemOpen;
@@ -89,6 +103,7 @@ public class WorkspaceController {
 	public static JMenuItem menuItemValidate;
 	public static JCheckBoxMenuItem checkBoxMenuItemGenerateCCode;
 	public static JCheckBoxMenuItem checkBoxMenuItemGenerateJavaCode;
+	public static JMenuItem menuItemViewCode;
 	
 	public static JMenu menuConfiguration;
 	public static JCheckBoxMenuItem checkBoxMenuItemEnglish;
@@ -124,6 +139,8 @@ public class WorkspaceController {
     
     private static Element langDefRoot;
     
+    public static HashMap<String, String> variableListMap = new HashMap<String, String>();
+    
     //flags 
     private boolean isWorkspacePanelInitialized = false;
     
@@ -131,7 +148,7 @@ public class WorkspaceController {
     protected static Workspace workspace;
     
     protected JPanel workspacePanel;
-    protected SearchBar searchBar;
+    //protected SearchBar searchBar;
     
     //flag to indicate if a new lang definition file has been set
     private boolean langDefDirty = true;
@@ -182,6 +199,36 @@ public class WorkspaceController {
             //set the dirty flag for the language definition file 
             //to true now that a new file has been set
             langDefDirty = true;
+            
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+public void setLangDefFilePathTest(String content){
+        
+        DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder;
+        Document doc;
+        DOMParser parser = new DOMParser();
+        
+        try {
+            builder = factory.newDocumentBuilder();
+            
+            parser.parse(new InputSource(new StringReader(content)));
+             doc = parser.getDocument();
+            
+            langDefRoot = doc.getDocumentElement();
+           
+            //set the dirty flag for the language definition file 
+            //to true now that a new file has been set
+            langDefDirty = true;
+            workspaceLoaded = true;
             
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -321,9 +368,9 @@ public class WorkspaceController {
     public void loadFreshWorkspace(){
         //need to just reset workspace (no need to reset language) unless
         //language was never loaded
-        //reset only if workspace actually exists
-        BlockGenus.setNameToGenus(new HashMap<String, BlockGenus>());
-    	if(workspaceLoaded)
+    	BlockGenus.setNameToGenus(new HashMap<String, BlockGenus>());    	
+    	//reset only if workspace actually exists
+        if(workspaceLoaded)
             resetWorkspace();
         
         if(langDefDirty)
@@ -640,6 +687,8 @@ public class WorkspaceController {
 				}
 				wc.setLangDefFilePath(LANG_DEF_FILEPATH);
                 wc.loadFreshWorkspace();
+                workspace.addCodeEditor();
+                workspace.clearCodeInEditor();
 			}
 		});
 		
@@ -693,7 +742,7 @@ public class WorkspaceController {
 					}
 				}
 				workspace.clearCodeInEditor();
-				wc.openPressed();
+				wc.openPressed(wc);
 			}
 		});
 		String saveString = "Save";
@@ -789,6 +838,8 @@ public class WorkspaceController {
 				}
 				wc.setLangDefFilePath(LANG_DEF_FILEPATH);
                 wc.loadFreshWorkspace(); 
+                workspace.addCodeEditor();
+                workspace.clearCodeInEditor();
 			}
 		});
 		
@@ -946,26 +997,39 @@ public class WorkspaceController {
 			}
 		});
 		
-		
-		/*JMenuItem menuItemGenerateCCode = new JMenuItem("Generate C Code");
-		menuCodeGeneration.add(menuItemGenerateCCode);
-		menuItemGenerateCCode.addActionListener(new ActionListener() 
+		String viewCodeString = "View Code";
+		if (syntaxMap.containsKey(viewCodeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(viewCodeString);
+			viewCodeString = titleEntry.getLabel();
+		}
+		menuItemViewCode = new JMenuItem(viewCodeString);
+		menuCodeGeneration.add(menuItemViewCode);
+		menuItemViewCode.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Generate C Code Clicked.");				
+				List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
+            	if(errors.size() > 0)
+            	{
+            		ValidationErrorDisplayer displayer = new ValidationErrorDisplayer();
+                	displayer.displayError(errors);
+                	displayer.setVisible(true);
+                	
+                	workspace.clearCodeInEditor();
+            	}
+            	else
+            	{
+            		workspace.setCodeInEditor();
+            		String code = workspace.getCode();            	
+                	DisplayCode displayCode = new DisplayCode(syntaxMap);
+                	displayCode.setCode(code);
+                	displayCode.setLocationRelativeTo(null);
+                	displayCode.setVisible(true);
+                	
+            	}			
 			}
 		});
-		JMenuItem menuItemGenerateJavaCode = new JMenuItem("Generate Java Code");
-		menuCodeGeneration.add(menuItemGenerateJavaCode);
-		menuItemGenerateJavaCode.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
-				workspace.loadProjectWithVariable(wc.getSaveString());
-				workspace.setCodeInEditor();
-			}
-		});*/
+		
 		String configurationString = "Configuration";
 		if (syntaxMap.containsKey(configurationString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(configurationString);
@@ -1119,7 +1183,7 @@ public class WorkspaceController {
 		
 		
         //create search bar
-        SearchBar searchBar = new SearchBar("Search blocks", "Search for blocks in the drawers and workspace", workspace);
+        searchBar = new SearchBar("Search blocks", "Search for blocks in the drawers and workspace", workspace);
         for(SearchableContainer con : wc.getAllSearchableContainers()){
             searchBar.addSearchableContainer(con);
         }
@@ -1227,7 +1291,7 @@ public class WorkspaceController {
 					}
 				}
 				workspace.clearCodeInEditor();
-				wc.openPressed();
+				wc.openPressed(wc);
             }
         });
         toolbar.add(openButton);
@@ -1347,7 +1411,7 @@ public class WorkspaceController {
         });
         toolbar.add(validateBbutton);        
         
-        String viewCodeString = "View Code";
+        viewCodeString = "View Code";
 		if (syntaxMap.containsKey(viewCodeString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(viewCodeString);
 			viewCodeString = titleEntry.getLabel();
@@ -1434,7 +1498,7 @@ public class WorkspaceController {
                 		{
                 			addVariableSuccessTitleString = "Success";
                 		}
-                		
+                		WorkspaceController.variableListMap.put(variableName.getValue(), variableName.getVariableType());
                 		wc.langDefDirty = true;
 	            		VariableMaker.addVariable(langDefRoot.getOwnerDocument(), variableName.getValue(), variableName.getVariableType());
 	            		wc.loadProject(wc.getSaveString());
@@ -1453,6 +1517,7 @@ public class WorkspaceController {
 	                	{
 	                		workspace.setCodeInEditor();	                    	
 	                	}
+	                    wc.updateSearchableComponents(wc);
                 	}
             	}
             	
@@ -1632,6 +1697,13 @@ public class WorkspaceController {
 		}
 		checkBoxMenuItemGenerateJavaCode.setText(generateJavaCodeString);
 		
+		String viewCodeString = "View code";
+		if (syntaxMap.containsKey(viewCodeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(viewCodeString);
+			viewCodeString = titleEntry.getLabel();
+		}
+		menuItemViewCode.setText(viewCodeString);
+		
 		String configurationString = "Configuration";
 		if (syntaxMap.containsKey(configurationString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(configurationString);
@@ -1695,12 +1767,6 @@ public class WorkspaceController {
 		}
 		menuItemSnap.setText(snapString);
 		
-		String viewCodeString = "View code";
-		if (syntaxMap.containsKey(viewCodeString)) {
-			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(viewCodeString);
-			viewCodeString = titleEntry.getLabel();
-		}
-		
 		/*newButton.setText(newString);
 		openButton.setText(openString);
 		saveButton.setText(saveString);
@@ -1731,9 +1797,10 @@ public class WorkspaceController {
 	}
 	
 	
-	public void openPressed(){
+	public void openPressed(WorkspaceController wc)
+	{
 		String uploadedFileContent = "";
-		File openedFile = new File("sample.pz");
+		String fileName = "";
 		JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Open pz File");
 
@@ -1751,21 +1818,71 @@ public class WorkspaceController {
 
         //user selects a file
         if (result == JFileChooser.APPROVE_OPTION) {
-        	openedFile = fc.getSelectedFile();
-            fileSavePath = fc.getSelectedFile().getPath();
-            //retrieving text content of the uploaded file
-            uploadedFileContent = readFile(fc.getSelectedFile().getPath());
+        	if(!fc.getSelectedFile().getName().endsWith(".pz"))
+        	{
+        		fileSavePath = fc.getSelectedFile().getPath()+".pz";
+                //retrieving text content of the uploaded file
+                uploadedFileContent = readFile(fc.getSelectedFile().getPath()+".pz");
+                fileName = fc.getSelectedFile().getName()+".pz";
+        	}
+        	else
+        	{
+        		fileSavePath = fc.getSelectedFile().getPath();
+                //retrieving text content of the uploaded file
+                uploadedFileContent = readFile(fc.getSelectedFile().getPath());
+                fileName = fc.getSelectedFile().getName();
+        	}
+        	
 
             if (uploadedFileContent != null) {
+            	String codePart = "";
+            	//String variablePart = "";
+            	String leftPanelPart = "";
+            	if(uploadedFileContent.indexOf("<BlockLangDef>") > 0)
+            	{
+            		codePart = uploadedFileContent.substring(0, uploadedFileContent.indexOf("<BlockLangDef>"));
+            		//leftPanelPart = uploadedFileContent.substring(uploadedFileContent.indexOf("<BlockLangDef>")).trim();
+            		//leftPanelPart = "<?xml version=\"1.0\" encoding=\"UTF-16\"?>"+uploadedFileContent.substring(uploadedFileContent.indexOf("<BlockLangDef>"));                	
+            		leftPanelPart = uploadedFileContent.substring(uploadedFileContent.indexOf("<BlockLangDef>"));
+            	}
+            	else if(uploadedFileContent.indexOf("<CODEBLOCKS>") >= 0)
+            	{
+            		codePart = uploadedFileContent;
+            	}
+            	wc.workspaceLoaded = false;
+            	wc.setLangDefFilePathTest(leftPanelPart);
+            	wc.loadFreshWorkspace();
+            	//ParseVariable parseVariable = new ParseVariable();
+            	/*ParseVariable.ParseVariableList(variablePart);
+            	Set keys = WorkspaceController.variableListMap.keySet();
+    		    for (Iterator i = keys.iterator(); i.hasNext();)
+    		    {
+    		        String key = (String) i.next();
+    		        String value = (String) WorkspaceController.variableListMap.get(key);
+    		        
+    		        wc.langDefDirty = true;
+            		VariableMaker.addVariable(langDefRoot.getOwnerDocument(), key, value);
+            		wc.loadProject(wc.getSaveString());
+            		codeblocks.Block block = new codeblocks.Block(key+"_decl");
+            		Page blockPage = workspace.getPageNamed("Blocks");
+            		WorkspaceWidget ww = workspace.getWidgetAt(new Point(blockPage.getJComponent().getX(), blockPage.getJComponent().getY()));
+            		blockPage.blockDropped(new RenderableBlock(ww, block.getBlockID()));
+            		workspace.cleanUpAllBlocks();
+            		
+    		    }   */         	
+            	wc.updateSearchableComponents(wc);
+            	
+            	
+            	
             	//updating frame title including file name
                 String frameTitle = "OpenBlocksDemo";
         		if (syntaxMap.containsKey(frameTitle)) {
         			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(frameTitle);
         			frameTitle = titleEntry.getLabel();
         		}
-        		frame.setTitle(frameTitle+" "+openedFile.getName());
+        		frame.setTitle(frameTitle+" "+fileName);
         		
-            	loadProject(uploadedFileContent);
+            	loadProject(codePart);
             }            
         }
 	}
@@ -1842,7 +1959,35 @@ public class WorkspaceController {
     		}
     		frame.setTitle(frameTitle+" "+file.getName());
     		
-            writeFile(file,wc.getSaveString());
+    		/*String variablesTag = "<variables>";
+    		Set keys = WorkspaceController.variableListMap.keySet();
+		    for (Iterator i = keys.iterator(); i.hasNext();)
+		    {
+		        String key = (String) i.next();
+		        String value = (String) WorkspaceController.variableListMap.get(key);
+		        variablesTag += "<variable>";
+		        variablesTag += "<name>"+key+"</name>";
+		        variablesTag += "<type>"+value+"</type>";
+		        variablesTag += "</variable>";
+		    }
+		    variablesTag += "</variables>";*/    	
+    		String leftPanelXml = "";
+    		
+    		try
+    		{
+    			TransformerFactory tf = TransformerFactory.newInstance();
+        		Transformer transformer = tf.newTransformer();
+        		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        		StringWriter writer = new StringWriter();
+        		transformer.transform(new DOMSource(WorkspaceController.langDefRoot), new StreamResult(writer));
+        		leftPanelXml = writer.getBuffer().toString();        		
+    		}
+    		catch(Exception ex)
+    		{
+    			
+    		}
+    		
+            writeFile(file,wc.getSaveString()+leftPanelXml);
             //storing this file path to use later if user wants to save
             fileSavePath = file.getPath();
             isFileSaved = true;
@@ -1855,11 +2000,11 @@ public class WorkspaceController {
         File aFile = new File(fileUrl);
         StringBuilder contents = new StringBuilder();
         try {
-            BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(aFile)));
+        	BufferedReader input = new BufferedReader( new InputStreamReader( new FileInputStream(new File(fileUrl)), "UTF-16"));
             try {
                 String line = null;
                 while ((line = input.readLine()) != null) {
-                    contents.append(line+"\n");
+                    contents.append(line);
                 }
             } finally {
                 input.close();
@@ -1875,12 +2020,12 @@ public class WorkspaceController {
      * */
     public static boolean writeFile(File file, String dataString) {
     	String newLine = System.getProperty("line.separator");
-    	dataString = dataString.replaceAll("\n", newLine);
+    	//dataString = dataString.replaceAll("\n", newLine);
         try {
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-            out.print(dataString);
-            out.flush();
-            out.close();
+            BufferedWriter bw = new BufferedWriter( new OutputStreamWriter( new FileOutputStream(file), "UTF-16"));
+            bw.write(dataString);
+            
+            bw.close();
         } catch (IOException e) {
             return false;
         }
@@ -1972,6 +2117,20 @@ public class WorkspaceController {
 			ExternalOption.addCustombyUser(langDefRoot.getOwnerDocument(), "externalvar"+externalVariableCounter,parsedFileContent, "string");
 			wc.loadProject(wc.getSaveString());        		
 			externalVariableCounter++;
+			updateSearchableComponents(wc);
 		}
 	}
+    
+    public void updateSearchableComponents(WorkspaceController wc)
+    {
+    	searchBar.clearSearchableContainer();
+    	for(SearchableContainer con : wc.getAllSearchableContainers()){
+            searchBar.addSearchableContainer(con);
+        }
+    }
+    
+    public static Workspace getWorkspace()
+    {	
+    	return workspace;
+    }
 }

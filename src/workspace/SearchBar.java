@@ -165,6 +165,11 @@ public class SearchBar {
 			containerSet.add(searchable);
 		}
 	}
+	public void clearSearchableContainer() {
+		synchronized(this) {
+			containerSet.clear();
+		}
+	}
 	
 	/**
 	 * Removes a searchable container from the set of searchables queried by this search bar.
