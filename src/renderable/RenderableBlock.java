@@ -38,6 +38,9 @@ import javax.swing.JToolTip;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -61,8 +64,10 @@ import codeblocks.BlockLinkSuggester;
 import codeblocks.BlockLinkSuggestion;
 import codeblocks.BlockShape;
 import codeblocks.BlockStub;
+import codeblocks.ExceptionRule;
 import codeblocks.InfixBlockShape;
 import codeblocks.JComponentDragHandler;
+import codeblocks.MessageResolver;
 import codeblocks.rendering.BlockShapeUtil;
 import codeblockutil.CToolTip;
 import codeblockutil.GraphicsManager;
@@ -140,7 +145,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
             int width = getWidth(), height = getHeight();
             for (ConnectorTag tag : socketTags) {
                 if (!tag.getSocket().hasBlock()) {
-                    Point p = tag.getPixelLocation();
+                    Point p = tag.getErrorLocation();
                     int px = p.x, py = p.y;
                     if (px < 6)
                         px = 6;
@@ -167,7 +172,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 	        int width = getWidth(), height = getHeight();
 	        for (ConnectorTag tag : socketTags) {
 	            if (!tag.getSocket().hasBlock()) {
-	                Point p = tag.getPixelLocation();
+	                Point p = tag.getErrorLocation();
 	                int x = p.x, y = p.y;
 	                if (x < 6)
 	                    x = 6;
@@ -820,6 +825,20 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 		tag.setAbstractLocation(point);
 		
 	}
+
+    /**
+     * Updates the center point location of this socket
+     * 
+     * @param socket - the socket whose point we will update.  Socket MAY NOT BE NULL
+     * @param point - the ABSTRACT location of socket's center.  ABSTRACT LOCATION!!!
+     * 
+     * @requires socket != null and there exist a matching tag for the socket
+     */
+    public void updateSocketPoint(BlockConnector socket, Point2D point, Point2D error) {
+        ConnectorTag tag = this.getConnectorTag(socket);
+        //TODO: what if tag does not exist?  should we throw exception or add new tag?
+        tag.setAbstractLocation(point, error);
+    }
 
 	/**
 	 * Updates the renderable block with the underlying block's before, 
@@ -1657,6 +1676,34 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 		super.processMouseEvent(e);
 	}
 
+	/** The one-time link error tool tip text. */
+	private String linkError;
+	
+	protected void showLinkError(String linkError) {
+	    this.linkError = MessageResolver.getMessage(linkError);
+	    
+	    ToolTipManager manager = ToolTipManager.sharedInstance();
+	    int initialDelay = manager.getInitialDelay();
+	    try {
+            manager.setInitialDelay(1);
+	        manager.mouseMoved(
+	                new MouseEvent(this, 0, 0, 0,
+	                        0, 0, // X-Y of the mouse for the tool tip
+	                        0, false)
+	                );
+	    } finally {
+	        manager.setInitialDelay(initialDelay);
+	    }
+	}
+
+	@Override
+	public String getToolTipText() {
+	    String linkError = this.linkError;
+	    if (linkError != null)
+	        return linkError;
+	    return super.getToolTipText();
+	}
+	
 	public void mouseReleased(MouseEvent e) {
 		if (SwingUtilities.isLeftMouseButton(e)){
 			if (!pickedUp)
@@ -1665,11 +1712,17 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 
 			//if the block was dragged before...then
 			if(dragging){
+			    ExceptionRule.setLastError(null);
 				BlockLink link = getNearbyLink(); //look for nearby link opportunities
 				WorkspaceWidget widget = null;
 
 				// if a suitable link wasn't found, just drop the block
 				if (link == null) {
+				    // display link error message if exists
+				    String linkError = ExceptionRule.getLastError();
+				    if (linkError != null && linkError.length() > 0)
+				        showLinkError(linkError);
+				    
 					widget = lastDragWidget;
 					stopDragging(this, widget);
 				} 
@@ -2198,8 +2251,39 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 	//Tool Tips
 	/////////////////
 	public JToolTip createToolTip(){
-		return new CToolTip(new Color(255,255,225));
+	    String linkError = this.linkError;
+	    if (linkError != null)
+	        return createLinkErrorToolTip(linkError);
+	    else
+	        return new CToolTip(new Color(255,255,225));
 	}
+	
+	/**
+	 * Constructs a one-time link error tool tip.
+	 * 
+	 * @param linkError
+	 * @return
+	 */
+	protected JToolTip createLinkErrorToolTip(String linkError) {
+        CToolTip tooltip = new CToolTip(Color.orange);
+        tooltip.addAncestorListener(new AncestorListener() {
+            
+            @Override
+            public void ancestorRemoved(AncestorEvent event) {
+                RenderableBlock.this.linkError = null;
+            }
+            
+            @Override
+            public void ancestorMoved(AncestorEvent event) {
+            }
+            
+            @Override
+            public void ancestorAdded(AncestorEvent event) {
+            }
+        });
+        return tooltip;
+	}
+	
 	public void setBlockToolTip(String text){
 		this.setToolTipText(text);
 		this.blockLabel.setToolTipText(text);
