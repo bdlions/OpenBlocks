@@ -54,7 +54,6 @@ import codeblocks.*;
 import codegenerator.*;
 
 
-
 /**
  * 
  * The WorkspaceController is the starting point for any program using Open Blocks.
