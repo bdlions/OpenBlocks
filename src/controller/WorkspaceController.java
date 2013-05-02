@@ -271,6 +271,7 @@ public class WorkspaceController {
         BlockLinkChecker.addRule(new CommandRule());
         BlockLinkChecker.addRule(new SocketRule());
         BlockLinkChecker.addRule(new PolyRule());
+        BlockLinkChecker.addRule(new ExceptionRule(root));
         
         //set the dirty flag for the language definition file 
         //to false now that the lang file has been loaded

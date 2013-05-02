@@ -88,7 +88,6 @@ public class FactoryRenderableBlock extends RenderableBlock {
             //translate this e to a MouseEvent for createdRB
             MouseEvent newE = SwingUtilities.convertMouseEvent(this, e, createdRB);
             createdRB.mouseReleased(newE);
-            System.out.println("released2 location: "+createdRB.getLocation());
             createdRB = null;
         }
     }
