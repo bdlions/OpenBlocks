@@ -3,10 +3,15 @@ package renderable;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
+
 import java.awt.Container;
+
+import java.awt.Cursor;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.PopupMenu;
@@ -26,13 +31,24 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+
 import javax.swing.JOptionPane;
+
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JPopupMenu;
+
 import javax.swing.JToolTip;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -54,10 +70,14 @@ import codeblocks.BlockConnectorShape;
 import codeblocks.BlockGenus;
 import codeblocks.BlockLink;
 import codeblocks.BlockLinkChecker;
+import codeblocks.BlockLinkSuggester;
+import codeblocks.BlockLinkSuggestion;
 import codeblocks.BlockShape;
 import codeblocks.BlockStub;
+import codeblocks.ExceptionRule;
 import codeblocks.InfixBlockShape;
 import codeblocks.JComponentDragHandler;
+import codeblocks.MessageResolver;
 import codeblocks.rendering.BlockShapeUtil;
 import codeblockutil.CToolTip;
 import codeblockutil.GraphicsManager;
@@ -89,6 +109,8 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 	private static final  float DRAGGING_ALPHA = 0.66F;
 	/** Mapping from blockID to the corresponding RenderableBlock instance */
 	private static final Map<Long, RenderableBlock> ALL_RENDERABLE_BLOCKS= new HashMap<Long,RenderableBlock>();
+	/** The image representing unconnected block socket handle. */
+    private static final ImageIcon socketErrorIcon = new ImageIcon("support/images/compile-error.png");
 
 
 	///////////////////////
@@ -121,9 +143,64 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 	private BlockShape blockShape;
 	private Area abstractBlockArea;
 	private Area blockArea;
+	private SocketTagsArea socketTagsArea = new SocketTagsArea();
 	/** static drawing area for unstable blocks.  MAY BE NULL */
 	private BufferedImage buffImg = null;
 
+	class SocketTagsArea extends JComponent {
+	    
+	    @Override
+        public boolean contains(int x, int y) {
+            return getSocketAt(x, y) != null;
+        }
+	    
+	    public ConnectorTag getSocketAt(int x, int y) {
+            int width = getWidth(), height = getHeight();
+            for (ConnectorTag tag : socketTags) {
+                if (!tag.getSocket().hasBlock()) {
+                    Point p = tag.getErrorLocation();
+                    int px = p.x, py = p.y;
+                    if (px < 6)
+                        px = 6;
+                    if (px > width - 6)
+                        px = width - 6;
+                    if (py < 6)
+                        py = 6;
+                    if (py > height - 6)
+                        py = height - 6;
+                    
+                    if ((px-x)*(px-x) + (py-y)*(py-y) <= 36)
+                        return tag;
+                }
+            }
+            return null;
+	    }
+	    
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        if (isLoading || dragging)
+	            return;
+	        
+            // print an error icon near each socket central point which is unplugged
+	        int width = getWidth(), height = getHeight();
+	        for (ConnectorTag tag : socketTags) {
+	            if (!tag.getSocket().hasBlock()) {
+	                Point p = tag.getErrorLocation();
+	                int x = p.x, y = p.y;
+	                if (x < 6)
+	                    x = 6;
+	                if (x > width - 6)
+	                    x = width - 6;
+	                if (y < 6)
+	                    y = 6;
+	                if (y > height - 6)
+	                    y = height - 6;
+	                g.drawImage(socketErrorIcon.getImage(), x-8, y-8, null);
+	            }
+	        }
+	    }
+	}
+	
 	//////////////////////////////////////
 	//Internal Managers
 	/** HighlightManager that manages drawing of highlights around this block */
@@ -152,11 +229,11 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 	///////////////////////////
 	//Sockets and Labels
 	/** TODO: Documentation does not exist for these components.  Consult author*/
-	private final NameLabel blockLabel;
+	protected final NameLabel blockLabel;
 	private final PageLabel pageLabel;
-	private final ConnectorTag plugTag;
-	private final ConnectorTag afterTag;
-	private final ConnectorTag beforeTag;
+	protected final ConnectorTag plugTag;
+	protected final ConnectorTag afterTag;
+	protected final ConnectorTag beforeTag;
 	private List<ConnectorTag> socketTags = new ArrayList<ConnectorTag>();
 
 	////////////////////////////////
@@ -201,7 +278,8 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 
 		this.parent = parent;
 		this.blockID = blockID;
-		ALL_RENDERABLE_BLOCKS.put(this.blockID, this);
+		if (!ALL_RENDERABLE_BLOCKS.containsKey(this.blockID))
+		    ALL_RENDERABLE_BLOCKS.put(this.blockID, this);
 
 		//initialize block image map
 		//note: must do this before updateBuffImg();
@@ -256,6 +334,13 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 		if(blockDescription != null){
 			setBlockToolTip(getBlock().getBlockDescription().trim());
 		}
+		
+		if (!(this instanceof FactoryRenderableBlock)) {
+		    socketTagsArea = new SocketTagsArea();
+		    socketTagsArea.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		    add(socketTagsArea);
+		}
+		
 		setCursor(dragHandler.getDragHintCursor());
 	}
 
@@ -754,6 +839,20 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 		
 	}
 
+    /**
+     * Updates the center point location of this socket
+     * 
+     * @param socket - the socket whose point we will update.  Socket MAY NOT BE NULL
+     * @param point - the ABSTRACT location of socket's center.  ABSTRACT LOCATION!!!
+     * 
+     * @requires socket != null and there exist a matching tag for the socket
+     */
+    public void updateSocketPoint(BlockConnector socket, Point2D point, Point2D error) {
+        ConnectorTag tag = this.getConnectorTag(socket);
+        //TODO: what if tag does not exist?  should we throw exception or add new tag?
+        tag.setAbstractLocation(point, error);
+    }
+
 	/**
 	 * Updates the renderable block with the underlying block's before, 
 	 * after, and plug connectors. 
@@ -794,7 +893,11 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 	 * of the BlockShape
 	 */
 	public boolean contains(int x, int y) {
-		return blockArea.contains(x, y);
+		if (blockArea.contains(x, y))
+		    return true;
+		if (socketTagsArea != null && socketTagsArea.contains(x, y))
+		    return true;
+		return false;
 	}
 
 
@@ -1170,11 +1273,16 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 				g2.drawImage(buffImg, 0, 0, null);
 				g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1));
 			} else {
-				g2.drawImage(buffImg, 0, 0,  null);	
+				g2.drawImage(buffImg, 0, 0,  null);
 			}
 		}
 	}
 
+	@Override
+	public void paintChildren(Graphics g) {
+	    super.paintChildren(g);
+	}
+	
 	/**
 	 * Reforms the blockShape of this renderableBlock and saves it into the blockArea while
 	 * updating the bounds of this RenderableBlock.  Used to update the shape and socket 
@@ -1221,6 +1329,8 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 			}
 			label.update(getSocketAbstractPoint(socket));
 		}
+		if (socketTagsArea != null)
+		    socketTagsArea.setSize(getWidth(), getHeight());
 	}
 
 	/**
@@ -1617,9 +1727,38 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 	 * Makes public the protected processMouseEvent() method from Component so that the children within this block
 	 * may pass mouse events to this
 	 */
-	public void processMouseEvent(MouseEvent e){
+	public void processMouseEvent(MouseEvent e) {
 		super.processMouseEvent(e);
 	}
+
+	/** The one-time link error tool tip text. */
+	private String linkError;
+	
+	protected void showLinkError(String linkError) {
+	    this.linkError = MessageResolver.getMessage(linkError);
+	    
+	    ToolTipManager manager = ToolTipManager.sharedInstance();
+	    int initialDelay = manager.getInitialDelay();
+	    try {
+            manager.setInitialDelay(1);
+	        manager.mouseMoved(
+	                new MouseEvent(this, 0, 0, 0,
+	                        0, 0, // X-Y of the mouse for the tool tip
+	                        0, false)
+	                );
+	    } finally {
+	        manager.setInitialDelay(initialDelay);
+	    }
+	}
+
+	@Override
+	public String getToolTipText() {
+	    String linkError = this.linkError;
+	    if (linkError != null)
+	        return linkError;
+	    return super.getToolTipText();
+	}
+	
 	public void mouseReleased(MouseEvent e) {
 		if (SwingUtilities.isLeftMouseButton(e)){
 			if (!pickedUp)
@@ -1628,11 +1767,17 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 
 			//if the block was dragged before...then
 			if(dragging){
+			    ExceptionRule.setLastError(null);
 				BlockLink link = getNearbyLink(); //look for nearby link opportunities
 				WorkspaceWidget widget = null;
 
 				// if a suitable link wasn't found, just drop the block
 				if (link == null) {
+				    // display link error message if exists
+				    String linkError = ExceptionRule.getLastError();
+				    if (linkError != null && linkError.length() > 0)
+				        showLinkError(linkError);
+				    
 					widget = lastDragWidget;
 					stopDragging(this, widget);
 				} 
@@ -1681,12 +1826,23 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 			}
 		}
 		pickedUp = false;
-		if(e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e) || e.isControlDown()){
+		
+        ConnectorTag socketTag = null;
+        if (socketTagsArea != null)
+            socketTag = socketTagsArea.getSocketAt(e.getX(), e.getY());
+        
+        if (socketTag != null) {
+            List<BlockLinkSuggestion> suggestions = BlockLinkSuggester.suggest(getBlock(), socketTag.getSocket());
+            JPopupMenu popup = createSuggestionPopup(socketTag, suggestions);
+            popup.show(RenderableBlock.this, e.getX(), e.getY());
+        } else if (e.isPopupTrigger() || SwingUtilities.isRightMouseButton(e) || e.isControlDown()) {
 			//add context menu at right click location to provide functionality
 			//for adding new comments and removing comments
-			PopupMenu popup = ContextMenu.getContextMenuFor(this);
-			add(popup);
-			popup.show(this, e.getX(), e.getY());
+		    if (socketTagsArea == null || !socketTagsArea.contains(e.getX(), e.getY())) {
+		        PopupMenu popup = ContextMenu.getContextMenuFor(this);
+		        add(popup);
+		        popup.show(this, e.getX(), e.getY());
+		    }
 		}
 		Workspace.getInstance().getMiniMap().repaint();
 		
@@ -1706,6 +1862,76 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 			Workspace.getInstance().clearCodeInEditor();
 		}
 	}
+
+	private static String typeToText(String type) {
+	    if (type.equals("cmd"))
+	        return "Command";
+	    if (type.equals("poly"))
+	        return "Anything";
+	    if (type.equals("poly-list"))
+	        return "List";
+	    if (type.equals("boolean"))
+	        return "Boolean";
+	    if (type.equals("number"))
+	        return "Number";
+	    if (type.equals("string"))
+	        return "String";
+	    return type;
+	}
+	
+    protected JPopupMenu createSuggestionPopup(ConnectorTag socketTag, List<BlockLinkSuggestion> suggestions) {
+        JPopupMenu popup = new JPopupMenu();
+        popup.setLayout(new GridLayout(0, 1));
+        // create popup menu title
+        JLabel title = new JLabel(typeToText(socketTag.getSocket().getKind()), SwingConstants.CENTER);
+        title.setBackground(Color.lightGray);
+        title.setOpaque(true);
+        popup.add(title);
+
+        Point socketLocationOnScreen = socketTag.getPixelLocation();
+        Point p = getLocationOnScreen();
+        socketLocationOnScreen.translate(p.x, p.y);
+        
+        Map<String, Map<String, JMenu>> types = new TreeMap<String, Map<String, JMenu>>();
+        for (BlockLinkSuggestion suggestion : suggestions) {
+            // get submenu for given suggestion type
+            String type = suggestion.getConnector().getKind();
+            Map<String, JMenu> menus = types.get(type);
+            if (menus == null)
+                types.put(type, menus = new TreeMap<String, JMenu>());
+            
+            // get submenu for given suggestion drawer
+            String drawer = suggestion.getDrawerName();
+            JMenu menu = menus.get(drawer);
+            if (menu == null) {
+                menus.put(drawer, menu = new JMenu(drawer));
+                menu.getPopupMenu().setLayout(new MeshLayout(0, 1));
+            }
+            
+            // add suggestion block menu item
+            LinkFactoryRenderableBlock suggestionBlock = new LinkFactoryRenderableBlock(parent, socketLocationOnScreen, suggestion.getBlock().getBlockID(), suggestion.getConnector());
+            suggestionBlock.setMinimumSize(suggestionBlock.getSize());
+            suggestionBlock.setPreferredSize(suggestionBlock.getSize());
+            suggestionBlock.setPopupMenu(popup);
+            menu.add(suggestionBlock);
+        }
+        
+        // repack double nested map into popup menu
+        if (types.size() == 1)
+            for (JMenu menu : types.values().iterator().next().values())
+                popup.add(menu);
+        else {
+            for (String type : types.keySet()) {
+                JMenu menu = new JMenu(typeToText(type));
+                for (JMenu subMenu : types.get(type).values())
+                    menu.add(subMenu);
+                popup.add(menu);
+            }
+        }
+        
+        return popup;
+    }
+	
 	public void mouseDragged(MouseEvent e) { 
 		if (SwingUtilities.isLeftMouseButton(e)){
 			if (!pickedUp)
@@ -1781,7 +2007,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 		}
 	}
 	public void mousePressed(MouseEvent e) {
-		if (SwingUtilities.isLeftMouseButton(e)){
+        if (SwingUtilities.isLeftMouseButton(e)){
 			dragHandler.mousePressed(e);
 			pickedUp = true; //mark this block as currently being picked up
 		}
@@ -2107,8 +2333,39 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 	//Tool Tips
 	/////////////////
 	public JToolTip createToolTip(){
-		return new CToolTip(new Color(255,255,225));
+	    String linkError = this.linkError;
+	    if (linkError != null)
+	        return createLinkErrorToolTip(linkError);
+	    else
+	        return new CToolTip(new Color(255,255,225));
 	}
+	
+	/**
+	 * Constructs a one-time link error tool tip.
+	 * 
+	 * @param linkError
+	 * @return
+	 */
+	protected JToolTip createLinkErrorToolTip(String linkError) {
+        CToolTip tooltip = new CToolTip(Color.orange);
+        tooltip.addAncestorListener(new AncestorListener() {
+            
+            @Override
+            public void ancestorRemoved(AncestorEvent event) {
+                RenderableBlock.this.linkError = null;
+            }
+            
+            @Override
+            public void ancestorMoved(AncestorEvent event) {
+            }
+            
+            @Override
+            public void ancestorAdded(AncestorEvent event) {
+            }
+        });
+        return tooltip;
+	}
+	
 	public void setBlockToolTip(String text){
 		this.setToolTipText(text);
 		this.blockLabel.setToolTipText(text);

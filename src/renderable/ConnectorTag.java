@@ -10,6 +10,7 @@ class ConnectorTag{
 	private double zoom = 1.0;
 	private SocketLabel label;
 	private Point aLoc;
+    private Point eLoc;
 	private BlockConnector connector;
 	private Dimension dimension;
 	ConnectorTag(BlockConnector connector){
@@ -50,9 +51,14 @@ class ConnectorTag{
 		//return this.dimension;
 	}
 	void setAbstractLocation(Point2D p) {
-		//we can't do aLoc=loc because then we can mutate aLoc by mutating loc
-		aLoc = new Point((int)p.getX(), (int)p.getY());
+	    setAbstractLocation(p, null);
 	}
+    void setAbstractLocation(Point2D p, Point2D r) {
+        //we can't do aLoc=loc because then we can mutate aLoc by mutating loc
+        aLoc = new Point((int)p.getX(), (int)p.getY());
+        if (r != null)
+            eLoc = new Point((int)r.getX(), (int)r.getY());
+    }
 	Point getAbstractLocation() {
 		//we can't do aLoc=loc because then we can mutate aLoc by mutating loc
 		return aLoc.getLocation();
@@ -60,4 +66,9 @@ class ConnectorTag{
 	Point getPixelLocation() {
 		return new Point(rescale(aLoc.x), rescale(aLoc.y));
 	}
+    Point getErrorLocation() {
+        if (eLoc != null)
+            return new Point(rescale(eLoc.x), rescale(eLoc.y));
+        return getPixelLocation();
+    }
 }
