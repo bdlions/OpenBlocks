@@ -58,7 +58,6 @@ import org.xml.sax.SAXException;
 
 import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 
-import parser.ParseVariable;
 import renderable.RenderableBlock;
 
 
@@ -1857,24 +1856,7 @@ public void setLangDefFilePathTest(String content){
             	wc.workspaceLoaded = false;
             	wc.setLangDefFilePathTest(leftPanelPart);
             	wc.loadFreshWorkspace();
-            	//ParseVariable parseVariable = new ParseVariable();
-            	/*ParseVariable.ParseVariableList(variablePart);
-            	Set keys = WorkspaceController.variableListMap.keySet();
-    		    for (Iterator i = keys.iterator(); i.hasNext();)
-    		    {
-    		        String key = (String) i.next();
-    		        String value = (String) WorkspaceController.variableListMap.get(key);
-    		        
-    		        wc.langDefDirty = true;
-            		VariableMaker.addVariable(langDefRoot.getOwnerDocument(), key, value);
-            		wc.loadProject(wc.getSaveString());
-            		codeblocks.Block block = new codeblocks.Block(key+"_decl");
-            		Page blockPage = workspace.getPageNamed("Blocks");
-            		WorkspaceWidget ww = workspace.getWidgetAt(new Point(blockPage.getJComponent().getX(), blockPage.getJComponent().getY()));
-            		blockPage.blockDropped(new RenderableBlock(ww, block.getBlockID()));
-            		workspace.cleanUpAllBlocks();
-            		
-    		    }   */         	
+         	
             	wc.updateSearchableComponents(wc);
             	
             	
@@ -1888,6 +1870,16 @@ public void setLangDefFilePathTest(String content){
         		frame.setTitle(frameTitle+" "+fileName);
         		
             	loadProject(codePart);
+            	
+            	List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
+            	if(errors.size() > 0)
+            	{
+            		workspace.clearCodeInEditor();
+            	}
+            	else
+            	{
+            		workspace.setCodeInEditor();	                    	
+            	}
             }            
         }
 	}
@@ -1906,10 +1898,18 @@ public void setLangDefFilePathTest(String content){
         {
             try 
             {
+            	String leftPanelXml = "";
+            	TransformerFactory tf = TransformerFactory.newInstance();
+        		Transformer transformer = tf.newTransformer();
+        		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        		StringWriter writer = new StringWriter();
+        		transformer.transform(new DOMSource(WorkspaceController.langDefRoot), new StreamResult(writer));
+        		leftPanelXml = writer.getBuffer().toString();       
+        		
             	//if file is saved for the first time before then variable "fileSavePath" is updated there
             	FileWriter fstream = new FileWriter(fileSavePath);
                 BufferedWriter out = new BufferedWriter(fstream);
-                out.write(wc.getSaveString());
+                out.write(wc.getSaveString()+leftPanelXml);
                 out.close();
             }
             catch(Exception ex)
@@ -1989,7 +1989,7 @@ public void setLangDefFilePathTest(String content){
     		}
     		catch(Exception ex)
     		{
-    			
+    			System.out.println("Error while generating left panel xml");
     		}
     		
             writeFile(file,wc.getSaveString()+leftPanelXml);

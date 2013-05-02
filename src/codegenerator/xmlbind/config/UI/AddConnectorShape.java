@@ -93,7 +93,7 @@ public class AddConnectorShape extends JDialog {
 				if(!textField.getText().equals("")  && !textField.getText().trim().equals(""))
 				{
 					BlockConnectorShape connectorShape = new BlockConnectorShape();
-					connectorShape.setShapeNumber(1);
+					connectorShape.setShapeNumber((int)comboBox.getSelectedItem());
 					connectorShape.setShapeType(textField.getText());
 					
 					model.addElement(connectorShape);
