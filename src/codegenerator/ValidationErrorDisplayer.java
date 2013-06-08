@@ -1,5 +1,7 @@
 package codegenerator;
 
+import general.DisplayMessage;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.util.List;
@@ -7,13 +9,14 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JDialog;
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ValidationErrorDisplayer extends JFrame {
+public class ValidationErrorDisplayer extends JDialog {
 
 	private JPanel contentPane;
 	JTextPane textPane;
@@ -40,7 +43,9 @@ public class ValidationErrorDisplayer extends JFrame {
 	 * Create the frame.
 	 */
 	public ValidationErrorDisplayer() {
-		setTitle("All Validation Errors");
+		setModal(true);
+		String validationWindowTitle = DisplayMessage.convertedTextInSelectedLanguage("All Validation Errors");
+		setTitle(validationWindowTitle);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 600, 400);
 		contentPane = new JPanel();
@@ -56,8 +61,8 @@ public class ValidationErrorDisplayer extends JFrame {
 		
 		panel = new JPanel();
 		contentPane.add(panel, BorderLayout.SOUTH);
-		
-		btnClose = new JButton("Ok");
+		String okString = DisplayMessage.convertedTextInSelectedLanguage("Ok");
+		btnClose = new JButton(okString);
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ValidationErrorDisplayer.this.dispose();

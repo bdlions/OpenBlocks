@@ -30,7 +30,7 @@ import codeblockutil.CQueryField;
  */
 public class SearchBar {
 	private final CQueryField searchPanel;
-	private final JTextField searchBar;
+	public JTextField searchBar;
     private final String defaultText;
 	
     private Set<SearchableContainer> containerSet = new HashSet<SearchableContainer>();
@@ -313,5 +313,5 @@ public class SearchBar {
             	}
             }
         }
-    }
+    }    
 }

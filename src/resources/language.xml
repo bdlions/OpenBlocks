@@ -14,8 +14,32 @@
 			<entry name="Open">
 				<label>Open</label>
 			</entry>
+			<entry name="Open pz File">
+				<label>Open pz File</label>
+			</entry>
+			<entry name="File name">
+				<label>File name</label>
+			</entry>
+			<entry name="Files of type">
+				<label>Files of type</label>
+			</entry>
+			<entry name="Open selected file">
+				<label>Open selected file</label>
+			</entry>
+			<entry name="Abort file chooser dialog">
+				<label>Abort file chooser dialog</label>
+			</entry>
+			<entry name="PZ Files (*.pz)">
+				<label>PZ Files (*.pz)</label>
+			</entry>
 			<entry name="Save">
 				<label>Save</label>
+			</entry>
+			<entry name="File is saved successfully">
+				<label>File is saved successfully</label>
+			</entry>
+			<entry name="Save selected file">
+				<label>Save selected file</label>
 			</entry>
 			<entry name="SaveAs">
 				<label>Save As</label>
@@ -59,6 +83,9 @@
 			<entry name="External">
 				<label>External</label>
 			</entry>
+			<entry name="Upload">
+				<label>Upload</label>
+			</entry>
 			<entry name="Help">
 				<label>Help</label>
 			</entry>
@@ -71,37 +98,16 @@
 			<entry name="Snap">
 				<label>Snap</label>
 			</entry>
-			<entry name="Undo">
-				<label>Undo</label>
-			</entry>
-			<entry name="Redo">
-				<label>Redo</label>
-			</entry>
-			<entry name="Cut">
-				<label>Cut</label>
-			</entry>
-			<entry name="Copy">
-				<label>Copy</label>
-			</entry>
-			<entry name="Paste">
-				<label>Paste</label>
-			</entry>
-			<entry name="Delete">
-				<label>Delete</label>
-			</entry>
-			<entry name="Validate">
-				<label>Validate</label>
-			</entry>
 			<entry name="Add Variable">
 				<label>Add Variable</label>
 			</entry>
-			<entry name="AddVariableTitle">
+			<entry name="New Variable">
 				<label>New Variable</label>
 			</entry>
-			<entry name="VariableNameLabel">
+			<entry name="Name">
 				<label>Name</label>
 			</entry>
-			<entry name="VariableTypeLabel">
+			<entry name="Type">
 				<label>Type</label>
 			</entry>
 			<entry name="Ok">
@@ -110,40 +116,31 @@
 			<entry name="Cancel">
 				<label>Cancel</label>
 			</entry>
-			<entry name="AddVariableErrorMessage">
-				<label>This name is invalid. please add a vaild variable name.</label>
-			</entry>
-			<entry name="AddVariableErrorMessageTitle">
+			<entry name="Error">
 				<label>Error</label>
 			</entry>
-			<entry name="VariableExistsMessage">
+			<entry name="This name is invalid. Please add a vaild variable name">
+				<label>This name is invalid. Please add a vaild variable name.</label>
+			</entry>
+			<entry name="Variable exists with the same name">
 				<label>Variable exists with the same name.</label>
 			</entry>
-			<entry name="VariableExistsMessage">
-				<label>Variable exists with the same name.</label>
+			<entry name="Success">
+				<label>Success</label>
 			</entry>
-			<entry name="VariableExistsMessageTitle">
-				<label>Error</label>
-			</entry>
-			<entry name="AddVariableSuccessMessage">
+			<entry name="Variable is added successfully">
 				<label>Variable is added successfully.</label>
 			</entry>
-			<entry name="AddVariableSuccessMessageTitle">
-				<label>Success</label>
+			<entry name="Displaying Code">
+				<label>Displaying Code</label>
 			</entry>
-			<entry name="DisplayCodeWindowTitle">
-				<label>Displaying Code English</label>
-			</entry>
-			<entry name="CopyToClipBoard">
+			<entry name="Copy to Clipboard">
 				<label>Copy to Clipboard</label>
 			</entry>
-			<entry name="CopyToClipBoardSuccess">
+			<entry name="Code is saved into clipboard successfully">
 				<label>Code is saved into clipboard successfully.</label>
 			</entry>
-			<entry name="CopyToClipBoardSuccessTitle">
-				<label>Success</label>
-			</entry>
-			<entry name="SaveConfirmation">
+			<entry name="Do you want to save your current work">
 				<label>Do you want to save your current work?</label>
 			</entry>
 			<entry name="Yes">
@@ -151,304 +148,583 @@
 			</entry>
 			<entry name="No">
 				<label>No</label>
+			</entry>
+			<entry name="No Error">
+				<label>No error</label>
+			</entry>
+			<entry name="Overwrite">
+				<label>Overwrite</label>
+			</entry>
+			<entry name="Overwrite existing file">
+				<label>Overwrite existing file</label>
+			</entry>
+			<entry name="Message">
+				<label>Message</label>
+			</entry>
+			<entry name="Each variable must be in separate line">
+				<label>Each variable must be in separate line</label>
+			</entry>
+			<entry name="Please upload correct file">
+				<label>Please upload correct file</label>
+			</entry>
+			<entry name="Search blocks">
+				<label>Search blocks</label>
+			</entry>
+			<entry name="Search for blocks in the drawers and workspace">
+				<label>Search for blocks in the drawers and workspace</label>
+			</entry>
+			<entry name="Please enter valid input within the range">
+				<label>Please enter valid input within the range</label>
+			</entry>
+			<entry name="Please enter valid input within the length">
+				<label>Please enter valid input within the length</label>
+			</entry>
+			<entry name="You are not allowed to drop this component here">
+				<label>You are not allowed to drop this component here</label>
+			</entry>
+			<entry name="You are not allowed to drop this element twice">
+				<label>You are not allowed to drop this element twice</label>
+			</entry>
+			<entry name="SnapAbout">
+				<label>Name:Snap. Version:1.0. Snap Java</label>
+			</entry>	
+			<entry name="can't be added as single data block">
+				<label>can't be added as single data block</label>
+			</entry>	
+			<entry name="Please declare the variable named">
+				<label>Please declare the variable named</label>
+			</entry>
+			<entry name="block is missing it's then block">
+				<label>block is missing it's then block</label>
+			</entry>	
+			<entry name="block is missing it's else block">
+				<label>block is missing it's else block</label>
+			</entry>
+			<entry name="block is missing it's condition block">
+				<label>block is missing it's condition block</label>
+			</entry>
+			<entry name="parameter is missing in block named">
+				<label>parameter is missing in block named</label>
+			</entry>
+			<entry name="parameters are missing in block named">
+				<label>parameters are missing in block named</label>
+			</entry>
+			<entry name="Initialize variable named">
+				<label>Initialize variable named</label>
+			</entry>
+			<entry name="Initialize correctly for variable named">
+				<label>Initialize correctly for variable named</label>
+			</entry>
+			<entry name="Set variable named">
+				<label>Set variable named</label>
+			</entry>
+			<entry name="Invalid set for variable named">
+				<label>Invalid set for variable named</label>
+			</entry>
+			<entry name="Socket isn't defined for block named">
+				<label>Socket isn't defined for block named</label>
+			</entry>
+			<entry name="An illegal block has been found which id is">
+				<label>An illegal block has been found which id is</label>
+			</entry>
+			<entry name="block is missing the plug">
+				<label>block is missing the plug</label>
+			</entry>
+			<entry name="block is missing the connector">
+				<label>block is missing the connector</label>
+			</entry>
+			<entry name="block is missing the left part">
+				<label>block is missing the left part</label>
+			</entry>
+			<entry name="block is missing the right part">
+				<label>block is missing the right part</label>
+			</entry>
+			<entry name="All Validation Errors">
+				<label>All Validation Errors</label>
 			</entry>
 		</language>
 		<language name="Spanish">
 			<entry name="OpenBlocksDemo">
-				<label>OpenBlocks Demo</label>
+				<label>OpenBlocks Demo*</label>
 			</entry>
 			<entry name="File">
-				<label>Archivo</label>
+				<label>File*</label>
 			</entry>
 			<entry name="New">
-				<label>Nuevo</label>
+				<label>New*</label>
 			</entry>	
 			<entry name="Open">
-				<label>Abrir</label>
+				<label>Open*</label>
+			</entry>
+			<entry name="Open pz File">
+				<label>Open pz File*</label>
+			</entry>
+			<entry name="File name">
+				<label>File name*</label>
+			</entry>
+			<entry name="Files of type">
+				<label>Files of type*</label>
+			</entry>
+			<entry name="Open selected file">
+				<label>Open selected file*</label>
+			</entry>
+			<entry name="Abort file chooser dialog">
+				<label>Abort file chooser dialog*</label>
+			</entry>
+			<entry name="PZ Files (*.pz)">
+				<label>PZ Files (*.pz)*</label>
 			</entry>
 			<entry name="Save">
-				<label>Grabar</label>
+				<label>Save*</label>
+			</entry>
+			<entry name="File is saved successfully">
+				<label>File is saved successfully*</label>
+			</entry>
+			<entry name="Save selected file">
+				<label>Save selected file*</label>
 			</entry>
 			<entry name="SaveAs">
-				<label>Grabar como</label>
-			</entry>
-			<entry name="Close">
-				<label>Close</label>
+				<label>Save As*</label>
 			</entry>	
+			<entry name="Close">
+				<label>Close*</label>
+			</entry>
 			<entry name="Print">
-				<label>Imprimir</label>
+				<label>Print*</label>
 			</entry>	
 			<entry name="Exit">
-				<label>Salir</label>
+				<label>Exit*</label>
 			</entry>	
 			<entry name="Code generated on the fly">
-				<label>Generar Codigo</label>
+				<label>Code generated on the fly*</label>
 			</entry>
 			<entry name="Validate">
-				<label>Validar</label>
+				<label>Validate*</label>
 			</entry>
 			<entry name="Generate C Code">
-				<label>Generar Codigo C</label>
+				<label>Generate C Code*</label>
 			</entry>	
 			<entry name="Generate Java Code">
-				<label>Generar Codigo Java</label>
+				<label>Generate Java Code*</label>
 			</entry>
 			<entry name="View Code">
-				<label>View Code</label>
+				<label>View Code*</label>
 			</entry>
 			<entry name="Configuration">
-				<label>Configuracion</label>
+				<label>Configuration*</label>
 			</entry>
 			<entry name="English">
-				<label>Ingles</label>
+				<label>English*</label>
 			</entry>
 			<entry name="Spanish">
-				<label>Espanol</label>
+				<label>Spanish*</label>
 			</entry>			
 			<entry name="Francis">
-				<label>Frances</label>
+				<label>Francis*</label>
 			</entry>
 			<entry name="External">
-				<label>External</label>
+				<label>External*</label>
+			</entry>
+			<entry name="Upload">
+				<label>Upload*</label>
 			</entry>
 			<entry name="Help">
-				<label>Ayuda</label>
+				<label>Help*</label>
 			</entry>
 			<entry name="Online Help">
-				<label>Ayuda en linea</label>
+				<label>Online Help*</label>
 			</entry>
 			<entry name="About">
-				<label>Infomacion</label>
+				<label>About*</label>
 			</entry>
 			<entry name="Snap">
-				<label>Snap</label>
-			</entry>
-			<entry name="Undo">
-				<label>Undo</label>
-			</entry>
-			<entry name="Redo">
-				<label>Redo</label>
-			</entry>
-			<entry name="Cut">
-				<label>Cortar</label>
-			</entry>
-			<entry name="Copy">
-				<label>Copiar</label>
-			</entry>
-			<entry name="Paste">
-				<label>Pegar</label>
-			</entry>
-			<entry name="Delete">
-				<label>Borrar</label>
-			</entry>
-			<entry name="Validate">
-				<label>Validate</label>
+				<label>Snap*</label>
 			</entry>
 			<entry name="Add Variable">
-				<label>Add Variable</label>
+				<label>Add Variable*</label>
 			</entry>
-			<entry name="AddVariableTitle">
-				<label>New Variable</label>
+			<entry name="New Variable">
+				<label>New Variable*</label>
 			</entry>
-			<entry name="VariableNameLabel">
-				<label>Name</label>
+			<entry name="Name">
+				<label>Name*</label>
 			</entry>
-			<entry name="VariableTypeLabel">
-				<label>Type</label>
+			<entry name="Type">
+				<label>Type*</label>
 			</entry>
 			<entry name="Ok">
-				<label>Ok</label>
+				<label>Ok*</label>
 			</entry>
 			<entry name="Cancel">
-				<label>Cancel</label>
+				<label>Cancel*</label>
 			</entry>
-			<entry name="AddVariableErrorMessage">
-				<label>This name is invalid. please add a vaild variable name.</label>
+			<entry name="Error">
+				<label>Error*</label>
 			</entry>
-			<entry name="AddVariableErrorMessageTitle">
-				<label>Error</label>
+			<entry name="This name is invalid. Please add a vaild variable name">
+				<label>This name is invalid. Please add a vaild variable name.*</label>
 			</entry>
-			<entry name="VariableExistsMessage">
-				<label>Variable exists with the same name.</label>
+			<entry name="Variable exists with the same name">
+				<label>Variable exists with the same name.*</label>
 			</entry>
-			<entry name="VariableExistsMessageTitle">
-				<label>Error</label>
+			<entry name="Success">
+				<label>Success*</label>
 			</entry>
-			<entry name="AddVariableSuccessMessage">
-				<label>Variable is added successfully.</label>
+			<entry name="Variable is added successfully">
+				<label>Variable is added successfully.*</label>
 			</entry>
-			<entry name="AddVariableSuccessMessageTitle">
-				<label>Success</label>
+			<entry name="Displaying Code">
+				<label>Displaying Code*</label>
 			</entry>
-			<entry name="DisplayCodeWindowTitle">
-				<label>Displaying Code</label>
+			<entry name="Copy to Clipboard">
+				<label>Copy to Clipboard*</label>
 			</entry>
-			<entry name="CopyToClipBoard">
-				<label>Copy to Clipboard</label>
+			<entry name="Code is saved into clipboard successfully">
+				<label>Code is saved into clipboard successfully.*</label>
 			</entry>
-			<entry name="CopyToClipBoardSuccess">
-				<label>Code is saved into clipboard successfully.</label>
-			</entry>
-			<entry name="CopyToClipBoardSuccessTitle">
-				<label>Success</label>
-			</entry>
-			<entry name="SaveConfirmation">
-				<label>Do you want to save your current work?</label>
+			<entry name="Do you want to save your current work">
+				<label>Do you want to save your current work?*</label>
 			</entry>
 			<entry name="Yes">
-				<label>Yes</label>
+				<label>Yes*</label>
 			</entry>
 			<entry name="No">
-				<label>No</label>
+				<label>No*</label>
+			</entry>
+			<entry name="Overwrite">
+				<label>Overwrite*</label>
+			</entry>
+			<entry name="Overwrite existing file">
+				<label>Overwrite existing file*</label>
+			</entry>
+			<entry name="No Error">
+				<label>No error*</label>
+			</entry>
+			<entry name="Message">
+				<label>Message*</label>
+			</entry>
+			<entry name="Each variable must be in separate line">
+				<label>Each variable must be in separate line*</label>
+			</entry>
+			<entry name="Please upload correct file">
+				<label>Please upload correct file*</label>
+			</entry>
+			<entry name="Search blocks">
+				<label>Search blocks*</label>
+			</entry>
+			<entry name="Search for blocks in the drawers and workspace">
+				<label>Search for blocks in the drawers and workspace*</label>
+			</entry>
+			<entry name="Please enter valid input within the range">
+				<label>Please enter valid input within the range*</label>
+			</entry>
+			<entry name="Please enter valid input within the length">
+				<label>Please enter valid input within the length*</label>
+			</entry>
+			<entry name="You are not allowed to drop this component here">
+				<label>You are not allowed to drop this component here*</label>
+			</entry>
+			<entry name="You are not allowed to drop this element twice">
+				<label>You are not allowed to drop this element twice*</label>
+			</entry>
+			<entry name="SnapAbout">
+				<label>Name:Snap. Version:1.0. Snap Java*</label>
+			</entry>
+			<entry name="can't be added as single data block">
+				<label>can't be added as single data block*</label>
+			</entry>
+			<entry name="Please declare the variable named">
+				<label>Please declare the variable named*</label>
+			</entry>	
+			<entry name="block is missing it's then block">
+				<label>block is missing it's then block*</label>
+			</entry>	
+			<entry name="block is missing it's else block">
+				<label>block is missing it's else block*</label>
+			</entry>
+			<entry name="block is missing it's condition block">
+				<label>block is missing it's condition block*</label>
+			</entry>
+			<entry name="parameter is missing in block named">
+				<label>parameter is missing in block named*</label>
+			</entry>
+			<entry name="parameters are missing in block named">
+				<label>parameters are missing in block named*</label>
+			</entry>	
+			<entry name="Initialize variable named">
+				<label>Initialize variable named*</label>
+			</entry>	
+			<entry name="Initialize correctly for variable named">
+				<label>Initialize correctly for variable named*</label>
+			</entry>
+			<entry name="Set variable named">
+				<label>Set variable named*</label>
+			</entry>
+			<entry name="Invalid set for variable named">
+				<label>Invalid set for variable named*</label>
+			</entry>
+			<entry name="Socket isn't defined for block named">
+				<label>Socket isn't defined for block named*</label>
+			</entry>
+			<entry name="An illegal block has been found which id is">
+				<label>An illegal block has been found which id is*</label>
+			</entry>
+			<entry name="block is missing the plug">
+				<label>block is missing the plug*</label>
+			</entry>
+			<entry name="block is missing the connector">
+				<label>block is missing the connector*</label>
+			</entry>
+			<entry name="block is missing the left part">
+				<label>block is missing the left part*</label>
+			</entry>
+			<entry name="block is missing the right part">
+				<label>block is missing the right part*</label>
+			</entry>
+			<entry name="All Validation Errors">
+				<label>All Validation Errors*</label>
 			</entry>
 		</language>
 		<language name="Francis">
 			<entry name="OpenBlocksDemo">
-				<label>OpenBlocks Demo</label>
+				<label>OpenBlocks Demo**</label>
 			</entry>
 			<entry name="File">
-				<label>Dosier</label>
+				<label>File**</label>
 			</entry>
 			<entry name="New">
-				<label>Neuf</label>
+				<label>New**</label>
 			</entry>	
 			<entry name="Open">
-				<label>Ouvrir</label>
+				<label>Open**</label>
+			</entry>
+			<entry name="Open pz File">
+				<label>Open pz File**</label>
+			</entry>
+			<entry name="File name">
+				<label>File name**</label>
+			</entry>
+			<entry name="Files of type">
+				<label>Files of type**</label>
+			</entry>
+			<entry name="Open selected file">
+				<label>Open selected file**</label>
+			</entry>
+			<entry name="Abort file chooser dialog">
+				<label>Abort file chooser dialog**</label>
+			</entry>
+			<entry name="PZ Files (*.pz)">
+				<label>PZ Files (*.pz)**</label>
 			</entry>
 			<entry name="Save">
-				<label>Grabar</label>
+				<label>Save**</label>
+			</entry>
+			<entry name="File is saved successfully">
+				<label>File is saved successfully**</label>
+			</entry>
+			<entry name="Save selected file">
+				<label>Save selected file**</label>
 			</entry>
 			<entry name="SaveAs">
-				<label>Grabar como</label>
-			</entry>
-			<entry name="Close">
-				<label>Close</label>
+				<label>Save As**</label>
 			</entry>	
+			<entry name="Close">
+				<label>Close**</label>
+			</entry>
 			<entry name="Print">
-				<label>Imprime</label>
+				<label>Print**</label>
 			</entry>	
 			<entry name="Exit">
-				<label>Ferme</label>
+				<label>Exit**</label>
 			</entry>	
 			<entry name="Code generated on the fly">
-				<label>Gen Codigo</label>
+				<label>Code generated on the fly**</label>
 			</entry>
 			<entry name="Validate">
-				<label>Validee</label>
+				<label>Validate**</label>
 			</entry>
 			<entry name="Generate C Code">
-				<label>Gen Codigo C</label>
+				<label>Generate C Code**</label>
 			</entry>	
 			<entry name="Generate Java Code">
-				<label>Gen Codigo Java</label>
+				<label>Generate Java Code**</label>
 			</entry>
 			<entry name="View Code">
-				<label>View Code</label>
+				<label>View Code**</label>
 			</entry>
 			<entry name="Configuration">
-				<label>Configuracion</label>
+				<label>Configuration**</label>
 			</entry>
 			<entry name="English">
-				<label>Ingle</label>
-			</entry>	
-			<entry name="Francis">
-				<label>Frances</label>
+				<label>English**</label>
 			</entry>
 			<entry name="Spanish">
-				<label>Espanol</label>
+				<label>Spanish**</label>
+			</entry>			
+			<entry name="Francis">
+				<label>Francis**</label>
 			</entry>
 			<entry name="External">
-				<label>External</label>
+				<label>External**</label>
+			</entry>
+			<entry name="Upload">
+				<label>Upload**</label>
 			</entry>
 			<entry name="Help">
-				<label>Aidee</label>
+				<label>Help**</label>
 			</entry>
 			<entry name="Online Help">
-				<label>Aidee en linea</label>
+				<label>Online Help**</label>
 			</entry>
 			<entry name="About">
-				<label>Infomacion</label>
+				<label>About**</label>
 			</entry>
 			<entry name="Snap">
-				<label>Snap</label>
-			</entry>
-			<entry name="Undo">
-				<label>Undo</label>
-			</entry>
-			<entry name="Redo">
-				<label>Redo</label>
-			</entry>
-			<entry name="Cut">
-				<label>Coupe</label>
-			</entry>
-			<entry name="Copy">
-				<label>Copie</label>
-			</entry>
-			<entry name="Paste">
-				<label>Pegar</label>
-			</entry>
-			<entry name="Delete">
-				<label>Eliminne</label>
-			</entry>
-			<entry name="Validate">
-				<label>Validate</label>
+				<label>Snap**</label>
 			</entry>
 			<entry name="Add Variable">
-				<label>Add Variable</label>
+				<label>Add Variable**</label>
 			</entry>
-			<entry name="AddVariableTitle">
-				<label>New Variable</label>
+			<entry name="New Variable">
+				<label>New Variable**</label>
 			</entry>
-			<entry name="VariableNameLabel">
-				<label>Name</label>
+			<entry name="Name">
+				<label>Name**</label>
 			</entry>
-			<entry name="VariableTypeLabel">
-				<label>Type</label>
+			<entry name="Type">
+				<label>Type**</label>
 			</entry>
 			<entry name="Ok">
-				<label>Ok</label>
+				<label>Ok**</label>
 			</entry>
 			<entry name="Cancel">
-				<label>Cancel</label>
+				<label>Cancel**</label>
 			</entry>
-			<entry name="AddVariableErrorMessage">
-				<label>This name is invalid. please add a vaild variable name.</label>
+			<entry name="Error">
+				<label>Error**</label>
 			</entry>
-			<entry name="AddVariableErrorMessageTitle">
-				<label>Error</label>
+			<entry name="This name is invalid. Please add a vaild variable name">
+				<label>This name is invalid. Please add a vaild variable name.**</label>
 			</entry>
-			<entry name="VariableExistsMessage">
-				<label>Variable exists with the same name.</label>
+			<entry name="Variable exists with the same name">
+				<label>Variable exists with the same name.**</label>
 			</entry>
-			<entry name="VariableExistsMessageTitle">
-				<label>Error</label>
-			</entry> 
-			<entry name="AddVariableSuccessMessage">
-				<label>Variable is added successfully.</label>
+			<entry name="Success">
+				<label>Success**</label>
 			</entry>
-			<entry name="AddVariableSuccessMessageTitle">
-				<label>Success</label>
+			<entry name="Variable is added successfully">
+				<label>Variable is added successfully.**</label>
 			</entry>
-			<entry name="DisplayCodeWindowTitle">
-				<label>Displaying Code</label>
+			<entry name="Displaying Code">
+				<label>Displaying Code**</label>
 			</entry>
-			<entry name="CopyToClipBoard">
-				<label>Copy to Clipboard</label>
+			<entry name="Copy to Clipboard">
+				<label>Copy to Clipboard**</label>
 			</entry>
-			<entry name="CopyToClipBoardSuccess">
-				<label>Code is saved into clipboard successfully.</label>
+			<entry name="Code is saved into clipboard successfully">
+				<label>Code is saved into clipboard successfully.**</label>
 			</entry>
-			<entry name="CopyToClipBoardSuccessTitle">
-				<label>Success</label>
-			</entry>
-			<entry name="SaveConfirmation">
-				<label>Do you want to save your current work?</label>
+			<entry name="Do you want to save your current work">
+				<label>Do you want to save your current work?**</label>
 			</entry>
 			<entry name="Yes">
-				<label>Yes</label>
+				<label>Yes**</label>
 			</entry>
 			<entry name="No">
-				<label>No</label>
+				<label>No**</label>
+			</entry>
+			<entry name="Overwrite">
+				<label>Overwrite**</label>
+			</entry>
+			<entry name="Overwrite existing file">
+				<label>Overwrite existing file**</label>
+			</entry>
+			<entry name="No Error">
+				<label>No error**</label>
+			</entry>
+			<entry name="Message">
+				<label>Message**</label>
+			</entry>
+			<entry name="Each variable must be in separate line">
+				<label>Each variable must be in separate line**</label>
+			</entry>
+			<entry name="Please upload correct file">
+				<label>Please upload correct file**</label>
+			</entry>
+			<entry name="Search blocks">
+				<label>Search blocks**</label>
+			</entry>
+			<entry name="Search for blocks in the drawers and workspace">
+				<label>Search for blocks in the drawers and workspace**</label>
+			</entry>
+			<entry name="Please enter valid input within the range">
+				<label>Please enter valid input within the range**</label>
+			</entry>
+			<entry name="Please enter valid input within the length">
+				<label>Please enter valid input within the length**</label>
+			</entry>
+			<entry name="You are not allowed to drop this component here">
+				<label>You are not allowed to drop this component here**</label>
+			</entry>
+			<entry name="You are not allowed to drop this element twice">
+				<label>You are not allowed to drop this element twice**</label>
+			</entry>
+			<entry name="SnapAbout">
+				<label>Name:Snap. Version:1.0. Snap Java**</label>
+			</entry>	
+			<entry name="can't be added as single data block">
+				<label>can't be added as single data block**</label>
+			</entry>	
+			<entry name="Please declare the variable named">
+				<label>Please declare the variable named**</label>
+			</entry>	
+			<entry name="block is missing it's then block">
+				<label>block is missing it's then block**</label>
+			</entry>	
+			<entry name="block is missing it's else block">
+				<label>block is missing it's else block**</label>
+			</entry>
+			<entry name="block is missing it's condition block">
+				<label>block is missing it's condition block**</label>
+			</entry>
+			<entry name="parameter is missing in block named">
+				<label>parameter is missing in block named**</label>
+			</entry>
+			<entry name="parameters are missing in block named">
+				<label>parameters are missing in block named**</label>
+			</entry>
+			<entry name="Initialize variable named">
+				<label>Initialize variable named**</label>
+			</entry>
+			<entry name="Initialize correctly for variable named">
+				<label>Initialize correctly for variable named**</label>
+			</entry>
+			<entry name="Set variable named">
+				<label>Set variable named**</label>
+			</entry>
+			<entry name="Invalid set for variable named">
+				<label>Invalid set for variable named**</label>
+			</entry>
+			<entry name="Socket isn't defined for block named">
+				<label>Socket isn't defined for block named**</label>
+			</entry>
+			<entry name="An illegal block has been found which id is">
+				<label>An illegal block has been found which id is**</label>
+			</entry>
+			<entry name="block is missing the plug">
+				<label>block is missing the plug**</label>
+			</entry>
+			<entry name="block is missing the connector">
+				<label>block is missing the connector**</label>
+			</entry>
+			<entry name="block is missing the left part">
+				<label>block is missing the left part**</label>
+			</entry>
+			<entry name="block is missing the right part">
+				<label>block is missing the right part**</label>
+			</entry>
+			<entry name="All Validation Errors">
+				<label>All Validation Errors**</label>
 			</entry>
 		</language>
 	</languages>

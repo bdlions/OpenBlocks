@@ -12,6 +12,6 @@ public class JavaFilter extends javax.swing.filechooser.FileFilter
   }
 
   public String getDescription () {
-    return "PZ Files (*.pz)";
+	  return DisplayMessage.convertedTextInSelectedLanguage("PZ Files (*.pz)");
   }
 }

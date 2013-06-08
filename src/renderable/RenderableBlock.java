@@ -1,5 +1,7 @@
 package renderable;
 
+import general.DisplayMessage;
+
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
@@ -1803,7 +1805,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 					
 					if(link.getSocket().getDefArgumentGenusName().equals("USA") && currentMouseSelectedBlock.getGenusName().equals("string"))
 					{
-						JOptionPane.showMessageDialog(null, "You are not allowed to drop this component here.");
+						DisplayMessage.printErrorMessage("You are not allowed to drop this component here");
 						BlockUtilities.deleteBlock(this);
 						return;
 					}
@@ -1855,7 +1857,7 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 		List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(saveString.toString()));
 		if(errors.size() <= 0)
 		{
-			Workspace.getInstance().setCodeInEditor();
+			Workspace.getInstance().setCodeInEditor();			
 		}
 		else
 		{

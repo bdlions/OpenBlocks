@@ -5,19 +5,17 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-
-import java.util.*;
 public class LanguageGenerator
 {
 	private String language = "English";
-	private Hashtable syntaxMapLanguage = new Hashtable();
+	private Hashtable<String, LanguageEntry> syntaxMapLanguage = new Hashtable<String, LanguageEntry>();
 	private LoadLanguage loadLanguage = new LoadLanguage();
 	
 	public LoadLanguage getLoadLanguage() {
 		return loadLanguage;
 	}
 	
-	public Hashtable getSyntaxMapLanguage() {
+	public Hashtable<String, LanguageEntry> getSyntaxMapLanguage() {
 		return syntaxMapLanguage;
 	}
 	
@@ -40,7 +38,7 @@ public class LanguageGenerator
 			 
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			loadLanguage = (LoadLanguage) jaxbUnmarshaller.unmarshal(inputStream);
-			syntaxMapLanguage = new Hashtable();
+			syntaxMapLanguage = new Hashtable<String, LanguageEntry>();
 			List<Language> languages =  loadLanguage.getLanguages().getLanguage();
 			for ( Language language : languages) 
 			{
@@ -63,7 +61,7 @@ public class LanguageGenerator
 	 * */
 	public void updateLanguageMapLoadLanguage()
 	{
-		syntaxMapLanguage = new Hashtable();
+		syntaxMapLanguage = new Hashtable<String, LanguageEntry>();
 		List<Language> languages =  loadLanguage.getLanguages().getLanguage();
 		for ( Language language : languages) 
 		{

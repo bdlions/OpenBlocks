@@ -1,5 +1,7 @@
 package workspace;
 
+import general.DisplayMessage;
+
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
@@ -605,8 +607,8 @@ public class Page  implements WorkspaceWidget, SearchableContainer, ISupportMeme
 						
 			        	if(currentblock.getGenusName().equals(block.getBlock().getGenusName()))
 						{
-							JOptionPane.showMessageDialog(null, "You are not allowed to drop this element twice.");
-							isAddingAllowed = false;
+							DisplayMessage.printErrorMessage("You are not allowed to drop this element twice");
+			        		isAddingAllowed = false;
 							BlockUtilities.deleteBlock(block);
 						}
 					}
@@ -719,6 +721,11 @@ public class Page  implements WorkspaceWidget, SearchableContainer, ISupportMeme
 	/** @ovverride WorkspaceWidget.getJComponent() */
 	public JComponent getJComponent() {
 		return this.pageJComponent;
+	}
+	/** @throws CloneNotSupportedException 
+	 * @ovverride WorkspaceWidget.getJComponent() */
+	public JComponent getJComponentCloned() throws CloneNotSupportedException {
+		return this.pageJComponent.clone();
 	}
 	/**
 	 * @return the RBParent representation of this Page
@@ -1154,7 +1161,7 @@ public class Page  implements WorkspaceWidget, SearchableContainer, ISupportMeme
  * This class serves as the zoomable JComponent and RBParent of the page
  * that wraps it.
  */
-class PageJComponent extends JLayeredPane  implements RBParent{
+class PageJComponent extends JLayeredPane  implements RBParent, Cloneable{
 	private static final long serialVersionUID = 83982193213L;
 	private static final Integer BLOCK_LAYER = new Integer(1);
 	private static final Integer HIGHLIGHT_LAYER = new Integer(0);
@@ -1169,6 +1176,11 @@ class PageJComponent extends JLayeredPane  implements RBParent{
 	}
 	public Image getImage(){
 		return image;
+	}
+	@Override
+	public JComponent clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return (JComponent)super.clone();
 	}
 	/**
 	 * renders this JComponent

@@ -1,10 +1,12 @@
 package controller;
 
 
+import general.DisplayMessage;
 import general.JavaFilter;
 import general.JavaFilterText;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -84,11 +86,12 @@ public class WorkspaceController {
     private static JavaFilterText fJavaFilterText;
 	private static String fileSavePath = ""; 
 	private static boolean isFileSaved = false;
+	private static String savedFileContent = "";
 	
 	private static int externalVariableCounter = 1;
 	private static String projectInitialXmlContent = "";
 	private static LanguageGenerator languageGenerator;
-	private static Hashtable syntaxMap;
+	private static Hashtable<String, LanguageEntry> syntaxMap;
 	
 	public static SearchBar searchBar;
 	
@@ -718,7 +721,7 @@ public void setLangDefFilePathTest(String content){
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				PrintUtilities.printComponent(workspace.getPageNamed("Blocks").getJComponent());
+				wc.printSelected(wc);
 			}
 		});
 
@@ -733,8 +736,7 @@ public void setLangDefFilePathTest(String content){
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				wc.exitSelected(wc);				
-				System.exit(0);
+				wc.exitSelected(wc);
 			}
 		});
 		String codeGenerationString = "Code generated on the fly";
@@ -756,14 +758,7 @@ public void setLangDefFilePathTest(String content){
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
-            	if(errors.size() > 0){
-            		ValidationErrorDisplayer displayer = new ValidationErrorDisplayer();
-                	displayer.displayError(errors);
-                	displayer.setVisible(true);
-            	}else{
-            		JOptionPane.showMessageDialog(null, "No error found");
-            	}			
+				wc.validateSelected(wc);						
 			}
 		});
 		
@@ -890,7 +885,7 @@ public void setLangDefFilePathTest(String content){
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				//JOptionPane.showMessageDialog(null, "English Clicked.");		
+				DisplayMessage.setLanguage("English");
 				languageGenerator.setLanguage("English");
 				languageGenerator.updateLanguageMapLoadLanguage();
 				syntaxMap = languageGenerator.getSyntaxMapLanguage();			
@@ -902,19 +897,19 @@ public void setLangDefFilePathTest(String content){
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				//JOptionPane.showMessageDialog(null, "Francis Clicked.");		
+				DisplayMessage.setLanguage("Spanish");
 				languageGenerator.setLanguage("Spanish");
 				languageGenerator.updateLanguageMapLoadLanguage();
 				syntaxMap = languageGenerator.getSyntaxMapLanguage();
 				
-				updateLabelText();				
+				updateLabelText();
 			}
 		});
 		checkBoxMenuItemFrancis.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				//JOptionPane.showMessageDialog(null, "Francis Clicked.");		
+				DisplayMessage.setLanguage("Francis");
 				languageGenerator.setLanguage("Francis");
 				languageGenerator.updateLanguageMapLoadLanguage();
 				syntaxMap = languageGenerator.getSyntaxMapLanguage();
@@ -1003,13 +998,22 @@ public void setLangDefFilePathTest(String content){
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				JOptionPane.showMessageDialog(null, "Name:Snap\nVersion:1.0\nSnap Java");				
+				DisplayMessage.printMessage("SnapAbout");						
 			}
-		});
-		
+		});		
 		
         //create search bar
-        searchBar = new SearchBar("Search blocks", "Search for blocks in the drawers and workspace", workspace);
+		String searchBarTitleString = "Search blocks";
+		if (syntaxMap.containsKey(searchBarTitleString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(searchBarTitleString);
+			searchBarTitleString = titleEntry.getLabel();
+		}
+		String searchBarToolTipString = "Search for blocks in the drawers and workspace";
+		if (syntaxMap.containsKey(searchBarToolTipString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(searchBarToolTipString);
+			searchBarToolTipString = titleEntry.getLabel();
+		}
+        searchBar = new SearchBar(searchBarTitleString, searchBarToolTipString, workspace);
         for(SearchableContainer con : wc.getAllSearchableContainers()){
             searchBar.addSearchableContainer(con);
         }
@@ -1053,7 +1057,7 @@ public void setLangDefFilePathTest(String content){
         printBbutton.setToolTipText(printString);
         printBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
-            	PrintUtilities.printComponent(workspace.getPageNamed("Blocks").getJComponent());
+            	wc.printSelected(wc);
             }
         });
         toolbar.add(printBbutton);
@@ -1063,15 +1067,7 @@ public void setLangDefFilePathTest(String content){
         validateBbutton.setToolTipText(validateString);
         validateBbutton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt){
-            	List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
-            	if(errors.size() > 0){
-            		ValidationErrorDisplayer displayer = new ValidationErrorDisplayer();
-                	displayer.displayError(errors);
-                	displayer.setVisible(true);
-            	}else{
-            		JOptionPane.showMessageDialog(null, "No error found");
-            	}
-            	
+            	wc.validateSelected(wc);            	
             }
         });
         toolbar.add(validateBbutton);        
@@ -1124,51 +1120,17 @@ public void setLangDefFilePathTest(String content){
             	
             	if(variableName.getOption() == JOptionPane.OK_OPTION)
             	{
-                	if( BlockGenus.getGenusWithName(Variable.getValidVariableName(variableName.getValue())) != null){
-                		String variableExistsString = "VariableExistsMessage";
-                		if (syntaxMap.containsKey(variableExistsString)) {
-                			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(variableExistsString);
-                			variableExistsString = titleEntry.getLabel();
-                		}
-                		else
-                		{
-                			variableExistsString = "Variable exists with the same name.";
-                		}
-                		String variableExistsTitleString = "VariableExistsMessageTitle";
-                		if (syntaxMap.containsKey(variableExistsTitleString)) {
-                			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(variableExistsTitleString);
-                			variableExistsTitleString = titleEntry.getLabel();
-                		}
-                		else
-                		{
-                			variableExistsTitleString = "Error";
-                		}
-                		JOptionPane.showMessageDialog(null, variableExistsString, variableExistsTitleString, JOptionPane.PLAIN_MESSAGE);
+            		if( BlockGenus.getGenusWithName(Variable.getValidVariableName(variableName.getValue())) != null)
+            		{
+                		DisplayMessage.printErrorMessage("Variable exists with the same name");            			                		
                 	}
                 	else{	            		
-                		String addVariableSuccessString = "AddVariableSuccessMessage";
-                		if (syntaxMap.containsKey(addVariableSuccessString)) {
-                			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(addVariableSuccessString);
-                			addVariableSuccessString = titleEntry.getLabel();
-                		}
-                		else
-                		{
-                			addVariableSuccessString = "Variable is added successfully.";
-                		}
-                		String addVariableSuccessTitleString = "AddVariableSuccessMessageTitle";
-                		if (syntaxMap.containsKey(addVariableSuccessTitleString)) {
-                			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(addVariableSuccessTitleString);
-                			addVariableSuccessTitleString = titleEntry.getLabel();
-                		}
-                		else
-                		{
-                			addVariableSuccessTitleString = "Success";
-                		}
+                		DisplayMessage.printSuccessMessage("Variable is added successfully");                		
+                		
                 		WorkspaceController.variableListMap.put(variableName.getValue(), variableName.getVariableType());
                 		wc.langDefDirty = true;
 	            		VariableMaker.addVariable(langDefRoot.getOwnerDocument(), variableName.getValue(), variableName.getVariableType());
 	            		wc.loadProject(wc.getSaveString());
-	            		JOptionPane.showMessageDialog(null, addVariableSuccessString, addVariableSuccessTitleString, JOptionPane.PLAIN_MESSAGE);
 	            		codeblocks.Block block = new codeblocks.Block(variableName.getValue()+"_decl");
 	            		Page blockPage = workspace.getPageNamed("Blocks");
 	            		WorkspaceWidget ww = workspace.getWidgetAt(new Point(blockPage.getJComponent().getX(), blockPage.getJComponent().getY()));
@@ -1203,7 +1165,7 @@ public void setLangDefFilePathTest(String content){
         //adding code editor
         Workspace.addCodeEditor();
         frame.setVisible(true);
-        
+        wc.resetFileReference();
     }
 
     public static void main(String[] args) {
@@ -1229,6 +1191,8 @@ public void setLangDefFilePathTest(String content){
         	    catch (IllegalAccessException e) {
         	       // handle exception
         	    }
+            	DisplayMessage.generateLanguage();
+            	DisplayMessage.setLanguage("English");
                 LANG_DEF_FILEPATH = "support/lang_def.xml";
                       
                 //Create a new WorkspaceController 
@@ -1361,7 +1325,7 @@ public void setLangDefFilePathTest(String content){
 		}
 		checkBoxMenuItemGenerateJavaCode.setText(generateJavaCodeString);
 		
-		String viewCodeString = "View code";
+		String viewCodeString = "View Code";
 		if (syntaxMap.containsKey(viewCodeString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(viewCodeString);
 			viewCodeString = titleEntry.getLabel();
@@ -1382,6 +1346,13 @@ public void setLangDefFilePathTest(String content){
 		}
 		checkBoxMenuItemEnglish.setText(englishString);
 		
+		String spanishString = "Spanish";
+		if (syntaxMap.containsKey(spanishString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(spanishString);
+			spanishString = titleEntry.getLabel();
+		}
+		checkBoxMenuItemSpanish.setText(spanishString);
+		
 		String francisString = "Francis";
 		if (syntaxMap.containsKey(francisString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(francisString);
@@ -1397,9 +1368,9 @@ public void setLangDefFilePathTest(String content){
 		menuExternal.setText(externalMenuString);
 		
 		String uploadExternalString = "External";
-		if (syntaxMap.containsKey(printString)) {
-			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(printString);
-			printString = titleEntry.getLabel();
+		if (syntaxMap.containsKey(uploadExternalString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(uploadExternalString);
+			uploadExternalString = titleEntry.getLabel();
 		}
 		menuItemExternal.setText(uploadExternalString);
 		
@@ -1431,13 +1402,6 @@ public void setLangDefFilePathTest(String content){
 		}
 		menuItemSnap.setText(snapString);
 		
-		/*newButton.setText(newString);
-		openButton.setText(openString);
-		saveButton.setText(saveString);
-		printBbutton.setText(printString);
-		validateBbutton.setText(validateString);
-		viewCodeButton.setText(viewCodeString);*/
-		
 		newButton.setToolTipText(newString);
 		openButton.setToolTipText(openString);
 		saveButton.setToolTipText(saveString);
@@ -1445,20 +1409,113 @@ public void setLangDefFilePathTest(String content){
 		validateBbutton.setToolTipText(validateString);
 		viewCodeButton.setToolTipText(viewCodeString);
 		
-		String deleteString = "Delete";
-		if (syntaxMap.containsKey(deleteString)) {
-			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(deleteString);
-			deleteString = titleEntry.getLabel();
-		}
-		deleteButton.setToolTipText(deleteString);
-		
 		String addVariableString = "Add Variable";
 		if (syntaxMap.containsKey(addVariableString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(addVariableString);
 			addVariableString = titleEntry.getLabel();
 		}
 		buttonAddVariable.setToolTipText(addVariableString);
+		
+		String searchBlocksNameString = "Search blocks";
+		if (syntaxMap.containsKey(searchBlocksNameString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(searchBlocksNameString);
+			searchBlocksNameString = titleEntry.getLabel();
+		}
+		String searchBlocksNameTooltipString = "Search for blocks in the drawers and workspace";
+		if (syntaxMap.containsKey(searchBlocksNameTooltipString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(searchBlocksNameTooltipString);
+			searchBlocksNameTooltipString = titleEntry.getLabel();
+		}
+		
+		searchBar.searchBar.setText(searchBlocksNameString);
+		searchBar.searchBar.setToolTipText(searchBlocksNameTooltipString);
 	}
+	
+	/*
+     * User selects New either from menu item or tool bar
+     * */
+    public void newSelected(WorkspaceController wc)
+    {    	
+    	//if(!projectInitialXmlContent.equals(wc.getSaveString()))
+    	if(isProjectModified(wc.getSaveString()))
+		{
+			int reply = DisplayMessage.saveMessageUserInput("Do you want to save your current work");    		
+			//before initializing the window, we are saving current project content
+    		if (reply == JOptionPane.YES_OPTION)
+			{
+			   wc.saveAsPressed(wc);
+			}
+    		else if(reply == JOptionPane.NO_OPTION)
+    		{
+    			//do nothing
+    		}
+    		else
+    		{
+    			//user didn't select yes/no option
+    			return;            			
+    		}
+		}
+		
+		//initializing frame title
+		String frameTitle = "OpenBlocksDemo";
+		if (syntaxMap.containsKey(frameTitle)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(frameTitle);
+			frameTitle = titleEntry.getLabel();
+		}
+		frame.setTitle(frameTitle);
+		
+		wc.setLangDefFilePath(LANG_DEF_FILEPATH);
+        //loading fresh workspace
+		wc.loadFreshWorkspace();
+		//adding code editor
+        Workspace.addCodeEditor();
+        Workspace.clearCodeInEditor();
+        //updating search option
+        wc.updateSearchableComponents(wc);
+        wc.resetFileReference();        
+    }
+    
+    /*
+     * User selects Open either from menu item or tool bar
+     * */
+    public void openSelected(WorkspaceController wc)
+    {    	
+    	//if(!projectInitialXmlContent.equals(wc.getSaveString()))
+    	if(isProjectModified(wc.getSaveString()))
+		{
+    		int reply = DisplayMessage.saveMessageUserInput("Do you want to save your current work");
+    		if (reply == JOptionPane.YES_OPTION)
+			{
+			   wc.savePressed(wc);
+			}
+    		else if(reply == JOptionPane.NO_OPTION)
+    		{
+    			//do nothing
+    		}
+    		else
+    		{
+    			//user didn't select yes/no option
+    			return;
+    		}
+		}
+    	
+    	//initializing frame title
+		String frameTitle = "OpenBlocksDemo";
+		if (syntaxMap.containsKey(frameTitle)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(frameTitle);
+			frameTitle = titleEntry.getLabel();
+		}
+		frame.setTitle(frameTitle);
+		
+		wc.setLangDefFilePath(LANG_DEF_FILEPATH);
+        wc.loadFreshWorkspace(); 
+        Workspace.addCodeEditor();
+        Workspace.clearCodeInEditor();        
+        wc.updateSearchableComponents(wc);        
+        wc.resetFileReference();
+    	
+    	wc.openPostProcessing(wc);
+    }
 	
 	/*
 	 * User uploads a file after selecting Open either from menu item or tool bar
@@ -1468,8 +1525,53 @@ public void setLangDefFilePathTest(String content){
 		String uploadedFileContent = "";
 		String fileName = "";
 		JFileChooser fc = new JFileChooser();
-        fc.setDialogTitle("Open pz File");
-
+        
+		String fileChooserDialogTitle = "Open pz File";
+		if (syntaxMap.containsKey(fileChooserDialogTitle)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(fileChooserDialogTitle);
+			fileChooserDialogTitle = titleEntry.getLabel();
+		}
+		fc.setDialogTitle(fileChooserDialogTitle);
+		String openString = "Open";
+		if (syntaxMap.containsKey(openString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(openString);
+			openString = titleEntry.getLabel();
+		}
+		UIManager.put("FileChooser.openButtonText", openString);
+		String cancelString = "Cancel";
+		if (syntaxMap.containsKey(cancelString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(cancelString);
+			cancelString = titleEntry.getLabel();
+		}
+		UIManager.put("FileChooser.cancelButtonText", cancelString);		
+		String openButtonToolTipString = "Open selected file";
+		if (syntaxMap.containsKey(openButtonToolTipString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(openButtonToolTipString);
+			openButtonToolTipString = titleEntry.getLabel();
+		}
+		UIManager.put("FileChooser.openButtonToolTipText", openButtonToolTipString);
+		String ocancelButtonToolTipString = "Abort file chooser dialog";
+		if (syntaxMap.containsKey(ocancelButtonToolTipString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(ocancelButtonToolTipString);
+			ocancelButtonToolTipString = titleEntry.getLabel();
+		}
+        UIManager.put("FileChooser.cancelButtonToolTipText",ocancelButtonToolTipString);
+		
+		String fileNameString = "File name";
+		if (syntaxMap.containsKey(fileNameString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(fileNameString);
+			fileNameString = titleEntry.getLabel();
+		}
+		UIManager.put("FileChooser.fileNameLabelText", fileNameString);		
+		String fileTypeString = "Files of type";
+		if (syntaxMap.containsKey(fileTypeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(fileTypeString);
+			fileTypeString = titleEntry.getLabel();
+		}
+		UIManager.put("FileChooser.filesOfTypeLabelText", fileTypeString);
+		
+		SwingUtilities.updateComponentTreeUI(fc);
+		
         // Choose only files, not directories
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
@@ -1498,9 +1600,10 @@ public void setLangDefFilePathTest(String content){
                 uploadedFileContent = readFile(fc.getSelectedFile().getPath());
                 fileName = fc.getSelectedFile().getName();
         	}
-        	
+        	isFileSaved = true;
 
-            if (uploadedFileContent != null) {
+            if (uploadedFileContent != null) 
+            {
             	String codePart = "";
             	String leftPanelPart = "";
             	if(uploadedFileContent.indexOf("<BlockLangDef>") > 0 && uploadedFileContent.indexOf("<CODEBLOCKS>") >= 0)
@@ -1510,7 +1613,8 @@ public void setLangDefFilePathTest(String content){
             	}
             	else
             	{
-            		JOptionPane.showMessageDialog(null, "Please upload correct file.");
+            		resetFileReference();
+            		DisplayMessage.printErrorMessage("Please upload correct file");
             		return;
             	}
             	wc.workspaceLoaded = false;
@@ -1539,7 +1643,27 @@ public void setLangDefFilePathTest(String content){
             	
             	//updating search tool bar
             	wc.updateSearchableComponents(wc);
-            }            
+            	
+            	String leftPanelXml = "";    		
+        		try
+        		{
+        			TransformerFactory tf = TransformerFactory.newInstance();
+            		Transformer transformer = tf.newTransformer();
+            		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            		StringWriter writer = new StringWriter();
+            		transformer.transform(new DOMSource(WorkspaceController.langDefRoot), new StreamResult(writer));
+            		leftPanelXml = writer.getBuffer().toString();        		
+        		}
+        		catch(Exception ex)
+        		{
+        			System.out.println("Error while generating left panel xml");
+        		}
+        		WorkspaceController.savedFileContent = wc.getSaveString()+leftPanelXml;
+            } 
+            else
+            {
+            	resetFileReference();
+            }
         }
 	}
 	/*
@@ -1571,8 +1695,10 @@ public void setLangDefFilePathTest(String content){
         		{
         			System.out.println("Error while generating left panel xml");
         		}
-            	
-        		writeFile(new File(fileSavePath),wc.getSaveString()+leftPanelXml);            	
+            	WorkspaceController.savedFileContent = wc.getSaveString()+leftPanelXml;
+        		writeFile(new File(fileSavePath),wc.getSaveString()+leftPanelXml);  
+        		
+        		DisplayMessage.printSuccessMessage("File is saved successfully");
             }
             catch(Exception ex)
             {
@@ -1589,6 +1715,48 @@ public void setLangDefFilePathTest(String content){
 	{
 		File file = new File(fileSavePath);
 		JFileChooser fc = new JFileChooser();
+		
+		String saveString = "Save";
+		if (syntaxMap.containsKey(saveString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveString);
+			saveString = titleEntry.getLabel();
+		}
+		fc.setDialogTitle(saveString);
+		UIManager.put("FileChooser.saveButtonText", saveString);
+		String cancelString = "Cancel";
+		if (syntaxMap.containsKey(cancelString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(cancelString);
+			cancelString = titleEntry.getLabel();
+		}
+		UIManager.put("FileChooser.cancelButtonText", cancelString);		
+		String saveButtonToolTipString = "Save selected file";
+		if (syntaxMap.containsKey(saveButtonToolTipString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveButtonToolTipString);
+			saveButtonToolTipString = titleEntry.getLabel();
+		}
+		UIManager.put("FileChooser.saveButtonToolTipText", saveButtonToolTipString);
+		String ocancelButtonToolTipString = "Abort file chooser dialog";
+		if (syntaxMap.containsKey(ocancelButtonToolTipString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(ocancelButtonToolTipString);
+			ocancelButtonToolTipString = titleEntry.getLabel();
+		}
+        UIManager.put("FileChooser.cancelButtonToolTipText",ocancelButtonToolTipString);
+		
+		String fileNameString = "File name";
+		if (syntaxMap.containsKey(fileNameString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(fileNameString);
+			fileNameString = titleEntry.getLabel();
+		}
+		UIManager.put("FileChooser.fileNameLabelText", fileNameString);		
+		String fileTypeString = "Files of type";
+		if (syntaxMap.containsKey(fileTypeString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(fileTypeString);
+			fileTypeString = titleEntry.getLabel();
+		}
+		UIManager.put("FileChooser.filesOfTypeLabelText", fileTypeString);
+		
+		SwingUtilities.updateComponentTreeUI(fc);
+		
         // Start in current directory
         fc.setCurrentDirectory(new File("."));
         // Set filter for text files.
@@ -1610,10 +1778,39 @@ public void setLangDefFilePathTest(String content){
             }
             
             if (file.exists()) {
-                int response = JOptionPane.showConfirmDialog(null,
+            	String overWriteMessage = "Overwrite existing file";
+            	if (syntaxMap.containsKey(overWriteMessage)) {
+        			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(overWriteMessage);
+        			overWriteMessage = titleEntry.getLabel();
+        		}
+        		String overWriteMessageTitle = "Overwrite";
+        		if (syntaxMap.containsKey(overWriteMessageTitle)) {
+        			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(overWriteMessageTitle);
+        			overWriteMessageTitle = titleEntry.getLabel();
+        		}
+        		String yesString = "Yes";
+        		if (syntaxMap.containsKey(yesString)) {
+        			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(yesString);
+        			yesString = titleEntry.getLabel();
+        		}
+        		String noString = "No";
+        		if (syntaxMap.containsKey(noString)) {
+        			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(noString);
+        			noString = titleEntry.getLabel();
+        		}
+        		int response = JOptionPane.showOptionDialog(null, 
+        				overWriteMessage+"?", 
+        				overWriteMessageTitle+"?", 
+        		        JOptionPane.OK_CANCEL_OPTION, 
+        		        JOptionPane.INFORMATION_MESSAGE, 
+        		        null, 
+        		        new String[]{yesString, noString},
+        		        "default");            	
+            	
+            	/*int response = JOptionPane.showConfirmDialog(null,
                         "Overwrite existing file?", "Confirm Overwrite",
                         JOptionPane.OK_CANCEL_OPTION,
-                        JOptionPane.QUESTION_MESSAGE);
+                        JOptionPane.QUESTION_MESSAGE);*/
                 if (response == JOptionPane.CANCEL_OPTION) {
                     return;
                 }
@@ -1640,52 +1837,128 @@ public void setLangDefFilePathTest(String content){
     		{
     			System.out.println("Error while generating left panel xml");
     		}
-    		
+    		WorkspaceController.savedFileContent = wc.getSaveString()+leftPanelXml;
             writeFile(file,wc.getSaveString()+leftPanelXml);
             //storing this file path to use later if user wants to save
             fileSavePath = file.getPath();
             isFileSaved = true;
+            DisplayMessage.printSuccessMessage("File is saved successfully");
         }
 	}
-	/*
-	 * This method takes a file url and returns content of that file
-	 * */
-	public String readFile(String fileUrl) {
-        File aFile = new File(fileUrl);
-        StringBuilder contents = new StringBuilder();
-        try {
-        	BufferedReader input = new BufferedReader( new InputStreamReader( new FileInputStream(new File(fileUrl)), "UTF-16"));
-            try {
-                String line = null;
-                while ((line = input.readLine()) != null) {
-                    contents.append(line);
-                }
-            } finally {
-                input.close();
-            }
-        } catch (IOException ex) {
-            System.out.println("Error while loading file.");
-        }
-        return contents.toString();
-    }
 	
 	/*
-     * This method takes file and file content and store the file content
+     * User selects Close from menu item
      * */
-    public static boolean writeFile(File file, String dataString) {
-    	String newLine = System.getProperty("line.separator");
-    	//dataString = dataString.replaceAll("\n", newLine);
-        try {
-            BufferedWriter bw = new BufferedWriter( new OutputStreamWriter( new FileOutputStream(file), "UTF-16"));
-            bw.write(dataString);
-            
-            bw.close();
-        } catch (IOException e) {
-            return false;
-        }
-        return true;
+    public void closeSelected(WorkspaceController wc)
+    {
+    	//if(!projectInitialXmlContent.equals(wc.getSaveString()))
+    	if(isProjectModified(wc.getSaveString()))
+		{
+    		int reply = DisplayMessage.saveMessageUserInput("Do you want to save your current work");
+			//before initializing the window, we are saving current project
+    		if (reply == JOptionPane.YES_OPTION)
+			{
+			   wc.savePressed(wc);
+			}
+    		else if(reply == JOptionPane.NO_OPTION)
+    		{
+    			//no action
+    		}
+    		else
+    		{
+    			//user didn't select yes/no option
+    			return;
+    		}
+		}
+    	//initializing frame title
+		String frameTitle = "OpenBlocksDemo";
+		if (syntaxMap.containsKey(frameTitle)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(frameTitle);
+			frameTitle = titleEntry.getLabel();
+		}
+		frame.setTitle(frameTitle);
+		
+		wc.setLangDefFilePath(LANG_DEF_FILEPATH);
+        wc.loadFreshWorkspace(); 
+        Workspace.addCodeEditor();
+        Workspace.clearCodeInEditor();        
+        wc.updateSearchableComponents(wc);        
+        wc.resetFileReference();
     }
     
+    /*
+     * User wants to print block content
+     * */
+    public void printSelected(WorkspaceController wc)
+    {
+    	Page blockPage = workspace.getPageNamed("Blocks");
+    	try 
+    	{
+    		Color defaultColor = blockPage.getPageColor();
+        	
+    		blockPage.setPageColor(Color.WHITE);
+			JComponent blockComponent = blockPage.getJComponentCloned();
+        	blockPage.setPageColor(defaultColor);
+        	
+        	PrintUtilities.printComponent(blockComponent);
+		} 
+    	catch (CloneNotSupportedException e) 
+    	{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    /*
+     * User selects exit from menu item
+     * */
+    public void exitSelected(WorkspaceController wc)
+    {    	
+    	//if(!projectInitialXmlContent.equals(wc.getSaveString()))
+    	if(isProjectModified(wc.getSaveString()))	
+		{
+    		int reply = DisplayMessage.saveMessageUserInput("Do you want to save your current work");
+    		if (reply == JOptionPane.YES_OPTION)
+			{
+			   wc.savePressed(wc);
+			}
+    		else if(reply == JOptionPane.NO_OPTION)
+    		{				
+				System.exit(0);
+    		}
+    		else
+    		{
+    			//user didn't select yes/no option
+    			return;
+    		}
+		}
+    	else
+    	{
+    		System.exit(0);
+    	}
+    }
+    
+    /*
+     * User wants to validate block panel
+     * */
+    public void validateSelected(WorkspaceController wc)
+    {
+    	List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
+    	if(errors.size() > 0)
+    	{
+    		ValidationErrorDisplayer displayer = new ValidationErrorDisplayer();
+        	displayer.displayError(errors);
+        	displayer.setVisible(true);
+    	}
+    	else
+    	{
+    		DisplayMessage.printSuccessMessage("No Error");    		   		
+    	}
+    }
+    
+    /*
+     * User selects External from menu item
+     * */
     public void uploadExternalFilePressed(final WorkspaceController wc){
 		//String uploadedFileContent = "";
 		String parsedFileContent = "";
@@ -1738,11 +2011,10 @@ public void setLangDefFilePathTest(String content){
                             			if(commentFirstWord.equals("external"))
                             			{
                             				//two variables in one line..so error.
-                            				JOptionPane.showMessageDialog(null, "Each variable must be in a separated line");
+                            				DisplayMessage.printErrorMessage("Each variable must be in separate line");
                             				return;
                             			}
-                            		}
-                            		
+                            		}                            		
                             	}
                             	//check duplicate external variable here
                             	variableDeclarationLine = tempString[0];
@@ -1763,9 +2035,31 @@ public void setLangDefFilePathTest(String content){
         {
         	return;
         }
-        
-        int reply = JOptionPane.showConfirmDialog(null, externalVariableList+parsedFileContent, "Upload?",  JOptionPane.YES_NO_OPTION);
-		if (reply == JOptionPane.YES_OPTION)
+        String uploadContent = externalVariableList+parsedFileContent;
+		String uploadString = "Upload";
+		if (syntaxMap.containsKey(uploadString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(uploadString);
+			uploadString = titleEntry.getLabel();
+		}
+		String yesString = "Yes";
+		if (syntaxMap.containsKey(yesString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(yesString);
+			yesString = titleEntry.getLabel();
+		}
+		String noString = "No";
+		if (syntaxMap.containsKey(noString)) {
+			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(noString);
+			noString = titleEntry.getLabel();
+		}
+		int reply = JOptionPane.showOptionDialog(null, 
+				uploadContent, 
+				uploadString+"?", 
+		        JOptionPane.OK_CANCEL_OPTION, 
+		        JOptionPane.INFORMATION_MESSAGE, 
+		        null, 
+		        new String[]{yesString, noString},
+		        "default");
+        if (reply == JOptionPane.YES_OPTION)
 		{
 			wc.langDefDirty = true;		
 			ExternalOption.addCustombyUser(langDefRoot.getOwnerDocument(), "externalvar"+externalVariableCounter,parsedFileContent, "string");
@@ -1774,7 +2068,49 @@ public void setLangDefFilePathTest(String content){
 			updateSearchableComponents(wc);
 		}
 	}
+	
+	/*
+	 * This method takes a file url and returns content of that file
+	 * */
+	public String readFile(String fileUrl) {
+        File aFile = new File(fileUrl);
+        StringBuilder contents = new StringBuilder();
+        try {
+        	BufferedReader input = new BufferedReader( new InputStreamReader( new FileInputStream(new File(fileUrl)), "UTF-16"));
+            try {
+                String line = null;
+                while ((line = input.readLine()) != null) {
+                    contents.append(line);
+                }
+            } finally {
+                input.close();
+            }
+        } catch (IOException ex) {
+            System.out.println("Error while loading file.");
+        }
+        return contents.toString();
+    }
+	
+	/*
+     * This method takes file and file content and store the file content
+     * */
+    public static boolean writeFile(File file, String dataString) {
+    	String newLine = System.getProperty("line.separator");
+    	//dataString = dataString.replaceAll("\n", newLine);
+        try {
+            BufferedWriter bw = new BufferedWriter( new OutputStreamWriter( new FileOutputStream(file), "UTF-16"));
+            bw.write(dataString);
+            
+            bw.close();
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
     
+    /*
+     * Updating search Bar
+     * */
     public void updateSearchableComponents(WorkspaceController wc)
     {
     	searchBar.clearSearchableContainer();
@@ -1783,235 +2119,64 @@ public void setLangDefFilePathTest(String content){
         }
     }
     
+    /*
+     * Returning workspace
+     * */
     public static Workspace getWorkspace()
     {	
     	return workspace;
     }
     
     /*
-     * User selects New either from menu item or tool bar
+     * Resetting current active project information
      * */
-    public void newSelected(WorkspaceController wc)
-    {    	
-    	if(!projectInitialXmlContent.equals(wc.getSaveString()))
-		{
-			String saveConfirmationString = "SaveConfirmation";
-    		if (syntaxMap.containsKey(saveConfirmationString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveConfirmationString);
-    			saveConfirmationString = titleEntry.getLabel();
-    		}
-    		String saveString = "Save";
-    		if (syntaxMap.containsKey(saveString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveString);
-    			saveString = titleEntry.getLabel();
-    		}
-    		String yesString = "Yes";
-    		if (syntaxMap.containsKey(yesString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(yesString);
-    			yesString = titleEntry.getLabel();
-    		}
-    		String noString = "No";
-    		if (syntaxMap.containsKey(noString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(noString);
-    			noString = titleEntry.getLabel();
-    		}
-    		int reply = JOptionPane.showOptionDialog(null, 
-    				saveConfirmationString, 
-    				saveString+"?", 
-    		        JOptionPane.OK_CANCEL_OPTION, 
-    		        JOptionPane.INFORMATION_MESSAGE, 
-    		        null, 
-    		        new String[]{yesString, noString},
-    		        "default");
-			//before initializing the window, we are saving current project content
-    		if (reply == JOptionPane.YES_OPTION)
-			{
-			   wc.saveAsPressed(wc);
-			}
-    		else if(reply == JOptionPane.NO_OPTION)
-    		{
-    			//do nothing
-    		}
-    		else
-    		{
-    			//user didn't select yes/no option
-    			return;            			
-    		}					
-    		
-		}
-		
-		//initializing frame title
-		String frameTitle = "OpenBlocksDemo";
-		if (syntaxMap.containsKey(frameTitle)) {
-			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(frameTitle);
-			frameTitle = titleEntry.getLabel();
-		}
-		frame.setTitle(frameTitle);
-		
-		wc.setLangDefFilePath(LANG_DEF_FILEPATH);
-        //loading fresh workspace
-		wc.loadFreshWorkspace();
-		//adding code editor
-        Workspace.addCodeEditor();
-        Workspace.clearCodeInEditor();
-        //updating search option
-        wc.updateSearchableComponents(wc);
-    }
-    
-    /*
-     * User selects Open either from menu item or tool bar
-     * */
-    public void openSelected(WorkspaceController wc)
-    {    	
-    	if(!projectInitialXmlContent.equals(wc.getSaveString()))
-		{
-			String saveConfirmationString = "SaveConfirmation";
-    		if (syntaxMap.containsKey(saveConfirmationString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveConfirmationString);
-    			saveConfirmationString = titleEntry.getLabel();
-    		}
-    		String saveString = "Save";
-    		if (syntaxMap.containsKey(saveString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveString);
-    			saveString = titleEntry.getLabel();
-    		}
-    		String yesString = "Yes";
-    		if (syntaxMap.containsKey(yesString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(yesString);
-    			yesString = titleEntry.getLabel();
-    		}
-    		String noString = "No";
-    		if (syntaxMap.containsKey(noString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(noString);
-    			noString = titleEntry.getLabel();
-    		}
-    		int reply = JOptionPane.showOptionDialog(null, 
-    				saveConfirmationString, 
-    				saveString+"?", 
-    		        JOptionPane.OK_CANCEL_OPTION, 
-    		        JOptionPane.INFORMATION_MESSAGE, 
-    		        null, 
-    		        new String[]{yesString, noString},
-    		        "default");
-    		if (reply == JOptionPane.YES_OPTION)
-			{
-			   wc.saveAsPressed(wc);
-			}
-    		else if(reply == JOptionPane.NO_OPTION)
-    		{
-    			//do nothing
-    		}
-    		else
-    		{
-    			//user didn't select yes/no option
-    			return;
-    		}
-		}
-		wc.openPostProcessing(wc);
-    }
-    
-    public void closeSelected(WorkspaceController wc)
+    public void resetFileReference()
     {
-    	if(!projectInitialXmlContent.equals(wc.getSaveString()))
-		{
-			String saveConfirmationString = "SaveConfirmation";
-    		if (syntaxMap.containsKey(saveConfirmationString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveConfirmationString);
-    			saveConfirmationString = titleEntry.getLabel();
-    		}
-    		String saveString = "Save";
-    		if (syntaxMap.containsKey(saveString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveString);
-    			saveString = titleEntry.getLabel();
-    		}
-    		String yesString = "Yes";
-    		if (syntaxMap.containsKey(yesString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(yesString);
-    			yesString = titleEntry.getLabel();
-    		}
-    		String noString = "No";
-    		if (syntaxMap.containsKey(noString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(noString);
-    			noString = titleEntry.getLabel();
-    		}
-    		int reply = JOptionPane.showOptionDialog(null, 
-    				saveConfirmationString, 
-    				saveString+"?", 
-    		        JOptionPane.OK_CANCEL_OPTION, 
-    		        JOptionPane.INFORMATION_MESSAGE, 
-    		        null, 
-    		        new String[]{yesString, noString},
-    		        "default");
-			//before initializing the window, we are saving current project
-    		if (reply == JOptionPane.YES_OPTION)
-			{
-			   wc.saveAsPressed(wc);
-			}
-    		else if(reply == JOptionPane.NO_OPTION)
-    		{
-    			//no action
-    		}
-    		else
-    		{
-    			//user didn't select yes/no option
-    			return;
-    		}
-		}
-    	//initializing frame title
-		String frameTitle = "OpenBlocksDemo";
-		if (syntaxMap.containsKey(frameTitle)) {
-			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(frameTitle);
-			frameTitle = titleEntry.getLabel();
-		}
-		frame.setTitle(frameTitle);
-		
-		wc.setLangDefFilePath(LANG_DEF_FILEPATH);
-        wc.loadFreshWorkspace(); 
-        Workspace.addCodeEditor();
-        Workspace.clearCodeInEditor();
+    	WorkspaceController.isFileSaved = false;
+        WorkspaceController.fileSavePath = "";
+        //WorkspaceController.savedFileContent = "";
         
-        wc.updateSearchableComponents(wc);
+        String leftPanelXml = "";    		
+		try
+		{
+			TransformerFactory tf = TransformerFactory.newInstance();
+    		Transformer transformer = tf.newTransformer();
+    		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+    		StringWriter writer = new StringWriter();
+    		transformer.transform(new DOMSource(WorkspaceController.langDefRoot), new StreamResult(writer));
+    		leftPanelXml = writer.getBuffer().toString();        		
+		}
+		catch(Exception ex)
+		{
+			System.out.println("Error while generating left panel xml");
+		}
+    	WorkspaceController.savedFileContent = projectInitialXmlContent+leftPanelXml;
     }
     
     /*
-     * User selects exit from menu item
+     * This method checks whether project content is modified or not
      * */
-    public void exitSelected(WorkspaceController wc)
-    {    	
-    	if(!projectInitialXmlContent.equals(wc.getSaveString()))
-		{
-			String saveConfirmationString = "SaveConfirmation";
-    		if (syntaxMap.containsKey(saveConfirmationString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveConfirmationString);
-    			saveConfirmationString = titleEntry.getLabel();
-    		}
-    		String saveString = "Save";
-    		if (syntaxMap.containsKey(saveString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveString);
-    			saveString = titleEntry.getLabel();
-    		}
-    		String yesString = "Yes";
-    		if (syntaxMap.containsKey(yesString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(yesString);
-    			yesString = titleEntry.getLabel();
-    		}
-    		String noString = "No";
-    		if (syntaxMap.containsKey(noString)) {
-    			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(noString);
-    			noString = titleEntry.getLabel();
-    		}
-    		int reply = JOptionPane.showOptionDialog(null, 
-    				saveConfirmationString, 
-    				saveString+"?", 
-    		        JOptionPane.OK_CANCEL_OPTION, 
-    		        JOptionPane.INFORMATION_MESSAGE, 
-    		        null, 
-    		        new String[]{yesString, noString},
-    		        "default");
-    		if (reply == JOptionPane.YES_OPTION)
-			{
-			   wc.saveAsPressed(wc);
-			}
-		}
+    public boolean isProjectModified(String projectContent)
+    {
+    	boolean isModified = false;
+    	String leftPanelXml = "";    		
+ 		try
+ 		{
+ 			TransformerFactory tf = TransformerFactory.newInstance();
+     		Transformer transformer = tf.newTransformer();
+     		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+     		StringWriter writer = new StringWriter();
+     		transformer.transform(new DOMSource(WorkspaceController.langDefRoot), new StreamResult(writer));
+     		leftPanelXml = writer.getBuffer().toString();        		
+ 		}
+ 		catch(Exception ex)
+ 		{
+ 			System.out.println("Error while generating left panel xml");
+ 		}
+ 		if(!(WorkspaceController.savedFileContent.equals(projectContent+leftPanelXml)))
+ 		{
+ 			return true; 			
+ 		}
+    	return isModified;
     }
 }

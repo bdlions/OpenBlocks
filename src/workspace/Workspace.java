@@ -1121,8 +1121,10 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
     public static void setCodeInEditor()
     {
     	CodeGen manageCode = new CodeGen();
-        StructureCode sCode = new StructureCode();                
+        StructureCode sCode = new StructureCode(); 
+        int currentPos = editor.getCaretPosition();
         editor.setText(sCode.indentMyCode(manageCode.getGenerateCode( ws.getWorkspaceSaveString(), selectedLanguage)));
+        editor.setCaretPosition(currentPos);
     }
     public static void clearCodeInEditor()
     {

@@ -1,5 +1,6 @@
 package codegenerator;
 
+import general.DisplayMessage;
 import general.JavaFilterText;
 
 import java.awt.BorderLayout;
@@ -50,36 +51,16 @@ public class DisplayCode extends JDialog {
 	public static Hashtable syntaxMap;
 	
 	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					DisplayCode frame = new DisplayCode();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
-
-	/**
 	 * Create the frame.
 	 */
 	public DisplayCode(Hashtable syntaxMap) {
 		this.syntaxMap = syntaxMap;
 		setModal(true);
 		
-		String displayCodeWindowTitleString = "DisplayCodeWindowTitle";
+		String displayCodeWindowTitleString = "Displaying Code";
 		if (syntaxMap.containsKey(displayCodeWindowTitleString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(displayCodeWindowTitleString);
 			displayCodeWindowTitleString = titleEntry.getLabel();
-		}
-		else
-		{
-			displayCodeWindowTitleString = "Displaying Code";
 		}
 		
 		setTitle(displayCodeWindowTitleString);
@@ -102,10 +83,6 @@ public class DisplayCode extends JDialog {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(saveAsString);
 			saveAsString = titleEntry.getLabel();
 		}
-		else
-		{
-			saveAsString = "Save As";
-		}
 		btnSaveAs = new JButton(saveAsString);
 		btnSaveAs.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -115,14 +92,10 @@ public class DisplayCode extends JDialog {
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		buttonPanel.add(btnSaveAs);
 		
-		String copyToClipBoardString = "CopyToClipBoard";
+		String copyToClipBoardString = "Copy to Clipboard";
 		if (syntaxMap.containsKey(copyToClipBoardString)) {
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(copyToClipBoardString);
 			copyToClipBoardString = titleEntry.getLabel();
-		}
-		else
-		{
-			copyToClipBoardString = "Copy to Clipboard";
 		}
 		btnCopyToClipboard = new JButton(copyToClipBoardString);
 		btnCopyToClipboard.addActionListener(new ActionListener() {
@@ -131,26 +104,7 @@ public class DisplayCode extends JDialog {
 			    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			    clipboard.setContents(selection, selection);
 			    
-			    String copyToClipBoardSuccessString = "CopyToClipBoardSuccess";
-        		if (DisplayCode.syntaxMap.containsKey(copyToClipBoardSuccessString)) {
-        			LanguageEntry titleEntry = (LanguageEntry) DisplayCode.syntaxMap.get(copyToClipBoardSuccessString);
-        			copyToClipBoardSuccessString = titleEntry.getLabel();
-        		}
-        		else
-        		{
-        			copyToClipBoardSuccessString = "Code is saved into clipboard successfully.";
-        		}
-        		String copyToClipBoardSuccessTitleString = "CopyToClipBoardSuccessTitle";
-        		if (DisplayCode.syntaxMap.containsKey(copyToClipBoardSuccessTitleString)) {
-        			LanguageEntry titleEntry = (LanguageEntry) DisplayCode.syntaxMap.get(copyToClipBoardSuccessTitleString);
-        			copyToClipBoardSuccessTitleString = titleEntry.getLabel();
-        		}
-        		else
-        		{
-        			copyToClipBoardSuccessTitleString = "Success";
-        		}
-			    
-			    JOptionPane.showMessageDialog(null, copyToClipBoardSuccessString, copyToClipBoardSuccessTitleString, JOptionPane.PLAIN_MESSAGE);
+			    DisplayMessage.printSuccessMessage("Code is saved into clipboard successfully");			    
 			}
 		});
 		buttonPanel.add(btnCopyToClipboard);
