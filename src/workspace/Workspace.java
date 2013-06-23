@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.TextArea;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.File;
@@ -25,13 +26,17 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.multi.MultiLabelUI;
 import javax.swing.text.JTextComponent;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -74,7 +79,7 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
      * Single Workspace instance
      */
     private static Workspace ws = new Workspace();
-    private static JTextComponent editor  = new JTextPane();
+    private static JLabel editor  = new JLabel();
     private static String selectedLanguage = "java"; 
 	public static void setSelectedLanguage(String selectedLanguage) {
 		Workspace.selectedLanguage = selectedLanguage;
@@ -1105,26 +1110,39 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
         Page editorPage = ws.getPageNamed("Code");
         
         //user will not be able to type in code editor panel
-        editor.setEditable(false);
         editor.setBackground(editorPage.getJComponent().getBackground());
         editor.setForeground(Color.green);
+        editor.setOpaque(true);
         editor.setFont(new Font("monospaced", Font.BOLD, 15));
-        editor.setEditable(false);
+
+        editor.setFocusable(false);
+        editor.setVerticalAlignment(JLabel.TOP);
+        editor.setVerticalTextPosition(JLabel.TOP);
+        
         int width = (int)editorPage.getJComponent().getBounds().getWidth();
         int height = (int)editorPage.getJComponent().getBounds().getHeight();
         Rectangle updatedDimensionRect = new Rectangle(20,0,width,height);
-        
         editor.setBounds(updatedDimensionRect);
+        
         editorPage.getRBParent().addToBlockLayer(editor);
+
     }
     
     public static void setCodeInEditor()
     {
     	CodeGen manageCode = new CodeGen();
         StructureCode sCode = new StructureCode(); 
-        int currentPos = editor.getCaretPosition();
-        editor.setText(sCode.indentMyCode(manageCode.getGenerateCode( ws.getWorkspaceSaveString(), selectedLanguage)));
-        editor.setCaretPosition(currentPos);
+        editor.setFocusable(false);
+        
+        String code = sCode.indentMyCode(manageCode.getGenerateCode( ws.getWorkspaceSaveString(), selectedLanguage));
+        String labelText = "<html>";
+        String lines[] = code.split("\n");
+        for (String line : lines) {
+			labelText += "<p>" + line + "</p>";
+		}
+        labelText += "</html>";
+        
+        editor.setText(labelText);
     }
     public static void clearCodeInEditor()
     {
