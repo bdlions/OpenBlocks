@@ -52,7 +52,7 @@ public class BlockCanvas implements PageChangeListener, ISupportMemento  {
 	/** The Swing representation of the page container */
 	private JComponent canvas;
 	/** The scrollable JComponent representing the graphical part of this BlockCanvas */
-	private CScrollPane scrollPane;
+	public CScrollPane scrollPane;
 
 	//////////////////////////////
 	//Constructor/Destructor	//

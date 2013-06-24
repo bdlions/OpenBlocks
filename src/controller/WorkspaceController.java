@@ -95,6 +95,8 @@ public class WorkspaceController {
 	
 	public static SearchBar searchBar;
 	
+	public static String projectFileName = "";
+	
 	public static JMenu menuFile;
 	public static JMenuItem menuItemNew;
 	public static JMenuItem menuItemOpen;
@@ -1235,7 +1237,7 @@ public void setLangDefFilePathTest(String content){
 			LanguageEntry titleEntry = (LanguageEntry) syntaxMap.get(frameTitle);
 			frameTitle = titleEntry.getLabel();
 		}
-		frame.setTitle(frameTitle);
+		frame.setTitle(frameTitle+" "+WorkspaceController.projectFileName);
 		
 		String fileString = "File";
 		if (syntaxMap.containsKey(fileString)) {
@@ -1628,7 +1630,7 @@ public void setLangDefFilePathTest(String content){
         			frameTitle = titleEntry.getLabel();
         		}
         		frame.setTitle(frameTitle+" "+fileName);
-        		
+        		WorkspaceController.projectFileName = fileName;
             	loadProject(codePart);
             	
             	List<String> errors = BlockValidator.validateAll(XMLToBlockGenerator.generateBlocks(wc.getSaveString()));
@@ -1811,7 +1813,8 @@ public void setLangDefFilePathTest(String content){
                         "Overwrite existing file?", "Confirm Overwrite",
                         JOptionPane.OK_CANCEL_OPTION,
                         JOptionPane.QUESTION_MESSAGE);*/
-                if (response == JOptionPane.CANCEL_OPTION) {
+                System.out.println("response:"+response+" and cancel_option:"+JOptionPane.CANCEL_OPTION+" no_option:"+JOptionPane.NO_OPTION);
+        		if (response != JOptionPane.OK_OPTION) {
                     return;
                 }
             }
@@ -1822,7 +1825,7 @@ public void setLangDefFilePathTest(String content){
     			frameTitle = titleEntry.getLabel();
     		}
     		frame.setTitle(frameTitle+" "+file.getName());
-    		
+    		WorkspaceController.projectFileName = file.getName();
     		String leftPanelXml = "";    		
     		try
     		{
@@ -2134,6 +2137,7 @@ public void setLangDefFilePathTest(String content){
     {
     	WorkspaceController.isFileSaved = false;
         WorkspaceController.fileSavePath = "";
+        WorkspaceController.projectFileName = "";
         //WorkspaceController.savedFileContent = "";
         
         String leftPanelXml = "";    		

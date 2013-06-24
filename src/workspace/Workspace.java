@@ -1138,7 +1138,8 @@ public class Workspace extends JLayeredPane implements ISupportMemento, RBParent
         String labelText = "<html>";
         String lines[] = code.split("\n");
         for (String line : lines) {
-			labelText += "<p>" + line + "</p>";
+        	line = line.replaceAll(" ", "&nbsp;");
+        	labelText += "<p>" + line + "</p>";
 		}
         labelText += "</html>";
         

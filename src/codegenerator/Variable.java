@@ -2,8 +2,8 @@ package codegenerator;
 
 import java.util.List;
 
-public class Variable {
 
+public class Variable {
 	private int id;
 	private String name;
 	private String type;

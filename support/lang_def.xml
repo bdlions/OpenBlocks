@@ -18,7 +18,7 @@
 		<BlockConnectorShape shape-type="color" shape-number="6"></BlockConnectorShape>
 		<BlockConnectorShape shape-type="string" shape-number="7"></BlockConnectorShape>
 		<BlockConnectorShape shape-type="string-list" shape-number="8"></BlockConnectorShape>
-		<BlockConnectorShape shape-type="string-inv" shape-number="9"></BlockConnectorShape>
+		<BlockConnectorShape shape-type="yes-no" shape-number="9"></BlockConnectorShape>
 		<BlockConnectorShape shape-type="poly" shape-number="10"></BlockConnectorShape>
 		<BlockConnectorShape shape-type="poly-list" shape-number="11"></BlockConnectorShape>
 		<BlockConnectorShape shape-type="poly-inv" shape-number="12"></BlockConnectorShape>
@@ -1065,12 +1065,12 @@
 		
 		<BlockGenus name="yes" kind="data" initlabel="yes" color="255 0 0" editable-label="no" is-label-value="yes">
 			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
+				<BlockConnector connector-kind="plug" connector-type="yes-no" position-type="mirror"></BlockConnector>
 			</BlockConnectors>
 		</BlockGenus>
 		<BlockGenus name="no" kind="data" initlabel="no" color="255 0 0" editable-label="no" is-label-value="yes">
 			<BlockConnectors>
-				<BlockConnector connector-kind="plug" connector-type="double" position-type="mirror"></BlockConnector>
+				<BlockConnector connector-kind="plug" connector-type="yes-no" position-type="mirror"></BlockConnector>
 			</BlockConnectors>
 		</BlockGenus>
 		<BlockGenus name="monday" kind="data" initlabel="Monday" color="255 0 0" editable-label="no" is-label-value="yes">
@@ -1200,7 +1200,7 @@
 		</BlockGenus>
 		<BlockGenus name="var-userexternal" kind="variable" initlabel="userexternal" editable-label="no" label-unique="yes" color="65 170 225">
 			<BlockConnectors>
-				<BlockConnector connector-kind="socket" connector-type="double">
+				<BlockConnector connector-kind="socket" connector-type="yes-no">
 					<DefaultArg genus-name="yes" label="yes" />
 				</BlockConnector>
 			</BlockConnectors>
@@ -1415,6 +1415,8 @@
 			<BlockDrawer name="General" type="factory" button-color="247 0 0">
 				<BlockGenusMember>var-execute</BlockGenusMember>
 				<BlockGenusMember>var-userexternal</BlockGenusMember>
+				<BlockGenusMember>tomorrow</BlockGenusMember>
+				<BlockGenusMember>yes</BlockGenusMember>
 			</BlockDrawer>
 			<BlockDrawer name="ExternalOption" type="factory" button-color="200 200 200">
 				
