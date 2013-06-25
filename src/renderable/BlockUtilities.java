@@ -16,6 +16,7 @@ import workspace.WorkspaceEvent;
 import workspace.WorkspaceWidget;
 import codeblocks.Block;
 import codeblocks.BlockConnector;
+import codeblocks.BlockGenus;
 import codeblocks.BlockLink;
 import codeblocks.BlockLinkChecker;
 import codeblocks.BlockStub;
@@ -71,25 +72,32 @@ public class BlockUtilities {
 		 * If the block has a plug then we will continue searching
 		 * if it has a plug then it has a parent
 		 * */
+		
 		if(BlockLinkChecker.getPlugEquivalent(block) != null)
 		{
+			
 			long plugId = BlockLinkChecker.getPlugEquivalent(block).getBlockID();
 			Block parentBlock = Block.getBlock(plugId);
+			 
 			if(parentBlock != null)
 			{
 				for (BlockConnector connector : parentBlock.getSockets()) {
 					if(connector.getBlockID() == block.getBlockID())
 					{
-						if(connector.hasARange())
+						BlockConnector actualConnector = null;
+						for (BlockConnector blockConnector : parentBlock.getInitSockets()) {
+							if(blockConnector.getLabel().equals(connector.getLabel())){
+								actualConnector = blockConnector;
+							}
+						}
+						if(actualConnector != null && actualConnector.hasARange())
 						{
-							//System.out.println("Current Text: "+ text);
-							//System.out.println("Range : "+ connector.getHighRange());
 							double currentNumber = Double.parseDouble(text);
-							if(connector.getLowRange() <= currentNumber && connector.getHighRange() >= currentNumber)
+							if(actualConnector.getLowRange() <= currentNumber && actualConnector.getHighRange() >= currentNumber)
 								return isInsideRangeMessage;
 							else
 							{	
-								isInsideRangeMessage = "["+connector.getLowRange()+"-"+connector.getHighRange()+"]";
+								isInsideRangeMessage = "["+actualConnector.getLowRange()+"-"+actualConnector.getHighRange()+"]";
 								return isInsideRangeMessage;
 							}
 						}
@@ -127,8 +135,6 @@ public class BlockUtilities {
 					{
 						if(connector.hasLength())
 						{
-							//System.out.println("Current Text: "+ text);
-							//System.out.println("Range : "+ connector.getHighRange());
 							int textLength = text.length();
 							if(connector.getMinLength() <= textLength && connector.getMaxLength() >= textLength)
 								return isInsideLengthMessage;
@@ -222,8 +228,9 @@ public class BlockUtilities {
 			Block parent = ((BlockStub)myblock).getParent();
 			block = new BlockStub(parent.getBlockID(), parent.getGenusName(), parent.getBlockLabel(), myblock.getGenusName());
 		}
-		else
+		else{
 			block = new Block(myblock.getGenusName(), label);
+		}
 
 		// TODO - djwendel - create a copy of the RB properties too, using an RB copy constructor.  Don't just use the genus.
 		//RenderableBlock renderable = new RenderableBlock(this.getParentWidget(), block.getBlockID());
