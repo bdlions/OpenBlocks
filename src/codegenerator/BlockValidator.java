@@ -11,32 +11,54 @@ import codegenerator.xmlbind.Block;
 import codegenerator.xmlbind.BlockConnector;
 import codegenerator.xmlbind.Plug;
 
+/**
+ * This is the class for validation
+ * validate when code is generated
+ * validated all blocks if a block has empty connectors or 
+ * allowed to generate code
+ * */
+
 public class BlockValidator {
 	private static HashMap<Integer, Block> blocksMap = new HashMap<Integer, Block>();
 	private static List<String> errors = new ArrayList<String>();
 	private static int missing_param_count = 0;
 	private static List<String> variableNameList = new ArrayList<String>();
+	
+	/**
+	 * This function validate a list of blocks
+	 * and store error result
+	 * */
 	public static List<String> validateAll(List<Block> allBlocks)
 	{
 		variableNameList = new ArrayList<String>();
 		blocksMap = new HashMap<Integer, Block>();
 		errors = new ArrayList<String>();
-		
+		/**
+		 * differentiate all variable list
+		 * and others blocks
+		 * */
 		for (Block block : allBlocks) 
 		{
 			blocksMap.put(block.getId(), block);
+			
 			if(block.getGenusName().contains("decl"))
 			{
 				variableNameList.add(BlockGenus.getGenusWithName(block.getGenusName()).getInitialLabel());
 			}
 		}
 		for (Block block : allBlocks) {
+			/**
+			 * validate a single block
+			 * */
 			validate(block);
 		}
 		
 		return errors; 
 	}
 	
+	/**
+	 * validate a single block
+	 * */
 	public static List<String> validate(Block block)
 	{
 		BlockGenus blockGenus = BlockGenus.getGenusWithName(block.getGenusName());
@@ -46,6 +68,11 @@ public class BlockValidator {
 		{
 			if(!variableNameList.contains(BlockGenus.getGenusWithName(block.getGenusName()).getInitialLabel()))
 			{
+				/**
+				 * If a variable not declared but 
+				 * trying to initiate tthe set command for that varialbe
+				 * then generate an error
+				 * */
 				customMessage = DisplayMessage.convertedTextInSelectedLanguage("Please declare the variable named");
 				errors.add(customMessage+" '"+block.getLabel()+"'");
 				//errors.add("Please declare the variable named "+BlockGenus.getGenusWithName(block.getGenusName()).getInitialLabel());
@@ -54,12 +81,22 @@ public class BlockValidator {
 		
 		if(blockGenus.isDataBlock() && block.getPlug().getBlockConnectors().getConnectBlockId() <= 0)
 		{ 
+			/**
+			 * data blocks are alone
+			 * so we cannnot set that type of block without others connected block
+			 * */
 			customMessage = DisplayMessage.convertedTextInSelectedLanguage("can't be added as single data block");
 			errors.add("'"+block.getLabel()+"' "+customMessage);			
 			//errors.add("You can't add '"+block.getLabel()+"' as single data block ");
 		}
 		if(blockGenus.isDeclaration())
 		{
+			/**
+			 * When a declaration block found
+			 * declaration blocks should have only one connector if there is more than one connector thane we found an error
+			 * if we found no connector then we have found another error becasue we have always declared varialbe with initialize
+			 * if there has one connector but connected id is not valid then ther is another error
+			 * */
 			List<BlockConnector> blockConnectors = block.getSockets().getBlockConnectors();
 			if (blockConnectors.size() > 1) 
 			{
@@ -89,6 +126,7 @@ public class BlockValidator {
 		{
 			/**
 			 * set method validation
+			 * set block should atleast a socketso that we can set a block in the connector
 			 * */
 			if(block.getSockets() == null)
 			{
@@ -98,6 +136,12 @@ public class BlockValidator {
 			}
 			else
 			{
+				/**
+				 * When a set block found
+				 * set blocks should have only one connector if there is more than one connector thane we found an error
+				 * if we found no connector then we have found another error becasue we have always a block for a set block
+				 * if there has one connector but connected id is not valid then ther is another error
+				 * */
 				List<BlockConnector> blockConnectors = block.getSockets().getBlockConnectors();
 				if (blockConnectors.size() > 1) 
 				{
@@ -129,6 +173,10 @@ public class BlockValidator {
 		{
 			
 			//List<ExpressionData> conditionData = new ArrayList<ExpressionData>();
+			/**
+			 * if "if" or "ifelse" blocks blockconnectors are invalid id or has no connecoter 
+			 * then add an erro
+			 * */
 			if(block.getSockets() != null){
 				for (BlockConnector ifConnector : block.getSockets().getBlockConnectors()){
 					
@@ -194,6 +242,10 @@ public class BlockValidator {
 			}
 			else
 			{
+				/**
+				 * Calculate how many connectoer are missing and
+				 * add error
+				 * */
 				int missing_param_count = 0;
 				for (BlockConnector blockConnector : block.getSockets().getBlockConnectors()) 
 				{
@@ -219,6 +271,9 @@ public class BlockValidator {
 		}
 		else if(blockGenus.isFunctionBlock())
 		{
+			/**
+			 * adding function bloks error and counting how many params are missed
+			 * */
 			List<ExpressionData> listExpression = new ArrayList<ExpressionData>();
 			listExpression.add(getExpressionData(block.getId(), Integer.toString(block.getId())));
 			while (isCompleteProcessFunction(listExpression));
@@ -395,6 +450,9 @@ public class BlockValidator {
 		list.addAll(tempList);
 		return found;
 	}
+	/**
+	 * Checking a string is number
+	 * */
 	public static Boolean isNumber(String number) {
 		try {
 			Integer.parseInt(number);
@@ -404,6 +462,10 @@ public class BlockValidator {
 		}
 		return false;
 	}
+	
+	/**
+	 * getting expression data
+	 * */
 	private static ExpressionData getExpressionData(int id, String data) {
 		ExpressionData expressionData = new ExpressionData();
 		expressionData.setData(data);

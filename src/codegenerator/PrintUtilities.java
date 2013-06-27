@@ -4,6 +4,9 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.print.*;
 
+/**
+ * this is a helper class to print a component
+ * */
 public class PrintUtilities implements Printable {
  private Component componentToBePrinted;
 

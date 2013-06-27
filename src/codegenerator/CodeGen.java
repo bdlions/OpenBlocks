@@ -20,7 +20,10 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
-
+/**
+ * This is the class which is responsiblae for generating 
+ * code applying template
+ * */
 public class CodeGen {
 
 	private HashMap<Integer, Block> blocksMap = new HashMap<Integer, Block>();
@@ -38,6 +41,10 @@ public class CodeGen {
 		{
 			blocksMap.put(block.getId(), block);
 		}
+		
+		/**
+		 * differentiate all blocks such as function, command, declaration etc
+		 * */
 		
 		for (Block block : allBlocks) 
 		{
@@ -103,6 +110,10 @@ public class CodeGen {
 		return getCodeFromTemplate(languageName);
 	}
 	
+	/**
+	 * getting the code from the template corresponding a specific language
+	 * such as c, java etc
+	 * */
 	public String getCodeFromTemplate(String languageName)
 	{
 		try
@@ -138,6 +149,11 @@ public class CodeGen {
 		return null;
 	}
 	
+	/**
+	 * get partial code for a block
+	 * when we want to know a specific block code according to a specific
+	 * language such as c, java
+	 * */
 	public String getPartialGenerateCode(String xmlString, String languageName, int blockID) {
 		languageName = languageName+"/"+languageName+"-partial";
 		// TODO Auto-generated method stub
@@ -322,7 +338,10 @@ public class CodeGen {
 		list.addAll(tempList);
 		return found;
 	}
-	
+	/**
+	 * making an expressing when callling from the template
+	 * get necessary infromation for generating code
+	 * */
 	public List<ExpressionData> getCommandExpression(Block block)
 	{
 		List<ExpressionData> expression = new ArrayList<ExpressionData>();
@@ -439,6 +458,9 @@ public class CodeGen {
 					}
 					if(paramBlock != null)
 					{
+						/*
+						 * if string, style, tomorrow-now etc then add double quote in the first and last end
+						 * */
 						Number paramBlockId = paramBlock.getId();
 						if(getGenusWithName(paramBlock.getGenusName()).isFunctionBlock())
 							expression.addAll(getFullFunction(paramBlock));
@@ -464,6 +486,9 @@ public class CodeGen {
 		return expressionData;
 	}
 
+	/**
+	 * check a string is a number
+	 * */
 	public Boolean isNumber(String number) {
 		try {
 			Integer.parseInt(number);
@@ -474,23 +499,37 @@ public class CodeGen {
 		return false;
 	}
 
+	/**
+	 * getting block with id
+	 * */
 	public Block getBlock(int id)
 	{
 		return blocksMap.get(id);
 	}
 	
+	/**
+	 * get block by block name
+	 * */
 	public BlockGenus getGenusWithName(String blockName)
 	{
 		return BlockGenus.getGenusWithName(blockName);
 	}
+	/**
+	 * get a list of variable blocks
+	 * */
 	public List<Variable> getVariableDeclBlocks()
 	{
 		return variableDecl;
 	}
+	/**
+	 * get all different command
+	 * */
 	public List<Block> getDifferentCommand() {
 		return differentCommand;
 	}
-	
+	/**
+	 * get a block is if block
+	 * */
 	public List<ExpressionData> getIfCondition(Block commandBlock)
 	{
 		List<ExpressionData> conditionData = new ArrayList<ExpressionData>();
@@ -505,6 +544,9 @@ public class CodeGen {
 				
 				if(ifConnector.getLabel().equals("condition"))
 				{
+					/**
+					 * when condition found get all the hierarchical blocks
+					 * */
 					conditionData.add(getExpressionData(ifConnector.getConnectBlockId(), Integer.toString(ifConnector.getConnectBlockId())));
 					//while (isCompleteProcessFunction(conditionData));
 					conditionData = getFullFunction(ifConnector.getConnectBlockId());

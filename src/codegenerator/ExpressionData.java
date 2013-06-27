@@ -1,5 +1,7 @@
 package codegenerator;
-
+/**
+ * helper class to stroe data
+ * */
 public class ExpressionData {
 	private int id;
 	private String data;

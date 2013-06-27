@@ -11,13 +11,20 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.*;
-
+/**
+ * this is a class to make a variable
+ * and add in the langdef.xml file
+ * so that we can save and upload the variable
+ * */
 
 public class VariableMaker {
 
 	public static void addSetMethod(Document doc, String name, String type)
 	{
-		
+		/**
+		 * adding set method in the langdef.xml file
+		 * and it's properties
+		 * */
 		Node blockGenuses = doc.getElementsByTagName("BlockGenuses").item(0);
 		
 		Element blockGenus = doc.createElement("BlockGenus");
@@ -56,7 +63,10 @@ public class VariableMaker {
 	
 	public static void addReSetMethod(Document doc, String name, String type)
 	{
-		
+		/**
+		 * adding reset method in the langdef.xml file
+		 * and it's properties
+		 * */
 		Node blockGenuses = doc.getElementsByTagName("BlockGenuses").item(0);
 		
 		Element blockGenus = doc.createElement("BlockGenus");
@@ -119,6 +129,10 @@ public class VariableMaker {
 	
 	public static String addVariable(Document doc, String name, String type)
 	{
+		/**
+		 * adding variable in the langdef.xml file
+		 * and it's properties
+		 * */
 		//String pattern = "[^a-zA-Z_]+|[^a-zA-Z_0-9]+//g";
 		//name = name.replaceAll(pattern, "");
 		name = Variable.getValidVariableName(name);
@@ -207,7 +221,9 @@ public class VariableMaker {
 				element.appendChild(familyMember);
 			}
 		}*/
-		
+		/**
+		 * adding variable into the blockdrawer
+		 * */
 		NodeList blockDrawers = doc.getElementsByTagName("BlockDrawer");
 		for (int i = 0; i < blockDrawers.getLength(); i ++) {
 			Element blockDrawer = (Element)blockDrawers.item(i);
@@ -233,6 +249,9 @@ public class VariableMaker {
 				
 			}
 		}
+		/**
+		 * add set and reset methond
+		 * */
 		
 		addSetMethod(doc, name, type);
 		addReSetMethod(doc, name, type);
@@ -244,6 +263,9 @@ public class VariableMaker {
 		
 		try
 		{
+			/**
+			 * generating xml
+			 * */
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 	
@@ -264,6 +286,10 @@ public class VariableMaker {
 		return xmlString;
 	}
 	
+	/**
+	 * adding increment methond
+	 * and add properties in the xml
+	 * */
 	public static void addInc(Document doc, String name, String type)
 	{
 		Node blockGenuses = doc.getElementsByTagName("BlockGenuses").item(0);
@@ -317,6 +343,10 @@ public class VariableMaker {
 		}
 	}
 	
+	/**
+	 * adding decrement methond
+	 * and add properties in the xml
+	 * */
 	public static void addDec(Document doc, String name, String type)
 	{
 		Node blockGenuses = doc.getElementsByTagName("BlockGenuses").item(0);

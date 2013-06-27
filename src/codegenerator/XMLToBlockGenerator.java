@@ -13,7 +13,9 @@ import codegenerator.xmlbind.CodeBlocks;
 import codegenerator.xmlbind.Page;
 import codegenerator.xmlbind.PageBlock;
 import codegenerator.xmlbind.Pages;
-
+/**
+ * this class converting xml to block
+ * */
 public class XMLToBlockGenerator {
 	public static List< Block> generateBlocks(String xml) {
 		List<Block> blocks = new ArrayList<Block>();
