@@ -271,9 +271,44 @@ public class BlockValidator {
 		}
 		else if(blockGenus.isFunctionBlock())
 		{
+
 			/**
 			 * adding function bloks error and counting how many params are missed
 			 * */
+
+			ArrayList<String> nameList = new ArrayList<String>();
+			nameList.add("and");
+			nameList.add("or");
+			nameList.add("not");	
+			nameList.add("sum");
+			nameList.add("double_sum_integer");
+			nameList.add("double_sum_double");
+			nameList.add("difference");
+			nameList.add("product");
+			nameList.add("quotient");
+			nameList.add("integernot-equalsinteger");
+			nameList.add("integerequalsinteger");
+			nameList.add("integerlessthaninteger");
+			nameList.add("integerlessthanorequaltointeger");
+			nameList.add("integergreaterthaninteger");
+			nameList.add("integergreaterthanorequaltointeger");
+			nameList.add("doublenot-equalsdouble");
+			nameList.add("doubleequalsdouble");
+			nameList.add("doublelessthandouble");
+			nameList.add("doublelessthanorequaltodouble");
+			nameList.add("doublegreaterthandouble");
+			nameList.add("doublegreaterthanorequaltodouble");
+			nameList.add("booleannot-equalsboolean");
+			nameList.add("booleanequalsboolean");
+			
+			String genusName = blockGenus.getGenusName();
+			if(nameList.contains(genusName) && block.getPlug() != null && block.getPlug().getBlockConnectors() != null && block.getPlug().getBlockConnectors().getConnectBlockId() == 0 )
+			{
+				customMessage = DisplayMessage.convertedTextInSelectedLanguage("Invalid block with");
+				errors.add(customMessage+" '"+block.getLabel()+"'");
+			}
+			
+
 			List<ExpressionData> listExpression = new ArrayList<ExpressionData>();
 			listExpression.add(getExpressionData(block.getId(), Integer.toString(block.getId())));
 			while (isCompleteProcessFunction(listExpression));

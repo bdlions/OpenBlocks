@@ -12,6 +12,8 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import renderable.BlockUtilities;
+
 import codeblocks.BlockGenus;
 import codegenerator.xmlbind.Block;
 import codegenerator.xmlbind.BlockConnector;
@@ -410,7 +412,9 @@ public class CodeGen {
 			for (Variable variable : variableDecl) {
 				if(variable.getName().equals(block.getLabel()))
 				{
-					expression.add(getExpressionData(0, getBlock(variable.getValue().get(0).getId()).getLabel()));
+					if(variable.getType().equals("string"))
+						expression.add(getExpressionData(0, "\""+getBlock(variable.getValue().get(0).getId()).getLabel()+"\""));
+					else expression.add(getExpressionData(0, getBlock(variable.getValue().get(0).getId()).getLabel()));
 					break;
 				}
 			}
@@ -510,6 +514,26 @@ public class CodeGen {
 	/**
 	 * get block by block name
 	 * */
+
+	public String getDataBlockType(int id)
+	{
+		Block block = blocksMap.get(id);
+		if(BlockGenus.getGenusWithName(block.getGenusName()).isDataBlock()){
+			if(block.getPlug() != null )
+			{
+				return block.getPlug().getBlockConnectors().getType();
+			}
+			else
+			{
+				return "";
+			}
+		}
+		else{
+			return "";
+		}
+	}
+	
+
 	public BlockGenus getGenusWithName(String blockName)
 	{
 		return BlockGenus.getGenusWithName(blockName);
