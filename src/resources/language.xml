@@ -242,6 +242,9 @@
 			<entry name="All Validation Errors">
 				<label>All Validation Errors</label>
 			</entry>
+			<entry name="Invalid block with">
+				<label>Invalid block with</label>
+			</entry>
 		</language>
 		<language name="Spanish">
 			<entry name="OpenBlocksDemo">
@@ -484,6 +487,9 @@
 			<entry name="All Validation Errors">
 				<label>All Validation Errors*</label>
 			</entry>
+			<entry name="Invalid block with">
+				<label>Invalid block with*</label>
+			</entry>
 		</language>
 		<language name="Francis">
 			<entry name="OpenBlocksDemo">
@@ -725,6 +731,9 @@
 			</entry>
 			<entry name="All Validation Errors">
 				<label>All Validation Errors**</label>
+			</entry>
+			<entry name="Invalid block with">
+				<label>Invalid block with**</label>
 			</entry>
 		</language>
 	</languages>

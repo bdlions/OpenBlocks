@@ -80,16 +80,20 @@ public class BlockUtilities {
 				for (BlockConnector connector : parentBlock.getSockets()) {
 					if(connector.getBlockID() == block.getBlockID())
 					{
-						if(connector.hasARange())
-						{
-							//System.out.println("Current Text: "+ text);
-							//System.out.println("Range : "+ connector.getHighRange());
+						BlockConnector actualConnector = null;
+						for (BlockConnector blockConnector : parentBlock.getInitSockets()) {
+							if(blockConnector.getLabel().equals(connector.getLabel())){
+								actualConnector = blockConnector;
+							}
+						}
+						if(actualConnector != null && actualConnector.hasARange())
+ 						{
 							double currentNumber = Double.parseDouble(text);
-							if(connector.getLowRange() <= currentNumber && connector.getHighRange() >= currentNumber)
+							if(actualConnector.getLowRange() <= currentNumber && actualConnector.getHighRange() >= currentNumber)
 								return isInsideRangeMessage;
 							else
 							{	
-								isInsideRangeMessage = "["+connector.getLowRange()+"-"+connector.getHighRange()+"]";
+								isInsideRangeMessage = "["+actualConnector.getLowRange()+"-"+actualConnector.getHighRange()+"]";
 								return isInsideRangeMessage;
 							}
 						}

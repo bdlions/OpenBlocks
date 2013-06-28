@@ -1803,7 +1803,36 @@ public class RenderableBlock extends JComponent implements SearchableElement, Mo
 					//Block currentMouseSelectedDroppedBlock = socketRB.blockShape.getBlock();
 					Block currentMouseSelectedBlock = blockShape.getBlock();
 					
-					if(link.getSocket().getDefArgumentGenusName().equals("USA") && currentMouseSelectedBlock.getGenusName().equals("string"))
+					//if a block genus socket is of type country then checking valid country
+					ArrayList<String> countryList = new ArrayList<String>();
+					countryList.add("USA");
+					countryList.add("CAN");
+					countryList.add("EUR");
+					if(countryList.contains(link.getSocket().getDefArgumentGenusName()) && !countryList.contains(currentMouseSelectedBlock.getGenusName()) )
+					{
+						DisplayMessage.printErrorMessage("You are not allowed to drop this component here");
+						BlockUtilities.deleteBlock(this);
+						return;
+					}
+					
+					//if a block genus socket is of type month then checking valid month
+					ArrayList<String> monthList = new ArrayList<String>();
+					monthList.add("january");
+					monthList.add("february");
+					monthList.add("march");
+					if(monthList.contains(link.getSocket().getDefArgumentGenusName()) && !monthList.contains(currentMouseSelectedBlock.getGenusName()) )
+					{
+						DisplayMessage.printErrorMessage("You are not allowed to drop this component here");
+						BlockUtilities.deleteBlock(this);
+						return;
+					}
+					
+					//if a block genus socket is of type day then checking valid day
+					ArrayList<String> dayList = new ArrayList<String>();
+					dayList.add("monday");
+					dayList.add("tuesday");
+					dayList.add("wednesday");
+					if(dayList.contains(link.getSocket().getDefArgumentGenusName()) && !dayList.contains(currentMouseSelectedBlock.getGenusName()) )
 					{
 						DisplayMessage.printErrorMessage("You are not allowed to drop this component here");
 						BlockUtilities.deleteBlock(this);

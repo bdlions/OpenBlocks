@@ -39,7 +39,7 @@
 			</#list> 
 		}
 	<#else>
- 		<#list codeGen.getCommandExpression(command) as commandStatement><#if commandStatement.getId() = 0> ${functions.getalternatename(commandStatement.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(commandStatement.getId()).getLabel())}</#if></#list>;
+ 		<#list codeGen.getCommandExpression(command) as commandStatement><#if commandStatement.getId() = 0>${functions.getalternatename(commandStatement.getData())}<#else><#if codeGen.getDataBlockType(commandStatement.getId()) = "string">"${functions.getalternatename(codeGen.getBlock(commandStatement.getId()).getLabel())}"<#else>${functions.getalternatename(codeGen.getBlock(commandStatement.getId()).getLabel())}</#if></#if></#list>;
  	</#if>
 	<#if command.getAfterBlockId() != 0>
 		<#assign nextBlock = codeGen.getBlock(command.getAfterBlockId())/>
@@ -65,7 +65,7 @@
 			</#list> 
 		}
  		<#else>
- 			<#list codeGen.getCommandExpression(command) as commandStatement><#if commandStatement.getId() = 0> ${functions.getalternatename(commandStatement.getData())}<#else> ${functions.getalternatename(codeGen.getBlock(commandStatement.getId()).getLabel())}</#if></#list>;
+ 			<#list codeGen.getCommandExpression(command) as commandStatement><#if commandStatement.getId() = 0>${functions.getalternatename(commandStatement.getData())}<#else><#if codeGen.getDataBlockType(commandStatement.getId()) = "string">"${functions.getalternatename(codeGen.getBlock(commandStatement.getId()).getLabel())}"<#else>${functions.getalternatename(codeGen.getBlock(commandStatement.getId()).getLabel())}</#if></#if></#list>;
  		<#if command.getAfterBlockId() != 0>
 			<#assign nextBlock = codeGen.getBlock(command.getAfterBlockId())/>
 			<@commandMacro command=nextBlock/>
