@@ -125,16 +125,22 @@ public class BlockUtilities {
 				for (BlockConnector connector : parentBlock.getSockets()) {
 					if(connector.getBlockID() == block.getBlockID())
 					{
-						if(connector.hasLength())
+						BlockConnector actualConnector = null;
+						for (BlockConnector blockConnector : parentBlock.getInitSockets()) {
+							if(blockConnector.getLabel().equals(connector.getLabel())){
+								actualConnector = blockConnector;
+							}
+						}
+						if(actualConnector.hasLength())
 						{
 							//System.out.println("Current Text: "+ text);
 							//System.out.println("Range : "+ connector.getHighRange());
 							int textLength = text.length();
-							if(connector.getMinLength() <= textLength && connector.getMaxLength() >= textLength)
+							if(actualConnector.getMinLength() <= textLength && actualConnector.getMaxLength() >= textLength)
 								return isInsideLengthMessage;
 							else
 							{
-								isInsideLengthMessage = "["+connector.getMinLength()+"-"+connector.getMaxLength()+"]";
+								isInsideLengthMessage = "["+actualConnector.getMinLength()+"-"+actualConnector.getMaxLength()+"]";
 								return isInsideLengthMessage;
 							}
 						}

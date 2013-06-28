@@ -2162,6 +2162,7 @@ public void setLangDefFilePathTest(String content){
     	String leftPanelXml = "";    		
  		try
  		{
+ 			//generating left panel xml content
  			TransformerFactory tf = TransformerFactory.newInstance();
      		Transformer transformer = tf.newTransformer();
      		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
@@ -2173,9 +2174,10 @@ public void setLangDefFilePathTest(String content){
  		{
  			System.out.println("Error while generating left panel xml");
  		}
+ 		//comparing current project content with last saved content
  		if(!(WorkspaceController.savedFileContent.equals(projectContent+leftPanelXml)))
  		{
- 			return true; 			
+ 			isModified = true; 			
  		}
     	return isModified;
     }

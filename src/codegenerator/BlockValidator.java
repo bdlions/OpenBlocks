@@ -279,7 +279,8 @@ public class BlockValidator {
 			ArrayList<String> nameList = new ArrayList<String>();
 			nameList.add("and");
 			nameList.add("or");
-			nameList.add("not");	
+			nameList.add("not");
+			nameList.add("abs");
 			nameList.add("sum");
 			nameList.add("double_sum_integer");
 			nameList.add("double_sum_double");
@@ -300,8 +301,8 @@ public class BlockValidator {
 			nameList.add("doublegreaterthanorequaltodouble");
 			nameList.add("booleannot-equalsboolean");
 			nameList.add("booleanequalsboolean");
-			
 			String genusName = blockGenus.getGenusName();
+			//checking the validation of location of expression. A && B, A < B etc should be inside a condition
 			if(nameList.contains(genusName) && block.getPlug() != null && block.getPlug().getBlockConnectors() != null && block.getPlug().getBlockConnectors().getConnectBlockId() == 0 )
 			{
 				customMessage = DisplayMessage.convertedTextInSelectedLanguage("Invalid block with");
