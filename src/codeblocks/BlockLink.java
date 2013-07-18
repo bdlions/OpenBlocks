@@ -162,7 +162,8 @@ public class BlockLink {
 			// the plug shouldn't be connected by the time we reach here.  This
 			// exception will only be thrown if the plug is connected even
 			// after any insertion-esq links were broken above
-			throw new RuntimeException("trying to link a plug that's already connected somewhere.");
+			//throw new RuntimeException("trying to link a plug that's already connected somewhere.");
+			return;			
 		}
 
 		// actually form the connection
