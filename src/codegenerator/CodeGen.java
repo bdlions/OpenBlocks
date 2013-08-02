@@ -549,6 +549,7 @@ public class CodeGen {
 	 * get all different command
 	 * */
 	public List<Block> getDifferentCommand() {
+		System.out.println("size of getDifferentCommand:"+differentCommand.size());
 		return differentCommand;
 	}
 	/**
@@ -607,16 +608,7 @@ public class CodeGen {
 				}
 				else if(ifConnector.getLabel().equals("then"))
 				{
-					do
-					{
-						if(getBlock(ifConnector.getConnectBlockId()) != null)
-						{
-							thenStatements.add(getBlock(ifConnector.getConnectBlockId()));
-							block = getBlock(block.getAfterBlockId());
-						}
-					}
-					while( block != null && block.getAfterBlockId() > 0 );
-					
+					thenStatements.add(getBlock(ifConnector.getConnectBlockId()));
 				}
 				
 			}
@@ -637,16 +629,7 @@ public class CodeGen {
 				}
 				else if(ifConnector.getLabel().equals("else"))
 				{
-					do
-					{
-						if(getBlock(ifConnector.getConnectBlockId()) != null)
-						{
-							elseStatements.add(getBlock(ifConnector.getConnectBlockId()));
-							block = getBlock(block.getAfterBlockId());
-						}
-					}
-					while( block != null && block.getAfterBlockId() > 0 );
-					
+					elseStatements.add(getBlock(ifConnector.getConnectBlockId()));
 				}
 				
 			}

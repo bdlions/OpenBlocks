@@ -35,12 +35,17 @@ public class VariableMaker {
 		blockGenus.setAttribute("label-prefix", "set ");
 		blockGenus.setAttribute("is-label-value", "yes");
 		blockGenus.setAttribute("color", "230 0 255");
+		blockGenus.setAttribute("editable-label", "no");
 		
 		Element blockConnectors = doc.createElement("BlockConnectors");
 		Element blokConnector = doc.createElement("BlockConnector");
 		blokConnector.setAttribute("connector-kind", "socket");
 		blokConnector.setAttribute("connector-type", type);
 		blokConnector.setAttribute("position-type", "single");
+		blokConnector.setAttribute("is-expandable", "no");
+		blokConnector.setAttribute("label-editable", "no");
+		blokConnector.setAttribute("has-range", "no");
+		blokConnector.setAttribute("has-length", "no");
 		
 		blockConnectors.appendChild(blokConnector);
 		blockGenus.appendChild(blockConnectors);
@@ -77,6 +82,7 @@ public class VariableMaker {
 		blockGenus.setAttribute("label-prefix", "reset ");
 		blockGenus.setAttribute("is-label-value", "yes");
 		blockGenus.setAttribute("color", "230 0 255");
+		blockGenus.setAttribute("editable-label", "no");
 		
 		/*Element blockConnectors = doc.createElement("BlockConnectors");
 		Element blokConnector = doc.createElement("BlockConnector");
@@ -148,12 +154,17 @@ public class VariableMaker {
 		blockGenus.setAttribute("label-unique", "yes");
 		blockGenus.setAttribute("is-label-value", "yes");
 		blockGenus.setAttribute("color", "230 0 255");
+		blockGenus.setAttribute("editable-label", "no");
 		
 		Element blockConnectors = doc.createElement("BlockConnectors");
 		Element blokConnector = doc.createElement("BlockConnector");
 		blokConnector.setAttribute("connector-kind", "plug");
 		blokConnector.setAttribute("connector-type", type);
 		blokConnector.setAttribute("position-type", "mirror");
+		blokConnector.setAttribute("is-expandable", "no");
+		blokConnector.setAttribute("label-editable", "no");
+		blokConnector.setAttribute("has-range", "no");
+		blokConnector.setAttribute("has-length", "no");
 		
 		blockConnectors.appendChild(blokConnector);
 		blockGenus.appendChild(blockConnectors);
@@ -167,6 +178,7 @@ public class VariableMaker {
 		blockGenusDecl.setAttribute("label-unique", "no");
 		blockGenusDecl.setAttribute("is-label-value", "yes");
 		blockGenusDecl.setAttribute("color", "65 170 225");
+		blockGenusDecl.setAttribute("editable-label", "no");
 		
 		Element defaultArgument = doc.createElement("DefaultArg");
 		defaultArgument.setAttribute("genus-name", type);
@@ -194,33 +206,16 @@ public class VariableMaker {
 		blokDeclConnector.setAttribute("connector-kind", "socket");
 		blokDeclConnector.appendChild(defaultArgument);
 		blokDeclConnector.setAttribute("connector-type", type);
-		
+		blokDeclConnector.setAttribute("position-type", "single");
+		blokDeclConnector.setAttribute("is-expandable", "no");
+		blokDeclConnector.setAttribute("label-editable", "no");
+		blokDeclConnector.setAttribute("has-range", "no");
+		blokDeclConnector.setAttribute("has-length", "no");
+				
 		blockDeclConnectors.appendChild(blokDeclConnector);
 		blockGenusDecl.appendChild(blockDeclConnectors);
 		blockGenuses.appendChild(blockGenusDecl);
 
-			
-		/*NodeList blockDrawers = doc.getElementsByTagName("BlockDrawer");
-		for (int i = 0; i < blockDrawers.getLength(); i ++) {
-			Element blockDrawer = (Element)blockDrawers.item(i);
-			if(blockDrawer.getAttribute("name").equals("Variables"))
-			{
-				Element blockGenusMember = doc.createElement("BlockGenusMember");
-				blockGenusMember.appendChild(doc.createTextNode(name));
-				blockDrawer.appendChild(blockGenusMember);
-			}
-		}*/
-		
-		/*NodeList nodeList = doc.getElementsByTagName("BlockFamily");
-		for (int i = 0; i < nodeList.getLength(); i ++) {
-			Element element = (Element) nodeList.item(i);
-			if( element.getAttribute("type").equals(type))
-			{
-				Element familyMember = doc.createElement("FamilyMember");
-				familyMember.appendChild(doc.createTextNode(name));
-				element.appendChild(familyMember);
-			}
-		}*/
 		/**
 		 * adding variable into the blockdrawer
 		 * */
@@ -299,15 +294,21 @@ public class VariableMaker {
 		blockGenus.setAttribute("kind", "command");
 		blockGenus.setAttribute("initlabel", name);
 		blockGenus.setAttribute("label-suffix", "+=");
-		//blockGenus.setAttribute("label-unique", "yes");
-		//blockGenus.setAttribute("is-label-value", "yes");
+		blockGenus.setAttribute("label-unique", "no");
+		blockGenus.setAttribute("is-label-value", "no");
 		blockGenus.setAttribute("color", "230 0 255");
+		blockGenus.setAttribute("editable-label", "no");
 		
 		Element blockConnectors = doc.createElement("BlockConnectors");
 		Element blockConnector = doc.createElement("BlockConnector");
 		blockConnector.setAttribute("connector-kind", "socket");
 		blockConnector.setAttribute("connector-type", type);
-		//blokConnector.setAttribute("position-type", "single");
+		blockConnector.setAttribute("position-type", "single");
+		blockConnector.setAttribute("is-expandable", "no");
+		blockConnector.setAttribute("label-editable", "no");
+		blockConnector.setAttribute("has-range", "no");
+		blockConnector.setAttribute("has-length", "no");
+		
 		Element defaultArgument = doc.createElement("DefaultArg");
 		defaultArgument.setAttribute("genus-name", type);
 		defaultArgument.setAttribute("label", "1");
@@ -356,15 +357,21 @@ public class VariableMaker {
 		blockGenus.setAttribute("kind", "command");
 		blockGenus.setAttribute("initlabel", name);
 		blockGenus.setAttribute("label-suffix", "-=");
-		//blockGenus.setAttribute("label-unique", "yes");
-		//blockGenus.setAttribute("is-label-value", "yes");
+		blockGenus.setAttribute("label-unique", "no");
+		blockGenus.setAttribute("is-label-value", "no");
 		blockGenus.setAttribute("color", "230 0 255");
+		blockGenus.setAttribute("editable-label", "no");
 		
 		Element blockConnectors = doc.createElement("BlockConnectors");
 		Element blockConnector = doc.createElement("BlockConnector");
 		blockConnector.setAttribute("connector-kind", "socket");
 		blockConnector.setAttribute("connector-type", type);
-		//blokConnector.setAttribute("position-type", "single");
+		blockConnector.setAttribute("position-type", "single");
+		blockConnector.setAttribute("is-expandable", "no");
+		blockConnector.setAttribute("label-editable", "no");
+		blockConnector.setAttribute("has-range", "no");
+		blockConnector.setAttribute("has-length", "no");
+		
 		Element defaultArgument = doc.createElement("DefaultArg");
 		defaultArgument.setAttribute("genus-name", type);
 		defaultArgument.setAttribute("label", "1");
